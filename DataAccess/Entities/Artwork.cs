@@ -9,7 +9,9 @@
         public decimal Price { get; set; }
         public DateTime CreatedDate { get; set; }
         public int AppUserId { get; set; }
-        public byte Status { get; set; }
+		public int ImageId { get; set; }
+
+		public byte Status { get; set; }
 
         //Navigation Property
         public List<ArtworkLike> Likes { get; set; }
