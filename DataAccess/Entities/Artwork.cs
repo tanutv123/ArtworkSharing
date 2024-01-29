@@ -10,7 +10,6 @@
         public DateTime CreatedDate { get; set; }
         public int AppUserId { get; set; }
 		public int ImageId { get; set; }
-
 		public byte Status { get; set; }
 
         //Navigation Property

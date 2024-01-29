@@ -9,6 +9,7 @@
         public AppUser Sender { get; set; }
         public int ReceiverId { get; set; }
         public AppUser Receiver { get; set; }
+        public Image? ProgressImage  { get; set; }
 
     }
 }
