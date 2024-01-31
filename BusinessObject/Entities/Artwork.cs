@@ -1,4 +1,7 @@
-﻿namespace DataAccess.Entities
+﻿using System;
+using System.Collections.Generic;
+
+namespace BusinessObject.Entities
 {
 	public class Artwork
 	{

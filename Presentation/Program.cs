@@ -1,5 +1,5 @@
-using DataAccess;
-using DataAccess.Entities;
+using BusinessObject.Entities;
+using DataAccess.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,7 +13,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 builder.Services.AddIdentityCore<AppUser>(opt =>
 {
-	opt.Password.RequiredLength = 8;
+	opt.Password.RequiredLength = 5;
 })
 	.AddRoles<AppRole>()
 	.AddRoleManager<RoleManager<AppRole>>()
@@ -37,5 +37,21 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+	var context = services.GetRequiredService<DataContext>();
+	var userManager = services.GetRequiredService<UserManager<AppUser>>();
+	var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
+	await context.Database.MigrateAsync();
+	await Seed.SeedImage(context);
+	await Seed.SeedUser(userManager, roleManager);
+}
+catch(Exception ex) {
+	var logger = services.GetRequiredService<ILogger<Program>>();
+	logger.LogError(ex, "An error while seeding data");
+}
 
 app.Run();

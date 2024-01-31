@@ -1,9 +1,9 @@
-﻿using DataAccess.Entities;
+﻿using BusinessObject.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccess
+namespace DataAccess.Data
 {
     public class DataContext : IdentityDbContext<AppUser,
                                                 AppRole,
@@ -17,20 +17,20 @@ namespace DataAccess
     {
         public DataContext()
         {
-            
+
         }
-		protected override void OnConfiguring(DbContextOptionsBuilder options)
-		{
-			if (!options.IsConfigured)
-			{
-				options.UseSqlServer("server =(local); database = ArtworkSharing;uid=sa;pwd=12345; TrustServerCertificate=True");
-			}
-		}
-		public DataContext(DbContextOptions options) : base(options)
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            if (!options.IsConfigured)
+            {
+                options.UseSqlServer("server =(local); database = ArtworkSharing;uid=sa;pwd=12345; TrustServerCertificate=True");
+            }
+        }
+        public DataContext(DbContextOptions options) : base(options)
         {
         }
         public DbSet<AppUser> Users { get; set; }
-        public DbSet<AppRole> Roles{ get; set; }
+        public DbSet<AppRole> Roles { get; set; }
         public DbSet<AppUserRole> AppUserRole { get; set; }
         public DbSet<Artwork> Artworks { get; set; }
         public DbSet<ArtworkComment> ArtworkComments { get; set; }
@@ -63,10 +63,10 @@ namespace DataAccess
                 .HasOne(a => a.Artwork)
                 .WithMany(a => a.Likes)
                 .OnDelete(DeleteBehavior.Cascade);
-			builder.Entity<ArtworkLike>()
-				.HasOne(a => a.AppUser)
-				.WithMany(u => u.LikedArtwork)
-				.OnDelete(DeleteBehavior.NoAction);
+            builder.Entity<ArtworkLike>()
+                .HasOne(a => a.AppUser)
+                .WithMany(u => u.LikedArtwork)
+                .OnDelete(DeleteBehavior.NoAction);
             builder.Entity<ArtworkComment>()
                 .HasOne(a => a.Artwork)
                 .WithMany(a => a.Comments)
@@ -75,18 +75,18 @@ namespace DataAccess
                 .HasOne(a => a.AppUser)
                 .WithMany(u => u.Comments)
                 .OnDelete(DeleteBehavior.Cascade);
-			builder.Entity<Purchase>()
-				.HasKey(k => new { k.ArtworkId, k.AppUserId });
+            builder.Entity<Purchase>()
+                .HasKey(k => new { k.ArtworkId, k.AppUserId });
             builder.Entity<Purchase>()
                 .HasOne(p => p.Artwork)
                 .WithMany(a => a.Purchases)
                 .OnDelete(DeleteBehavior.NoAction);
-			builder.Entity<Purchase>()
-				.HasOne(p => p.AppUser)
-				.WithMany(a => a.Purchases)
-				.OnDelete(DeleteBehavior.Cascade);
+            builder.Entity<Purchase>()
+                .HasOne(p => p.AppUser)
+                .WithMany(a => a.Purchases)
+                .OnDelete(DeleteBehavior.Cascade);
 
-			builder.Entity<UserFollow>()
+            builder.Entity<UserFollow>()
                 .HasKey(k => new { k.SourceUserId, k.TargetUserId });
             builder.Entity<UserFollow>()
                 .HasOne(fl => fl.SourceUser)
@@ -114,17 +114,20 @@ namespace DataAccess
             .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<CommisionHistory>()
-                .HasKey(k => new { k.SenderId, k.ReceiverId });
-            builder.Entity<CommisionHistory>()
                 .HasOne(c => c.Sender)
                 .WithMany(u => u.CommissionSent)
                 .HasForeignKey(c => c.SenderId)
                 .OnDelete(DeleteBehavior.Cascade);
-			builder.Entity<CommisionHistory>()
-				.HasOne(c => c.Receiver)
-				.WithMany(u => u.CommissionReceived)
-				.HasForeignKey(c => c.ReceiverId)
-				.OnDelete(DeleteBehavior.NoAction);
-		}
+            builder.Entity<CommisionHistory>()
+                .HasOne(c => c.Receiver)
+                .WithMany(u => u.CommissionReceived)
+                .HasForeignKey(c => c.ReceiverId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Artwork>()
+                .HasOne(x => x.Image)
+                .WithOne(x => x.Artwork)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }

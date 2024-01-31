@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
-namespace DataAccess.Entities
+namespace BusinessObject.Entities
 {
 	public class AppUser : IdentityUser<int>
 	{
         public string Name { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public string Phone { get; set; }
         public string Description{ get; set; }
         public int ImageId { get; set; }
         public byte Status { get; set; }

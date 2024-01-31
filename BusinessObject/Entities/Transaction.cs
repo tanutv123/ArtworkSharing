@@ -1,4 +1,6 @@
-﻿namespace DataAccess.Entities
+﻿using System;
+
+namespace BusinessObject.Entities
 {
 	public class Transaction
 	{

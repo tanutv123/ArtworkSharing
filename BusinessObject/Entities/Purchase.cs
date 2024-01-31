@@ -1,4 +1,4 @@
-﻿namespace DataAccess.Entities
+﻿namespace BusinessObject.Entities
 {
 	public class Purchase
 	{

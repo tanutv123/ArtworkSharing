@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace DataAccess.Entities
+namespace BusinessObject.Entities
 {
 	public class AppUserRole : IdentityUserRole<int>
 	{

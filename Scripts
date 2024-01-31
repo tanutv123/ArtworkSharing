@@ -1,0 +1,462 @@
+﻿IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
+BEGIN
+    CREATE TABLE [__EFMigrationsHistory] (
+        [MigrationId] nvarchar(150) NOT NULL,
+        [ProductVersion] nvarchar(32) NOT NULL,
+        CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+    );
+END;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+CREATE TABLE [AspNetRoles] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(256) NULL,
+    [NormalizedName] nvarchar(256) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetRoles] PRIMARY KEY ([Id])
+);
+GO
+
+CREATE TABLE [AspNetUsers] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    [Email] nvarchar(256) NOT NULL,
+    [Password] nvarchar(max) NOT NULL,
+    [Phone] nvarchar(max) NOT NULL,
+    [Description] nvarchar(max) NOT NULL,
+    [Status] tinyint NOT NULL,
+    [UserName] nvarchar(256) NULL,
+    [NormalizedUserName] nvarchar(256) NULL,
+    [NormalizedEmail] nvarchar(256) NULL,
+    [EmailConfirmed] bit NOT NULL,
+    [PasswordHash] nvarchar(max) NULL,
+    [SecurityStamp] nvarchar(max) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    [PhoneNumber] nvarchar(max) NULL,
+    [PhoneNumberConfirmed] bit NOT NULL,
+    [TwoFactorEnabled] bit NOT NULL,
+    [LockoutEnd] datetimeoffset NULL,
+    [LockoutEnabled] bit NOT NULL,
+    [AccessFailedCount] int NOT NULL,
+    CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
+);
+GO
+
+CREATE TABLE [Genres] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_Genres] PRIMARY KEY ([Id])
+);
+GO
+
+CREATE TABLE [AspNetRoleClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [RoleId] int NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [AspNetUserClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] int NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetUserClaims_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [AspNetUserLogins] (
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [ProviderKey] nvarchar(450) NOT NULL,
+    [ProviderDisplayName] nvarchar(max) NULL,
+    [UserId] int NOT NULL,
+    CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY ([LoginProvider], [ProviderKey]),
+    CONSTRAINT [FK_AspNetUserLogins_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [AspNetUserRoles] (
+    [UserId] int NOT NULL,
+    [RoleId] int NOT NULL,
+    CONSTRAINT [PK_AspNetUserRoles] PRIMARY KEY ([UserId], [RoleId]),
+    CONSTRAINT [FK_AspNetUserRoles_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_AspNetUserRoles_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [AspNetUserTokens] (
+    [UserId] int NOT NULL,
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [Name] nvarchar(450) NOT NULL,
+    [Value] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY ([UserId], [LoginProvider], [Name]),
+    CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [CommissionHistory] (
+    [SenderId] int NOT NULL,
+    [ReceiverId] int NOT NULL,
+    [Id] int NOT NULL,
+    [ActualPrice] decimal(18,2) NOT NULL,
+    [Status] tinyint NOT NULL,
+    CONSTRAINT [PK_CommissionHistory] PRIMARY KEY ([SenderId], [ReceiverId]),
+    CONSTRAINT [FK_CommissionHistory_AspNetUsers_ReceiverId] FOREIGN KEY ([ReceiverId]) REFERENCES [AspNetUsers] ([Id]),
+    CONSTRAINT [FK_CommissionHistory_AspNetUsers_SenderId] FOREIGN KEY ([SenderId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [Commissions] (
+    [Id] int NOT NULL IDENTITY,
+    [TargetPrice] decimal(18,2) NOT NULL,
+    [Description] nvarchar(max) NOT NULL,
+    [AppUserId] int NOT NULL,
+    CONSTRAINT [PK_Commissions] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Commissions_AspNetUsers_AppUserId] FOREIGN KEY ([AppUserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [Transactions] (
+    [SenderId] int NOT NULL,
+    [ReceiverId] int NOT NULL,
+    [Id] int NOT NULL,
+    [Money] decimal(18,2) NOT NULL,
+    [CreatedDate] datetime2 NOT NULL,
+    CONSTRAINT [PK_Transactions] PRIMARY KEY ([SenderId], [ReceiverId]),
+    CONSTRAINT [FK_Transactions_AspNetUsers_ReceiverId] FOREIGN KEY ([ReceiverId]) REFERENCES [AspNetUsers] ([Id]),
+    CONSTRAINT [FK_Transactions_AspNetUsers_SenderId] FOREIGN KEY ([SenderId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [UserFollows] (
+    [SourceUserId] int NOT NULL,
+    [TargetUserId] int NOT NULL,
+    CONSTRAINT [PK_UserFollows] PRIMARY KEY ([SourceUserId], [TargetUserId]),
+    CONSTRAINT [FK_UserFollows_AspNetUsers_SourceUserId] FOREIGN KEY ([SourceUserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UserFollows_AspNetUsers_TargetUserId] FOREIGN KEY ([TargetUserId]) REFERENCES [AspNetUsers] ([Id])
+);
+GO
+
+CREATE TABLE [Artworks] (
+    [Id] int NOT NULL IDENTITY,
+    [Title] nvarchar(max) NOT NULL,
+    [Description] nvarchar(max) NOT NULL,
+    [GenreId] int NOT NULL,
+    [Price] decimal(18,2) NOT NULL,
+    [CreatedDate] datetime2 NOT NULL,
+    [AppUserId] int NOT NULL,
+    [Status] tinyint NOT NULL,
+    CONSTRAINT [PK_Artworks] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Artworks_AspNetUsers_AppUserId] FOREIGN KEY ([AppUserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Artworks_Genres_GenreId] FOREIGN KEY ([GenreId]) REFERENCES [Genres] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [ArtworkComments] (
+    [Id] int NOT NULL IDENTITY,
+    [Content] nvarchar(max) NOT NULL,
+    [CreatedDate] datetime2 NOT NULL,
+    [AppUserId] int NOT NULL,
+    [ArtworkId] int NOT NULL,
+    CONSTRAINT [PK_ArtworkComments] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ArtworkComments_Artworks_ArtworkId] FOREIGN KEY ([ArtworkId]) REFERENCES [Artworks] ([Id]),
+    CONSTRAINT [FK_ArtworkComments_AspNetUsers_AppUserId] FOREIGN KEY ([AppUserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [ArtworkLikes] (
+    [ArtworkId] int NOT NULL,
+    [AppUserId] int NOT NULL,
+    CONSTRAINT [PK_ArtworkLikes] PRIMARY KEY ([ArtworkId], [AppUserId]),
+    CONSTRAINT [FK_ArtworkLikes_Artworks_ArtworkId] FOREIGN KEY ([ArtworkId]) REFERENCES [Artworks] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_ArtworkLikes_AspNetUsers_AppUserId] FOREIGN KEY ([AppUserId]) REFERENCES [AspNetUsers] ([Id])
+);
+GO
+
+CREATE TABLE [Images] (
+    [Id] int NOT NULL IDENTITY,
+    [Url] nvarchar(max) NOT NULL,
+    [isMain] bit NOT NULL,
+    [PublicId] nvarchar(max) NOT NULL,
+    [ArtworkId] int NOT NULL,
+    CONSTRAINT [PK_Images] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Images_Artworks_ArtworkId] FOREIGN KEY ([ArtworkId]) REFERENCES [Artworks] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE [Purchases] (
+    [AppUserId] int NOT NULL,
+    [ArtworkId] int NOT NULL,
+    CONSTRAINT [PK_Purchases] PRIMARY KEY ([ArtworkId], [AppUserId]),
+    CONSTRAINT [FK_Purchases_Artworks_ArtworkId] FOREIGN KEY ([ArtworkId]) REFERENCES [Artworks] ([Id]),
+    CONSTRAINT [FK_Purchases_AspNetUsers_AppUserId] FOREIGN KEY ([AppUserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+GO
+
+CREATE INDEX [IX_ArtworkComments_AppUserId] ON [ArtworkComments] ([AppUserId]);
+GO
+
+CREATE INDEX [IX_ArtworkComments_ArtworkId] ON [ArtworkComments] ([ArtworkId]);
+GO
+
+CREATE INDEX [IX_ArtworkLikes_AppUserId] ON [ArtworkLikes] ([AppUserId]);
+GO
+
+CREATE INDEX [IX_Artworks_AppUserId] ON [Artworks] ([AppUserId]);
+GO
+
+CREATE INDEX [IX_Artworks_GenreId] ON [Artworks] ([GenreId]);
+GO
+
+CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [AspNetRoleClaims] ([RoleId]);
+GO
+
+CREATE UNIQUE INDEX [RoleNameIndex] ON [AspNetRoles] ([NormalizedName]) WHERE [NormalizedName] IS NOT NULL;
+GO
+
+CREATE INDEX [IX_AspNetUserClaims_UserId] ON [AspNetUserClaims] ([UserId]);
+GO
+
+CREATE INDEX [IX_AspNetUserLogins_UserId] ON [AspNetUserLogins] ([UserId]);
+GO
+
+CREATE INDEX [IX_AspNetUserRoles_RoleId] ON [AspNetUserRoles] ([RoleId]);
+GO
+
+CREATE INDEX [EmailIndex] ON [AspNetUsers] ([NormalizedEmail]);
+GO
+
+CREATE UNIQUE INDEX [UserNameIndex] ON [AspNetUsers] ([NormalizedUserName]) WHERE [NormalizedUserName] IS NOT NULL;
+GO
+
+CREATE INDEX [IX_CommissionHistory_ReceiverId] ON [CommissionHistory] ([ReceiverId]);
+GO
+
+CREATE UNIQUE INDEX [IX_Commissions_AppUserId] ON [Commissions] ([AppUserId]);
+GO
+
+CREATE UNIQUE INDEX [IX_Images_ArtworkId] ON [Images] ([ArtworkId]);
+GO
+
+CREATE INDEX [IX_Purchases_AppUserId] ON [Purchases] ([AppUserId]);
+GO
+
+CREATE INDEX [IX_Transactions_ReceiverId] ON [Transactions] ([ReceiverId]);
+GO
+
+CREATE INDEX [IX_UserFollows_TargetUserId] ON [UserFollows] ([TargetUserId]);
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20240123134308_InitialCreate', N'7.0.15');
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+ALTER TABLE [Images] DROP CONSTRAINT [FK_Images_Artworks_ArtworkId];
+GO
+
+DROP INDEX [IX_Images_ArtworkId] ON [Images];
+GO
+
+DECLARE @var0 sysname;
+SELECT @var0 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Images]') AND [c].[name] = N'ArtworkId');
+IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [Images] DROP CONSTRAINT [' + @var0 + '];');
+ALTER TABLE [Images] DROP COLUMN [ArtworkId];
+GO
+
+ALTER TABLE [AspNetUsers] ADD [ImageId] int NOT NULL DEFAULT 0;
+GO
+
+ALTER TABLE [Artworks] ADD [ImageId] int NOT NULL DEFAULT 0;
+GO
+
+CREATE INDEX [IX_AspNetUsers_ImageId] ON [AspNetUsers] ([ImageId]);
+GO
+
+CREATE INDEX [IX_Artworks_ImageId] ON [Artworks] ([ImageId]);
+GO
+
+ALTER TABLE [Artworks] ADD CONSTRAINT [FK_Artworks_Images_ImageId] FOREIGN KEY ([ImageId]) REFERENCES [Images] ([Id]);
+GO
+
+ALTER TABLE [AspNetUsers] ADD CONSTRAINT [FK_AspNetUsers_Images_ImageId] FOREIGN KEY ([ImageId]) REFERENCES [Images] ([Id]) ON DELETE CASCADE;
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20240124065136_UpdateUserPhoto', N'7.0.15');
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+ALTER TABLE [CommissionHistory] ADD [ProgressImageId] int NULL;
+GO
+
+CREATE INDEX [IX_CommissionHistory_ProgressImageId] ON [CommissionHistory] ([ProgressImageId]);
+GO
+
+ALTER TABLE [CommissionHistory] ADD CONSTRAINT [FK_CommissionHistory_Images_ProgressImageId] FOREIGN KEY ([ProgressImageId]) REFERENCES [Images] ([Id]);
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20240129055600_CommissionUpdate', N'7.0.15');
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+DECLARE @var1 sysname;
+SELECT @var1 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Images]') AND [c].[name] = N'Url');
+IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [Images] DROP CONSTRAINT [' + @var1 + '];');
+ALTER TABLE [Images] ALTER COLUMN [Url] nvarchar(max) NULL;
+GO
+
+DECLARE @var2 sysname;
+SELECT @var2 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Images]') AND [c].[name] = N'PublicId');
+IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [Images] DROP CONSTRAINT [' + @var2 + '];');
+ALTER TABLE [Images] ALTER COLUMN [PublicId] nvarchar(max) NULL;
+GO
+
+DECLARE @var3 sysname;
+SELECT @var3 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Genres]') AND [c].[name] = N'Name');
+IF @var3 IS NOT NULL EXEC(N'ALTER TABLE [Genres] DROP CONSTRAINT [' + @var3 + '];');
+ALTER TABLE [Genres] ALTER COLUMN [Name] nvarchar(max) NULL;
+GO
+
+DECLARE @var4 sysname;
+SELECT @var4 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Commissions]') AND [c].[name] = N'Description');
+IF @var4 IS NOT NULL EXEC(N'ALTER TABLE [Commissions] DROP CONSTRAINT [' + @var4 + '];');
+ALTER TABLE [Commissions] ALTER COLUMN [Description] nvarchar(max) NULL;
+GO
+
+DECLARE @var5 sysname;
+SELECT @var5 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[AspNetUsers]') AND [c].[name] = N'Phone');
+IF @var5 IS NOT NULL EXEC(N'ALTER TABLE [AspNetUsers] DROP CONSTRAINT [' + @var5 + '];');
+ALTER TABLE [AspNetUsers] ALTER COLUMN [Phone] nvarchar(max) NULL;
+GO
+
+DECLARE @var6 sysname;
+SELECT @var6 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[AspNetUsers]') AND [c].[name] = N'Password');
+IF @var6 IS NOT NULL EXEC(N'ALTER TABLE [AspNetUsers] DROP CONSTRAINT [' + @var6 + '];');
+ALTER TABLE [AspNetUsers] ALTER COLUMN [Password] nvarchar(max) NULL;
+GO
+
+DECLARE @var7 sysname;
+SELECT @var7 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[AspNetUsers]') AND [c].[name] = N'Name');
+IF @var7 IS NOT NULL EXEC(N'ALTER TABLE [AspNetUsers] DROP CONSTRAINT [' + @var7 + '];');
+ALTER TABLE [AspNetUsers] ALTER COLUMN [Name] nvarchar(max) NULL;
+GO
+
+DECLARE @var8 sysname;
+SELECT @var8 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[AspNetUsers]') AND [c].[name] = N'Email');
+IF @var8 IS NOT NULL EXEC(N'ALTER TABLE [AspNetUsers] DROP CONSTRAINT [' + @var8 + '];');
+ALTER TABLE [AspNetUsers] ALTER COLUMN [Email] nvarchar(256) NULL;
+GO
+
+DECLARE @var9 sysname;
+SELECT @var9 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[AspNetUsers]') AND [c].[name] = N'Description');
+IF @var9 IS NOT NULL EXEC(N'ALTER TABLE [AspNetUsers] DROP CONSTRAINT [' + @var9 + '];');
+ALTER TABLE [AspNetUsers] ALTER COLUMN [Description] nvarchar(max) NULL;
+GO
+
+DECLARE @var10 sysname;
+SELECT @var10 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Artworks]') AND [c].[name] = N'Title');
+IF @var10 IS NOT NULL EXEC(N'ALTER TABLE [Artworks] DROP CONSTRAINT [' + @var10 + '];');
+ALTER TABLE [Artworks] ALTER COLUMN [Title] nvarchar(max) NULL;
+GO
+
+DECLARE @var11 sysname;
+SELECT @var11 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Artworks]') AND [c].[name] = N'Description');
+IF @var11 IS NOT NULL EXEC(N'ALTER TABLE [Artworks] DROP CONSTRAINT [' + @var11 + '];');
+ALTER TABLE [Artworks] ALTER COLUMN [Description] nvarchar(max) NULL;
+GO
+
+DECLARE @var12 sysname;
+SELECT @var12 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[ArtworkComments]') AND [c].[name] = N'Content');
+IF @var12 IS NOT NULL EXEC(N'ALTER TABLE [ArtworkComments] DROP CONSTRAINT [' + @var12 + '];');
+ALTER TABLE [ArtworkComments] ALTER COLUMN [Content] nvarchar(max) NULL;
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20240131082852_UpdateNullableAttributes', N'7.0.15');
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+DECLARE @var13 sysname;
+SELECT @var13 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[AspNetUsers]') AND [c].[name] = N'Password');
+IF @var13 IS NOT NULL EXEC(N'ALTER TABLE [AspNetUsers] DROP CONSTRAINT [' + @var13 + '];');
+ALTER TABLE [AspNetUsers] DROP COLUMN [Password];
+GO
+
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20240131092220_DeletePasswordColumnForUserTable', N'7.0.15');
+GO
+
+COMMIT;
+GO
+
