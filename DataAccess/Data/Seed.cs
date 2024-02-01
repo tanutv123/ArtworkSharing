@@ -17,7 +17,7 @@ namespace DataAccess.Data
 			{
 				return;
 			}
-			var photoData = await File.ReadAllTextAsync("D:\\du lieu o kia\\WPF\\ArtworkSharing\\DataAccess\\Data\\PhotoSeedData.json");
+			var photoData = await File.ReadAllTextAsync("../DataAccess/Data/PhotoSeedData.json");
 			var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 			var photos = JsonSerializer.Deserialize<List<Image>>(photoData, jsonOptions);
 			foreach (var photo in photos)
@@ -30,7 +30,7 @@ namespace DataAccess.Data
 		{
 			if (await userManager.Users.AnyAsync()) return;
 
-			var userData = await File.ReadAllTextAsync("D:\\du lieu o kia\\WPF\\ArtworkSharing\\DataAccess\\Data\\UserSeedData.json");
+			var userData = await File.ReadAllTextAsync("../DataAccess/Data/UserSeedData.json");
 			var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 			var users = JsonSerializer.Deserialize<List<AppUser>>(userData, jsonOptions);
 
