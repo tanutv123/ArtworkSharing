@@ -48,6 +48,7 @@ try
 	await context.Database.MigrateAsync();
 	await Seed.SeedImage(context);
 	await Seed.SeedUser(userManager, roleManager);
+	await Seed.SeedArtwork(context);
 }
 catch(Exception ex) {
 	var logger = services.GetRequiredService<ILogger<Program>>();

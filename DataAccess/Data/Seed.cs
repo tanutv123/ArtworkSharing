@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -87,6 +88,40 @@ namespace DataAccess.Data
 			};
 			await userManager.CreateAsync(artist, "Pa$$w0rd");
 			await userManager.AddToRoleAsync(artist, "Artist");
+		}
+
+		public static async Task SeedArtwork(DataContext context)
+		{
+
+            if (await context.Genres.AnyAsync())
+            {
+                return;
+            }
+            var genres = new List<Genre>
+			{
+				new Genre {Name = "Landscape"},
+				new Genre {Name = "Portrait"},
+				new Genre {Name = "Anime"},
+				new Genre {Name = "Fiction"}
+			};
+			foreach (var genre in genres)
+			{
+				context.Genres.AddAsync(genre);
+			}
+            await context.SaveChangesAsync();
+
+            if (await context.Artworks.AnyAsync())
+			{
+				return;
+			}
+			var artworks = await File.ReadAllTextAsync("../DataAccess/Data/ArtworkSeed.json");
+			var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+			var arts = JsonSerializer.Deserialize<List<Artwork>>(artworks, jsonOptions);
+			foreach (var art in arts)
+			{
+				await context.Artworks.AddAsync(art);
+			}
+			await context.SaveChangesAsync();
 		}
 	}
 }
