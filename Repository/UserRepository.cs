@@ -18,11 +18,6 @@ namespace Repository
             _userManagement = userManagement;
         }
 
-        public async Task<Image> FindImage(int id)
-        {
-            return await _userManagement.FindImage(id);
-        }
-
         public async Task<SignInResult> LoginAsync(string email, string password)
         {
             return await _userManagement.LoginAsync(email, password);

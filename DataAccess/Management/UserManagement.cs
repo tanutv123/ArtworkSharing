@@ -55,10 +55,5 @@ namespace DataAccess.Management
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phone);
             return user != null;
         }
-
-        public async Task<Image> FindImage(int id)
-        {
-            return await _dataContext.Images.FindAsync(id);
-        }
     }
 }
