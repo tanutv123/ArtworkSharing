@@ -47,6 +47,7 @@ namespace DataAccess.Data
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<UserFollow> UserFollows { get; set; }
         public DbSet<CommissionStatus> CommissionStatus { get; set; }
+        public DbSet<Connection> Connections { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

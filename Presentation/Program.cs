@@ -3,6 +3,7 @@ using DataAccess.Data;
 using DataAccess.Management;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Presentation.SignalR;
 using Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +35,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddSignalR();
+
 builder.Services.AddAuthentication();
 
 builder.Services.AddScoped<UserManagement>();
@@ -57,6 +60,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 app.MapRazorPages();
+
+app.MapHub<PresenceHub>("/presensehub");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
