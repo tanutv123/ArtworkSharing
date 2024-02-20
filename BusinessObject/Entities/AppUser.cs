@@ -7,7 +7,6 @@ namespace BusinessObject.Entities
 	{
         public string Name { get; set; }
         public string Description{ get; set; }
-        public int ImageId { get; set; }
         public byte Status { get; set; }
 
 		//Navigation Property
@@ -22,6 +21,6 @@ namespace BusinessObject.Entities
         public List<CommisionHistory> CommissionSent { get; set; }
         public List<CommisionHistory> CommissionReceived { get; set; }
         public List<ArtworkLike> LikedArtwork{ get; set; }
-        public Image Image { get; set; }
+        public UserImage UserImage { get; set; }
     }
 }
