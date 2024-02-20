@@ -57,6 +57,8 @@ namespace DataAccess.Data
 			var admin = new AppUser
 			{
 				UserName = "admin",
+				Name = "admin",
+				Description = "admin",
 				Email = "admin@fas.com",
 				ImageId = 1,
 				Status = 1
@@ -68,7 +70,9 @@ namespace DataAccess.Data
 			var manager = new AppUser
 			{
 				UserName = "manager",
-				Email = "manager@fas.com",
+                Name = "manager",
+                Description = "manager",
+                Email = "manager@fas.com",
 				ImageId = 1,
 				Status = 1
 			};

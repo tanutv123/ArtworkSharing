@@ -1,12 +1,17 @@
 using BusinessObject.Entities;
 using DataAccess.Data;
+using DataAccess.Management;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
+{
+    options.Conventions.AddPageRoute("/Account/LoginPage", "");
+});
 builder.Services.AddDbContext<DataContext>(options =>
 {
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -14,10 +19,25 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddIdentityCore<AppUser>(opt =>
 {
 	opt.Password.RequiredLength = 5;
+
+	opt.User.RequireUniqueEmail = true;
 })
 	.AddRoles<AppRole>()
 	.AddRoleManager<RoleManager<AppRole>>()
-	.AddEntityFrameworkStores<DataContext>();
+	.AddEntityFrameworkStores<DataContext>()
+	.AddSignInManager<SignInManager<AppUser>>();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(1800);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddAuthentication();
+
+builder.Services.AddScoped<UserManagement>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
@@ -33,9 +53,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseSession();
 app.MapRazorPages();
 
 using var scope = app.Services.CreateScope();
