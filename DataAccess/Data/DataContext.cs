@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace DataAccess.Data
 {
@@ -15,10 +17,10 @@ namespace DataAccess.Data
                                                 IdentityUserToken<int>
                                                 >
     {
-        //public DataContext()
-        //{
+        /*public DataContext()
+        {
 
-        //}
+        }*/
         //protected override void OnConfiguring(DbContextOptionsBuilder options)
         //{
         //    if (!options.IsConfigured)
@@ -26,6 +28,7 @@ namespace DataAccess.Data
         //        options.UseSqlServer("server =(local); database = ArtworkSharing;uid=sa;pwd=12345; TrustServerCertificate=True");
         //    }
         //}
+
         public DataContext(DbContextOptions options) : base(options)
         {
         }

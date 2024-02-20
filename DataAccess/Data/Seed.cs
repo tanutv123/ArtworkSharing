@@ -42,6 +42,8 @@ namespace DataAccess.Data
 			var admin = new AppUser
 			{
 				UserName = "admin",
+				Name = "admin",
+				Description = "admin",
 				Email = "admin@fas.com",
 				Status = 1
 			};
