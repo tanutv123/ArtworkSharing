@@ -11,6 +11,8 @@ namespace BusinessObject.Entities
         public AppUser Sender { get; set; }
         public int ReceiverId { get; set; }
         public AppUser Receiver { get; set; }
+        public int CommissionStatusId { get; set; }
+        public CommissionStatus CommissionStatus { get; set; }
         public List<CommissionImage>? CommissionImages { get; set; }
 
     }

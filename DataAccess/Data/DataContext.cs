@@ -43,6 +43,7 @@ namespace DataAccess.Data
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<UserFollow> UserFollows { get; set; }
+        public DbSet<CommissionStatus> CommissionStatus { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
