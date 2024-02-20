@@ -41,10 +41,12 @@ namespace DataAccess.Data
         public DbSet<CommisionHistory> CommissionHistory { get; set; }
         public DbSet<Commission> Commissions { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        public DbSet<Image> Images { get; set; }
+        public DbSet<UserImage> UserImages{ get; set; }
+        public DbSet<ArtworkImage> ArtworkImages { get; set; }
         public DbSet<Purchase> Purchases { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<UserFollow> UserFollows { get; set; }
+        public DbSet<CommissionStatus> CommissionStatus { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -128,9 +130,13 @@ namespace DataAccess.Data
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<Artwork>()
-                .HasOne(x => x.Image)
+                .HasOne(x => x.ArtworkImage)
                 .WithOne(x => x.Artwork)
                 .OnDelete(DeleteBehavior.NoAction);
-        }
+			builder.Entity<AppUser>()
+				.HasOne(x => x.UserImage)
+				.WithOne(x => x.AppUser)
+				.OnDelete(DeleteBehavior.NoAction);
+		}
     }
 }

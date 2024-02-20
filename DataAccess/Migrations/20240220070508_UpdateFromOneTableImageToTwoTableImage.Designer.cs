@@ -4,6 +4,7 @@ using DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240220070508_UpdateFromOneTableImageToTwoTableImage")]
+    partial class UpdateFromOneTableImageToTwoTableImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,9 +268,6 @@ namespace DataAccess.Migrations
                     b.Property<decimal>("ActualPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("CommissionStatusId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ReceiverId")
                         .HasColumnType("int");
 
@@ -278,8 +278,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("tinyint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CommissionStatusId");
 
                     b.HasIndex("ReceiverId");
 
@@ -341,22 +339,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("CommisionHistoryId");
 
                     b.ToTable("CommissionImage");
-                });
-
-            modelBuilder.Entity("BusinessObject.Entities.CommissionStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CommissionStatus");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.Genre", b =>
@@ -634,12 +616,6 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("BusinessObject.Entities.CommisionHistory", b =>
                 {
-                    b.HasOne("BusinessObject.Entities.CommissionStatus", "CommissionStatus")
-                        .WithMany("CommisionHistories")
-                        .HasForeignKey("CommissionStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BusinessObject.Entities.AppUser", "Receiver")
                         .WithMany("CommissionReceived")
                         .HasForeignKey("ReceiverId")
@@ -651,8 +627,6 @@ namespace DataAccess.Migrations
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CommissionStatus");
 
                     b.Navigation("Receiver");
 
@@ -829,11 +803,6 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("BusinessObject.Entities.CommisionHistory", b =>
                 {
                     b.Navigation("CommissionImages");
-                });
-
-            modelBuilder.Entity("BusinessObject.Entities.CommissionStatus", b =>
-                {
-                    b.Navigation("CommisionHistories");
                 });
 #pragma warning restore 612, 618
         }

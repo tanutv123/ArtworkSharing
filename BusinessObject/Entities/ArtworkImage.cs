@@ -1,13 +1,12 @@
 ﻿namespace BusinessObject.Entities
 {
-	public class Image
+	public class ArtworkImage
 	{
 		public int Id { get; set; }
 		public string Url { get; set; }
 		public bool isMain { get; set; }
 		public string PublicId { get; set; }
-
-        public AppUser AppUser { get; set; }
-        public Artwork Artwork { get; set; }
-    }
+		public int ArtworkId { get; set; }
+		public Artwork Artwork { get; set; }
+	}
 }

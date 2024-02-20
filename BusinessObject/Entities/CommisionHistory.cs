@@ -1,4 +1,6 @@
-﻿namespace BusinessObject.Entities
+﻿using System.Collections.Generic;
+
+namespace BusinessObject.Entities
 {
 	public class CommisionHistory
 	{
@@ -9,7 +11,9 @@
         public AppUser Sender { get; set; }
         public int ReceiverId { get; set; }
         public AppUser Receiver { get; set; }
-        public Image? ProgressImage  { get; set; }
+        public int CommissionStatusId { get; set; }
+        public CommissionStatus CommissionStatus { get; set; }
+        public List<CommissionImage>? CommissionImages { get; set; }
 
     }
 }

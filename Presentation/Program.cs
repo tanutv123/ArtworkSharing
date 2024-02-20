@@ -66,10 +66,12 @@ try
 	var userManager = services.GetRequiredService<UserManager<AppUser>>();
 	var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
 	await context.Database.MigrateAsync();
-	await Seed.SeedImage(context);
 	await Seed.SeedUser(userManager, roleManager);
+	await Seed.SeedArtwork(context);
+	await Seed.SeedCommissionStatus(context);
 }
-catch(Exception ex) {
+catch (Exception ex)
+{
 	var logger = services.GetRequiredService<ILogger<Program>>();
 	logger.LogError(ex, "An error while seeding data");
 }

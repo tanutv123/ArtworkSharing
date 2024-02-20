@@ -1,0 +1,142 @@
+[
+  {
+    "Title": "laboris dolore nisi",
+    "Description": "Esse est aute mollit nulla deserunt incididunt elit qui cupidatat. Irure et eiusmod sint dolore cillum ex sit qui do. Aute cillum quis magna eu tempor tempor aliquip consectetur. Magna nisi aliqua dolore aute do sunt. Commodo duis ad cupidatat elit nulla elit enim occaecat occaecat sunt culpa proident cillum.\r\n",
+    "GenreId": 1,
+    "Price": 1100,
+    "CreatedDate": "2023-03-09",
+    "AppUserId": 4,
+    "Status": 1,
+    "ArtworkImage": {
+      "Url": "https://images.pexels.com/photos/11098559/pexels-photo-11098559.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "IsMain": true
+    }
+    
+  },
+  {
+    "Title": "non veniam incididunt",
+    "Description": "Officia dolore commodo ad anim adipisicing do. Ut occaecat consectetur laborum occaecat adipisicing minim proident eiusmod nostrud. Tempor anim ut sint adipisicing consequat adipisicing non esse. Reprehenderit nulla pariatur quis adipisicing consectetur reprehenderit non id deserunt enim sit fugiat sunt ea. Ad anim velit fugiat est pariatur irure. Sunt aute elit laboris dolor exercitation id. Amet do commodo enim duis irure incididunt.\r\n",
+    "GenreId": 1,
+    "Price": 6454,
+    "CreatedDate": "2023-04-10",
+    "AppUserId": 3,
+    "Status": 1,
+    "ArtworkImage": {
+      "Url": "https://www.bing.com/images/create/landscape-art-red-sun/1-65d345860bdf4dc1ba67a85fa3f0a968?id=%2fey2QzA6MuSSuYW%2f1rmBiA%3d%3d&view=detailv2&idpp=genimg&thId=OIG3.eUOZean2xVM5VDv9vHR6&FORM=GCRIDP&mode=overlay",
+      "IsMain": true
+    }
+    
+  },
+  {
+    "Title": "cillum dolore proident",
+    "Description": "Aute eu laborum nulla sit nulla labore consectetur elit nisi pariatur officia. Eiusmod nostrud nisi proident aute do exercitation officia do irure veniam dolore. Amet et sint et non aute in et do. Occaecat nulla fugiat fugiat sunt nulla qui.\r\n",
+    "GenreId": 2,
+    "Price": 2958,
+    "CreatedDate": "2023-12-21",
+    "AppUserId": 5,
+    "Status": 1,
+    "ArtworkImage": {
+      "Url": "https://www.bing.com/images/create/landscape/1-65d34170f21542f4b330674862894501?id=hqZomNEajKl6%2b2SDuEDXkA%3d%3d&view=detailv2&idpp=genimg&thId=OIG4._rhAzrxxya9yE0TF__jo&FORM=GCRIDP&mode=overlay",
+      "IsMain": true
+    }
+    
+  },
+  {
+    "Title": "proident enim commodo",
+    "Description": "Laboris exercitation aute ipsum sunt officia ad tempor amet sit. Officia cupidatat velit quis mollit commodo occaecat elit quis. Dolor sit ex proident ad consectetur commodo culpa eu ad veniam elit tempor est. Sint ullamco velit ut ipsum duis laborum aute aliquip cillum esse labore nostrud elit. Esse ea commodo aliqua tempor voluptate nisi aliquip duis.\r\n",
+    "GenreId": 2,
+    "Price": 6170,
+    "CreatedDate": "2023-05-05",
+    "AppUserId": 8,
+    "Status": 1,
+    "ArtworkImage": {
+      "Url": "https://www.bing.com/images/create/portrait-art-of-a-wonderful-woman/1-65d3435da8e242cdb120455f8c5494d0?id=dYcqtlq4AdRbZnVx%2bAZ9OA%3d%3d&view=detailv2&idpp=genimg&thId=OIG1.yYAZQkg3XaZsSFxnboYL&FORM=GCRIDP&mode=overlay",
+      "IsMain": true
+    }
+    
+  },
+  {
+    "Title": "enim officia sit",
+    "Description": "Qui laborum laborum fugiat in ad. Dolor commodo sit ad dolore proident eiusmod laborum occaecat et. Incididunt commodo est labore ut. Proident do laboris eiusmod cillum nulla dolor mollit amet labore. Et sunt mollit do fugiat cillum ullamco nostrud et quis minim voluptate ipsum proident. Magna Lorem proident culpa culpa quis proident ullamco aliqua dolore adipisicing qui dolore aliquip.\r\n",
+    "GenreId": 3,
+    "Price": 9314,
+    "CreatedDate": "2023-12-27",
+    "AppUserId": 5,
+    "Status": 1,
+    "ArtworkImage": {
+      "Url": "https://www.bing.com/images/create/portrait-art-of-a-wonderful-woman/1-65d3435da8e242cdb120455f8c5494d0?id=gh%2fj6A%2b94nGKOv5gFAPwFg%3d%3d&view=detailv2&idpp=genimg&thId=OIG1.avu6uS6TqKThlA4hSTpy&FORM=GCRIDP&mode=overlay",
+      "IsMain": true
+    }
+    
+  },
+  {
+    "Title": "enim reprehenderit laboris",
+    "Description": "Consequat duis fugiat et officia id eiusmod nisi reprehenderit. Ullamco sint proident duis commodo qui. Consequat velit do occaecat et consequat consequat mollit aliquip et labore aliquip aliquip quis. In qui do ad consectetur esse excepteur nulla minim occaecat eiusmod consequat. Sint ipsum duis sunt anim.\r\n",
+    "GenreId": 3,
+    "Price": 6551,
+    "CreatedDate": "2023-02-14",
+    "AppUserId": 5,
+    "Status": 1,
+    "ArtworkImage": {
+      "Url": "https://www.bing.com/images/create/anime-vietnam-coding/1-65d34218d0e54b048c78036d8c6c68bf?id=7qVLVBz%2fdo5IuRRNOw9hmQ%3d%3d&view=detailv2&idpp=genimg&thId=OIG4.7wO4z.FiohSVEP_nmMQA&FORM=GCRIDP&mode=overlay",
+      "IsMain": true
+    }
+    
+  },
+  {
+    "Title": "proident est minim",
+    "Description": "Aliquip duis eu sint dolore dolore do commodo est cupidatat irure. Est et quis voluptate ipsum nulla eu velit ullamco. Minim nisi qui magna excepteur proident commodo quis consequat reprehenderit. Nostrud minim do occaecat cupidatat. Ipsum fugiat proident qui incididunt ad dolor officia consequat sint eu consectetur commodo qui. Officia aute eu ea aute ut est ipsum fugiat esse fugiat fugiat voluptate. Eiusmod culpa adipisicing incididunt excepteur cillum est anim duis.\r\n",
+    "GenreId": 4,
+    "Price": 1349,
+    "CreatedDate": "2023-01-18",
+    "AppUserId": 10,
+    "Status": 1,
+    "ArtworkImage": {
+      "Url": "https://www.bing.com/images/create/anime-fighting-space/1-65d343142b6b46299c16bfe7e820a41d?id=fTHlESG03UESF5JjDBaf8Q%3d%3d&view=detailv2&idpp=genimg&thId=OIG1.TxeieEDUjXp_dOA1Nxn2&FORM=GCRIDP&mode=overlay",
+      "IsMain": true
+    }
+    
+  },
+  {
+    "Title": "laborum ex aliqua",
+    "Description": "Cillum cupidatat nisi quis velit adipisicing nulla officia ad ex aliquip fugiat occaecat amet velit. Nulla mollit qui cillum laborum eiusmod pariatur sit ullamco qui duis. Pariatur ad excepteur deserunt tempor dolor minim minim. Mollit dolore ut cupidatat non aliquip nostrud enim magna irure laborum labore dolore mollit. Est elit ipsum ad eu nulla cillum.\r\n",
+    "GenreId": 4,
+    "Price": 2824,
+    "CreatedDate": "2024-01-17",
+    "AppUserId": 9,
+    "Status": 1,
+    "ArtworkImage": {
+      "Url": "https://www.bing.com/images/create/fiction-art-space-dragon-cosmic-entity/1-65d343f4b52e4fda8b13e5a94f46a593?id=ElkqWuNV1gx760LUZYfWxA%3d%3d&view=detailv2&idpp=genimg&thId=OIG3.dKxNE7ny695uYBUhcKkw&FORM=GCRIDP&mode=overlay",
+      "IsMain": true
+    }
+    
+  },
+  {
+    "Title": "eiusmod exercitation officia",
+    "Description": "Fugiat mollit nulla voluptate consequat laboris. Ut pariatur sit enim nisi est minim nostrud irure. Sunt do officia eiusmod et mollit mollit id ea ea consectetur do. Consequat qui quis dolore ut labore id eu consequat deserunt commodo. Nisi pariatur labore labore ea in. Sunt exercitation ut duis do commodo ut enim enim eu eu nostrud.\r\n",
+    "GenreId": 1,
+    "Price": 478,
+    "CreatedDate": "2023-11-01",
+    "AppUserId": 10,
+    "Status": 1,
+    "ArtworkImage": {
+      "Url": "https://www.bing.com/images/create/fiction-art-space-dragon-cosmic-entity/1-65d343f4b52e4fda8b13e5a94f46a593?id=PW5Fpw3Ef2BJX93up995Zw%3d%3d&view=detailv2&idpp=genimg&thId=OIG3.iVYE8Vjl1johNnYd4z7C&FORM=GCRIDP&mode=overlay",
+      "IsMain": true
+    }
+    
+  },
+  {
+    "Title": "mollit dolore ipsum",
+    "Description": "Mollit velit non anim qui sunt Lorem est. Culpa sunt cupidatat officia Lorem. Minim ex non sint nulla sunt fugiat irure ullamco irure. Ea eu dolore ullamco Lorem laborum culpa ad in.\r\n",
+    "GenreId": 1,
+    "Price": 2702,
+    "CreatedDate": "2023-05-26",
+    "AppUserId": 9,
+    "Status": 1,
+    "ArtworkImage": {
+      "Url": "https://www.bing.com/images/create/landscape-art-sky-full-of-star/1-65d3455a2f8140fb91f9bc1129d51969?id=aZm1Gf2zX2TaZFn2%2fCEmFw%3d%3d&view=detailv2&idpp=genimg&thId=OIG1.DwOuibWIcKVMnNR9qdU7&FORM=GCRIDP&mode=overlay",
+      "IsMain": true
+    }
+    
+  }
+]
