@@ -9,7 +9,7 @@
                 Welcome @Context.Session.GetString("EmailAddress")
             </a>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item" >Profile</a></li>
+                <li><a class="dropdown-item" asp-route-userId="@Context.Session.GetInt32("Id")" >Profile</a></li>
                 <li><a class="dropdown-item" asp-page="/Account/Logout">Logout</a></li>
             </ul>
         </li>
