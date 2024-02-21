@@ -25,8 +25,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
+                        @if (User.IsInRole("Artist"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/artist/artistcommission">My Commission</a>
+                            </li>
+                        }
                     </ul>
                 </div>
+                
                 <div class="mr-2">
                     <partial name="_LoginStatusPartial" />
                 </div>

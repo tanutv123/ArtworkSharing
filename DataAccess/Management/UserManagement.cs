@@ -41,7 +41,7 @@ namespace DataAccess.Management
             {
                 return SignInResult.Failed;
             }
-            var result = await _signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(email, password, false,lockoutOnFailure: false);
             return result;
         }
 

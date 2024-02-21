@@ -34,14 +34,14 @@ namespace DataAccess.Data
 
 			foreach (var user in users)
 			{
-				user.UserName = user.Name.ToLower();
+				user.UserName = user.Email;
 				var result = await userManager.CreateAsync(user, "Pa$$w0rd");
 				await userManager.AddToRoleAsync(user, "Audience");
 			}
 
 			var admin = new AppUser
 			{
-				UserName = "admin",
+				UserName = "admin@fas.com",
 				Name = "admin",
 				Description = "admin",
 				Email = "admin@fas.com",
@@ -53,7 +53,7 @@ namespace DataAccess.Data
 
 			var manager = new AppUser
 			{
-				UserName = "manager",
+				UserName = "manager@fas.com",
 				Email = "manager@fas.com",
 				Status = 1
 			};
@@ -62,7 +62,7 @@ namespace DataAccess.Data
 
 			var artist = new AppUser
 			{
-				UserName = "Davinci",
+				UserName = "vinci@gmail.com",
 				Name = "Da Vinci",
 				Email = "vinci@gmail.com",
 				PhoneNumber = "0123456789",
