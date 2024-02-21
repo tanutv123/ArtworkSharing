@@ -1,3 +1,5 @@
+using BusinessObject.DTOs;
+using BusinessObject.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repository;
@@ -12,7 +14,9 @@ namespace Presentation.Pages.Audience
         {
 			_commissionRepository = commissionRepository;
 		}
-        public void OnGet()
+        [BindProperty]
+        public CommissionRequestDTO CommissionRequestDTO{ get; set; } = new CommissionRequestDTO();
+        public void OnGet(int artistId)
         {
         }
     }

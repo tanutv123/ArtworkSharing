@@ -10,6 +10,7 @@ namespace BusinessObject.Entities
         public string Description { get; set; }
         public int GenreId { get; set; }
         public decimal Price { get; set; }
+        public int SoldNumber { get; set; }
         public DateTime CreatedDate { get; set; }
         public int AppUserId { get; set; }
 		public byte Status { get; set; }
