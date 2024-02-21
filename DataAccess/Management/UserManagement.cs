@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,6 +55,12 @@ namespace DataAccess.Management
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phone);
             return user != null;
+        }
+
+        public async Task<AppUser> GetUserDetail(int userId)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            return user;
         }
     }
 }

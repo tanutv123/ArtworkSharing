@@ -17,17 +17,17 @@ namespace DataAccess.Data
                                                 IdentityUserToken<int>
                                                 >
     {
-        /*public DataContext()
-        {
+          public DataContext()
+          {
 
-        }*/
-        //protected override void OnConfiguring(DbContextOptionsBuilder options)
-        //{
-        //    if (!options.IsConfigured)
-        //    {
-        //        options.UseSqlServer("server =(local); database = ArtworkSharing;uid=sa;pwd=12345; TrustServerCertificate=True");
-        //    }
-        //}
+          }
+         protected override void OnConfiguring(DbContextOptionsBuilder options)
+         {
+             if (!options.IsConfigured)
+             {
+                options.UseSqlServer("server =(local); database = ArtworkSharing1;uid=sa;pwd=123456@Aa; TrustServerCertificate=True");
+             }
+         }
 
         public DataContext(DbContextOptions options) : base(options)
         {
