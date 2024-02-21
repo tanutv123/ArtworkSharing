@@ -10,6 +10,6 @@ namespace BusinessObject.Entities
 	{
         public int Id { get; set; }
         public string Description { get; set; }
-        public List<CommisionHistory> CommisionHistories { get; set; }
+        public List<CommissionRequest> CommisionHistories { get; set; }
     }
 }

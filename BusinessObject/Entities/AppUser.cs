@@ -18,8 +18,8 @@ namespace BusinessObject.Entities
 		public ICollection<AppUserRole> UserRoles { get; set; }
         public List<Purchase> Purchases { get; set; }
         public Commission Commission { get; set; }
-        public List<CommisionHistory> CommissionSent { get; set; }
-        public List<CommisionHistory> CommissionReceived { get; set; }
+        public List<CommissionRequest> CommissionSent { get; set; }
+        public List<CommissionRequest> CommissionReceived { get; set; }
         public List<ArtworkLike> LikedArtwork{ get; set; }
         public UserImage UserImage { get; set; }
     }
