@@ -1,6 +1,7 @@
 using BusinessObject.Entities;
 using DataAccess.Data;
 using DataAccess.Management;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Presentation.SignalR;
@@ -26,7 +27,19 @@ builder.Services.AddIdentityCore<AppUser>(opt =>
 	.AddRoles<AppRole>()
 	.AddRoleManager<RoleManager<AppRole>>()
 	.AddEntityFrameworkStores<DataContext>()
-	.AddSignInManager<SignInManager<AppUser>>();
+	.AddSignInManager<SignInManager<AppUser>>()
+	.AddDefaultTokenProviders();
+builder.Services.AddAuthentication(options =>
+{
+	options.DefaultScheme = IdentityConstants.ApplicationScheme;
+	options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+}).AddIdentityCookies();
+builder.Services.AddAuthorization(options =>
+{
+	options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+	options.AddPolicy("RequireManagerRole", policy => policy.RequireRole("Manager"));
+	options.AddPolicy("RequireArtistRole", policy => policy.RequireRole("Artist"));
+});
 
 builder.Services.AddSession(options =>
 {
@@ -37,10 +50,11 @@ builder.Services.AddSession(options =>
 
 builder.Services.AddSignalR();
 
-builder.Services.AddAuthentication();
 
 builder.Services.AddScoped<UserManagement>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<CommissionManagement>();
+builder.Services.AddScoped<ICommissionRepository, CommissionRepository>();
 
 var app = builder.Build();
 

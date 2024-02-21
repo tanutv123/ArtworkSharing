@@ -23,4 +23,12 @@
     <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\du lieu o kia\WPF\ArtworkSharing\Presentation\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\du lieu o kia\WPF\ArtworkSharing\Presentation\.editorconfig" />
+  </ItemGroup>
+
 </Project>
