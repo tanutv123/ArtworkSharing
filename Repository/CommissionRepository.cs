@@ -16,7 +16,18 @@ namespace Repository
         {
 			_commissionManagement = commissionManagement;
 		}
-        public async Task<Commission> GetArtistCommission(int id)
+
+		public async Task AddCommission(Commission commission)
+		{
+			await _commissionManagement.Add(commission);
+		}
+
+		public async Task<bool> CheckArtistRegisterCommission(int id)
+		{
+			return await _commissionManagement.CheckArtistRegisterCommission(id);
+		}
+
+		public async Task<Commission> GetArtistCommission(int id)
 		{
 			return await _commissionManagement.GetArtistCommissionAsync(id);
 		}

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Presentation.Pages.Home
+namespace Presentation.Pages.Admin
 {
-    [Authorize]
-    [Authorize(Policy = "RequireArtistRole")]
+    [Authorize(Policy = "RequireAdminRole")]
+    [Authorize(Policy = "RequireManagerRole")]
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;

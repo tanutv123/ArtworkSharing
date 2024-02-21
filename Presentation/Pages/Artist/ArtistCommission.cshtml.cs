@@ -17,9 +17,9 @@ namespace Presentation.Pages.Artist
             _commissionRepository = commissionRepository;
         }
         public Commission Commission { get; set; }
-        public void OnGet()
+        public async Task OnGetAsync()
         {
-            Commission = _commissionRepository.GetArtistCommission(User.GetUserId()).Result;
+            Commission = await _commissionRepository.GetArtistCommission(User.GetUserId());
         }
     }
 }
