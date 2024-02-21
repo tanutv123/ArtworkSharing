@@ -1,0 +1,30 @@
+﻿@page
+@model Presentation.Pages.Artist.AddCommissionModel
+@{
+}
+
+@if(Model.IsRegisteredCommission)
+{
+	<h3>You already have one commission available.</h3>
+}
+else
+{
+	<div class="container">
+		<form method="post">
+			<div class="text-danger" asp-validation-summary="All"></div>
+			<div class="mb-3">
+				<label for="description" class="form-label">Description: </label>
+				<input type="text" class="form-control" id="description" asp-for="AddCommisionDTO.Description">
+				<span class="text-danger" asp-validation-for="AddCommisionDTO.Description"></span>
+			</div>
+			<div class="mb-3">
+				<label for="targetPrice" class="form-label">Target price: </label>
+				<input type="number" class="form-control" id="targetPrice" asp-for="AddCommisionDTO.TargetPrice">
+				<span class="text-danger" asp-validation-for="AddCommisionDTO.TargetPrice"></span>
+			</div>
+			<div class="mb-3">
+				<button type="submit" class="btn btn-success">Register your Commission</button>
+			</div>
+		</form>
+	</div>
+}
