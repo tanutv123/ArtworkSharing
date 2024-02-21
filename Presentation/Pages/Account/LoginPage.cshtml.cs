@@ -11,36 +11,57 @@ namespace Presentation.Pages.Account
     public class LoginPageModel : PageModel
     {
         private readonly IUserRepository _userRepository;
+        private readonly UserManager<AppUser> _userManager;
 
         [BindProperty]
-        public string EmailAddress { get; set; }
+        public AppUser AppUser { get; set; }
 
         [BindProperty]
         public string Password { get; set; }
 
-        public LoginPageModel(IUserRepository userRepository)
+        public LoginPageModel(IUserRepository userRepository, UserManager<AppUser> userManager)
         {
             _userRepository = userRepository;
+            _userManager = userManager;
         }
 
         public void OnGet()
         {
-            
+
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                
+
             }
-            Debug.WriteLine($"EmailAddress = {EmailAddress}, Password = {Password}");
-            var result = await _userRepository.LoginAsync(EmailAddress, Password);
+            string email = AppUser.Email;
+            Debug.WriteLine($"EmailAddress = {email}, Password = {Password}");
+            var result = await _userRepository.LoginAsync(email, Password);
 
             if (result.Succeeded)
             {
-                HttpContext.Session.SetString("EmailAddress", EmailAddress);
-                return RedirectToPage("/Home/Index");
+                var user = await _userManager.FindByEmailAsync(email);
+                var roles = await _userManager.GetRolesAsync(user);
+                var role = roles.FirstOrDefault(); 
+
+                HttpContext.Session.SetString("EmailAddress", email);
+                HttpContext.Session.SetString("Role", role);
+                HttpContext.Session.SetInt32("Id", user.Id);
+
+                if (role.Equals("Audience") || role.Equals("Artist"))
+                {
+                    return RedirectToPage("/Home/Index");
+                }
+                if (role.Equals("Admin") || role.Equals("Manager"))
+                {
+                    return RedirectToPage("/Admin/Index");
+                }
+                else
+                {
+                    return RedirectToPage("/Account/AccessDenied");
+                }
             }
             else
             {
