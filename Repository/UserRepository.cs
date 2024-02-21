@@ -32,5 +32,10 @@ namespace Repository
         {
             await _userManagement.SignOutAsync();
         }
+
+        public async Task<AppUser> GetUserById(int userId)
+        {
+            return await _userManagement.GetUserDetail(userId);
+        }
     }
 }

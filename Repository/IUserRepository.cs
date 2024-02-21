@@ -13,5 +13,6 @@ namespace Repository
         Task<IdentityResult> RegisterAsync(AppUser newUser, string password);
         Task<SignInResult> LoginAsync(string email, string password);
         Task SignOutAsync();
+        Task<AppUser> GetUserById(int userId);
     }
 }

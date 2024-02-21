@@ -18,6 +18,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
 builder.Services.AddIdentityCore<AppUser>(opt =>
 {
 	opt.Password.RequiredLength = 5;
