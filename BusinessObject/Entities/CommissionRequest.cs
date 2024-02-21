@@ -2,7 +2,7 @@
 
 namespace BusinessObject.Entities
 {
-	public class CommisionHistory
+	public class CommissionRequest
 	{
         public int Id { get; set; }
         public decimal ActualPrice { get; set; }

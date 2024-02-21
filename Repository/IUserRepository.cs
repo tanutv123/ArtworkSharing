@@ -1,4 +1,5 @@
-﻿using BusinessObject.Entities;
+﻿using BusinessObject.DTOs;
+using BusinessObject.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,6 @@ namespace Repository
         Task<IdentityResult> RegisterAsync(AppUser newUser, string password);
         Task<SignInResult> LoginAsync(string email, string password);
         Task SignOutAsync();
+        Task<AppUserProfileDTO> GetUserProfile(int id);
     }
 }
