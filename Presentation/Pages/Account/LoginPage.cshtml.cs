@@ -1,4 +1,5 @@
 using BusinessObject.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Presentation.Pages.Account
 {
+    [AllowAnonymous]
     public class LoginPageModel : PageModel
     {
         private readonly IUserRepository _userRepository;
