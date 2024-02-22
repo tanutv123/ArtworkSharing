@@ -1,0 +1,60 @@
+﻿@page
+@model Presentation.Pages.Artist.ArtistCommissionHistoryModel
+@{
+}
+
+@if(Model.CommissionRequestHistoryDTOs != null && Model.CommissionRequestHistoryDTOs.Count != 0)
+{
+	<div class="container">
+		<table class="table" id="commissionTable">
+			<thead>
+				<tr>
+					<td>Sender Email</td>
+					<td>Receiver Email</td>
+					<td>Description</td>
+					<td>Actual Price</td>
+					<td>Request Date</td>
+					<td>Status</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach(var request in Model.CommissionRequestHistoryDTOs)
+				{
+					<tr>
+						<td>@request.SenderEmail</td>
+						<td>@request.ReceiverEmail</td>
+						<td>@request.RequestDescription</td>
+						<td>@request.ActualPrice</td>
+						<td>@request.RequestDate</td>
+						<td>@request.CommissionStatusDescription</td>
+						<td>
+							@if (request.CommissionStatusDescription == "Pending")
+							{
+								<form method="post">
+									<button type="button" class="btn btn-primary">Accept</button>
+								</form>
+							}
+							else
+							{
+								<a href="#">View Detail</a>
+							}
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}
+else
+{
+	<h3>No commission to be displayed</h3>
+}
+@section Scripts {
+	<script>
+		let table = new DataTable('#commissionTable', {
+			responsive: true
+		});
+		console.log(@Html.Raw(Json.Serialize(Model.CommissionRequestHistoryDTOs.ToArray())));
+	</script>
+}

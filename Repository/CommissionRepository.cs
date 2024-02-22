@@ -1,4 +1,5 @@
-﻿using BusinessObject.Entities;
+﻿using BusinessObject.DTOs;
+using BusinessObject.Entities;
 using DataAccess.Management;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Repository
 {
-	public class CommissionRepository : ICommissionRepository
+    public class CommissionRepository : ICommissionRepository
 	{
 		private readonly CommissionManagement _commissionManagement;
 
@@ -22,6 +23,11 @@ namespace Repository
 			await _commissionManagement.Add(commission);
 		}
 
+		public async Task AddCommissionRequest(CommissionRequest commissionRequest)
+		{
+			await _commissionManagement.AddCommissionRequest(commissionRequest);
+		}
+
 		public async Task<bool> CheckArtistRegisterCommission(int id)
 		{
 			return await _commissionManagement.CheckArtistRegisterCommission(id);
@@ -31,5 +37,20 @@ namespace Repository
 		{
 			return await _commissionManagement.GetArtistCommissionAsync(id);
 		}
-	}
+
+		public async Task<List<CommissionRequestHistoryDTO>> GetCommissionRequestHistory(int audienceId)
+		{
+			return await _commissionManagement.GetCommissionRequestHistory(audienceId);
+		}
+
+		public async Task<List<CommissionRequestHistoryDTO>> GetCommissionRequestHistoryForArtist(int artistId, string statusFilter)
+		{
+			return await _commissionManagement.GetCommissionRequestHistoryForArtist(artistId, statusFilter);
+		}
+
+		public async Task<CommissionRequestHistoryDTO> GetSingleCommissionRequestHistory(int requestId)
+        {
+			return await _commissionManagement.GetSingleCommissionRequest(requestId);
+        }
+    }
 }
