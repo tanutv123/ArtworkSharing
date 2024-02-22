@@ -1,7 +1,12 @@
-﻿using BusinessObject.Entities;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using BusinessObject.DTOs;
+using BusinessObject.Entities;
 using DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DataAccess.Management
@@ -9,10 +14,12 @@ namespace DataAccess.Management
 	public class CommissionManagement
 	{
 		private readonly DataContext _context;
+		private readonly IMapper _mapper;
 
-		public CommissionManagement(DataContext context)
+		public CommissionManagement(DataContext context, IMapper mapper)
         {
 			_context = context;
+			_mapper = mapper;
 		}
 
 		public async Task<Commission> GetArtistCommissionAsync(int id)
@@ -74,6 +81,82 @@ namespace DataAccess.Management
 			{
 				throw new Exception(ex.Message);
 			}
+		}
+
+		public async Task AddCommissionRequest(CommissionRequest commissionRequest)
+		{
+			try
+			{
+				if (commissionRequest == null)
+				{
+					throw new Exception("Invalid request");
+				}
+				else
+				{
+					var pendingStatus = await _context.CommissionStatus
+						.SingleOrDefaultAsync(x => x.Description == "Pending");
+					commissionRequest.CommissionStatusId = pendingStatus.Id;
+					await _context.CommissionRequests.AddAsync(commissionRequest);
+					await _context.SaveChangesAsync();
+				}
+			}
+			catch (Exception ex) 
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		public async Task<List<CommissionRequestHistoryDTO>> GetCommissionRequestHistory(int audienceId)
+		{
+			List<CommissionRequestHistoryDTO> result = null;
+
+			try
+			{
+				result = await _context.CommissionRequests.Where(x => x.SenderId == audienceId).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
+			}
+			catch(Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+			return result;
+		}
+
+		public async Task<List<CommissionRequestHistoryDTO>> GetCommissionRequestHistoryForArtist(int artistId, string statusFilter)
+		{
+			List<CommissionRequestHistoryDTO> result = null;
+
+			try
+			{
+				if(string.IsNullOrEmpty(statusFilter))
+				{
+					result = await _context.CommissionRequests.Where(x => x.ReceiverId == artistId).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
+				} 
+				else
+				{
+					var statusToBeFiltered = await _context.CommissionStatus.Where(x => x.Description == statusFilter).SingleOrDefaultAsync();
+					result = await _context.CommissionRequests.Where(x => x.ReceiverId == artistId && x.CommissionStatusId == statusToBeFiltered.Id).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+			return result;
+		}
+
+		public async Task<CommissionRequestHistoryDTO> GetSingleCommissionRequest(int id)
+		{
+			CommissionRequestHistoryDTO result = null;
+
+			try
+			{
+				result = await _context.CommissionRequests.Where(x => x.Id == id).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+			}
+			catch(Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+			return result;
 		}
     }
 }
