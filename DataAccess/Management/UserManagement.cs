@@ -79,5 +79,18 @@ namespace DataAccess.Management
             }
             return result;
         }
+
+        public async Task<IEnumerable<AppUserDTO>> GetAllUser()
+        {
+            List<AppUserDTO> appUsers = null;
+            try
+            {
+                appUsers = await _dataContext.Users.ProjectTo<AppUserDTO>(_mapper.ConfigurationProvider).ToListAsync();
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return appUsers;
+        }
     }
 }

@@ -20,7 +20,12 @@ namespace Repository
             _userManagement = userManagement;
 		}
 
-		public async Task<AppUserProfileDTO> GetUserProfile(int id)
+        public async Task<IEnumerable<AppUserDTO>> GetAllUser()
+        {
+            return await _userManagement.GetAllUser();
+        }
+
+        public async Task<AppUserProfileDTO> GetUserProfile(int id)
 		{
 			return await _userManagement.GetUserProfile(id);
 		}

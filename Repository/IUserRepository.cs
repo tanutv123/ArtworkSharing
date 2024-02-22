@@ -15,5 +15,6 @@ namespace Repository
         Task<SignInResult> LoginAsync(string email, string password);
         Task SignOutAsync();
         Task<AppUserProfileDTO> GetUserProfile(int id);
+        Task<IEnumerable<AppUserDTO>> GetAllUser();
     }
 }

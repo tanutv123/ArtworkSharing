@@ -9,6 +9,7 @@ namespace DataAccess.Helpers
 		public AutoMapperProfile()
 		{
 			CreateMap<Commission, AddCommisionDTO>().ReverseMap();
+			CreateMap<AppUser, AppUserDTO>().ReverseMap();	
 		}
 	}
 }

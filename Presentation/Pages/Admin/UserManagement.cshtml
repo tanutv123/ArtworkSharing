@@ -1,0 +1,65 @@
+﻿@page
+@model Presentation.Pages.Admin.UserManagementModel
+@{
+    ViewData["Title"] = "User Management";
+}
+
+@if (Model.AppUserDTO != null && Model.AppUserDTO.Count != 0)
+{
+    <div class="container">
+        <table class="table" id="userTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Customer Status</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.AppUserDTO)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @if (item.Status == 1)
+                            {
+                                <span>Available</span>
+                            }
+                            else
+                            {
+                                <span>Unavailable</span>
+                            }
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                            <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <h3>No user to display</h3>
+}
+
+@section Scripts {
+    <script>
+        let table = new DataTable('#userTable', {
+            responsive: true
+        });
+    </script>
+}
