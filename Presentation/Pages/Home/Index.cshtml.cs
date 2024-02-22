@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Presentation.Pages.Home
 {
-    [Authorize]
-    [Authorize(Policy = "RequireArtistRole")]
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;

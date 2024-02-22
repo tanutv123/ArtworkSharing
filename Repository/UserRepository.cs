@@ -1,4 +1,6 @@
-﻿using BusinessObject.Entities;
+﻿using AutoMapper;
+using BusinessObject.DTOs;
+using BusinessObject.Entities;
 using DataAccess.Management;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -13,12 +15,17 @@ namespace Repository
     {
         private readonly UserManagement _userManagement;
 
-        public UserRepository(UserManagement userManagement)
+		public UserRepository(UserManagement userManagement)
         {
             _userManagement = userManagement;
-        }
+		}
 
-        public async Task<SignInResult> LoginAsync(string email, string password)
+		public async Task<AppUserProfileDTO> GetUserProfile(int id)
+		{
+			return await _userManagement.GetUserProfile(id);
+		}
+
+		public async Task<SignInResult> LoginAsync(string email, string password)
         {
             return await _userManagement.LoginAsync(email, password);
         }

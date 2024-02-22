@@ -7,6 +7,6 @@
 		public bool isMain { get; set; }
 		public string PublicId { get; set; }
 		public int CommissionHistoryId { get; set; }
-		public CommisionHistory CommisionHistory { get; set; }
+		public CommissionRequest CommisionHistory { get; set; }
 	}
 }

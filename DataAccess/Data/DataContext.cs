@@ -38,7 +38,7 @@ namespace DataAccess.Data
         public DbSet<Artwork> Artworks { get; set; }
         public DbSet<ArtworkComment> ArtworkComments { get; set; }
         public DbSet<ArtworkLike> ArtworkLikes { get; set; }
-        public DbSet<CommisionHistory> CommissionHistory { get; set; }
+        public DbSet<CommissionRequest> CommissionRequests { get; set; }
         public DbSet<Commission> Commissions { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<UserImage> UserImages{ get; set; }
@@ -119,12 +119,12 @@ namespace DataAccess.Data
             .HasForeignKey(t => t.ReceiverId)
             .OnDelete(DeleteBehavior.NoAction);
 
-            builder.Entity<CommisionHistory>()
+            builder.Entity<CommissionRequest>()
                 .HasOne(c => c.Sender)
                 .WithMany(u => u.CommissionSent)
                 .HasForeignKey(c => c.SenderId)
                 .OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<CommisionHistory>()
+            builder.Entity<CommissionRequest>()
                 .HasOne(c => c.Receiver)
                 .WithMany(u => u.CommissionReceived)
                 .HasForeignKey(c => c.ReceiverId)

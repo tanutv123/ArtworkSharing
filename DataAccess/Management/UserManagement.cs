@@ -1,4 +1,7 @@
-﻿using BusinessObject.Entities;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using BusinessObject.DTOs;
+using BusinessObject.Entities;
 using DataAccess.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,13 +20,19 @@ namespace DataAccess.Management
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly DataContext _dataContext;
+		private readonly IMapper _mapper;
 
-        public UserManagement(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, DataContext dataContext)
+		public UserManagement(
+            UserManager<AppUser> userManager, 
+            SignInManager<AppUser> signInManager, 
+            DataContext dataContext, 
+            IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _dataContext = dataContext;
-        }
+			_mapper = mapper;
+		}
 
         public async Task<IdentityResult> RegisterAsync(AppUser newUser, string password)
         {
@@ -61,6 +70,21 @@ namespace DataAccess.Management
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
             return user;
+        }
+
+        public async Task<AppUserProfileDTO> GetUserProfile(int id)
+        {
+            AppUserProfileDTO result = null;
+
+            try
+            {
+				result = await _dataContext.Users.Where(x => x.Id == id).ProjectTo<AppUserProfileDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return result;
         }
     }
 }

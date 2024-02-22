@@ -1,7 +1,6 @@
 using BusinessObject.Entities;
 using DataAccess.Data;
 using DataAccess.Management;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Presentation.SignalR;
@@ -19,6 +18,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddIdentityCore<AppUser>(opt =>
 {
 	opt.Password.RequiredLength = 5;
@@ -40,6 +40,9 @@ builder.Services.AddAuthorization(options =>
 	options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
 	options.AddPolicy("RequireManagerRole", policy => policy.RequireRole("Manager"));
 	options.AddPolicy("RequireArtistRole", policy => policy.RequireRole("Artist"));
+    options.AddPolicy("RequireAdminManagerRole", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") || context.User.IsInRole("Manager")));
 });
 
 builder.Services.AddSession(options =>
@@ -50,7 +53,6 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddSignalR();
-
 
 builder.Services.AddScoped<UserManagement>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
