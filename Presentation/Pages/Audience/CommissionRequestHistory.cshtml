@@ -1,0 +1,49 @@
+﻿@page
+@model Presentation.Pages.Audience.CommissionRequestHistoryModel
+@{
+}
+
+@if(Model.CommissionRequestDTOs != null && Model.CommissionRequestDTOs.Count != 0)
+{
+	<div class="container">
+		<table class="table" class="row">
+			<thead>
+				<tr>
+					<td>Id</td>
+					<td>Sender Email</td>
+					<td>Receiver Email</td>
+					<td>Actual Price</td>
+					<td>Request Date</td>
+					<td>Status</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var request in Model.CommissionRequestDTOs)
+				{
+					<tr>
+						<td>@request.Id</td>
+						<td>@request.SenderEmail</td>
+						<td>@request.ReceiverEmail</td>
+						<td>@request.ActualPrice</td>
+						<td>@request.RequestDate</td>
+						<td>@request.CommissionStatusDescription</td>
+						<td>
+							@if(request.CommissionStatusDescription == "Pending")
+							{
+								<p>Waiting for artist to accept</p>
+							} 
+							else
+							{
+								<a href="/audience/commissionrequesthistorydetail?id=@request.Id">View detail</a>
+							}
+						</td>
+					</tr>
+				}
+		</table>
+	</div>
+}
+else
+{
+	<h3>You do not have any requested commission yet.</h3>
+}
