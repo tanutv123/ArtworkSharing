@@ -35,6 +35,11 @@ namespace DataAccess.Management
 
         public async Task<IdentityResult> RegisterAsync(AppUser newUser, string password)
         {
+            if (await IsPhoneExistAsync(newUser.PhoneNumber))
+            {
+                throw new Exception("Phone number already exists.");
+            }
+            newUser.UserName = newUser.Email;
             var result = await _userManager.CreateAsync(newUser, password);
             if (result.Succeeded)
             {
@@ -85,7 +90,9 @@ namespace DataAccess.Management
             List<AppUserDTO> appUsers = null;
             try
             {
-                appUsers = await _dataContext.Users.ProjectTo<AppUserDTO>(_mapper.ConfigurationProvider).ToListAsync();
+                appUsers = await _dataContext.Users
+                    .Include(a => a.UserRoles)
+                    .ProjectTo<AppUserDTO>(_mapper.ConfigurationProvider).ToListAsync();
             }catch(Exception ex)
             {
                 throw new Exception(ex.Message);

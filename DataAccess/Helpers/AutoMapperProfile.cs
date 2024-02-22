@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BusinessObject.DTOs;
 using BusinessObject.Entities;
+using System.Linq;
 
 namespace DataAccess.Helpers
 {
@@ -18,6 +19,9 @@ namespace DataAccess.Helpers
 				.ForMember(dest => dest.SenderEmail, opt => opt.MapFrom(src => src.Sender.Email))
 				.ForMember(dest => dest.CommissionStatusDescription, opt => opt.MapFrom(src => src.CommissionStatus.Description))
 				.ReverseMap();
-		}
+            CreateMap<AppUser, AppUserDTO>()
+				.ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.UserRoles.FirstOrDefault().Role.Name))
+				.ReverseMap();
+        }
 	}
 }
