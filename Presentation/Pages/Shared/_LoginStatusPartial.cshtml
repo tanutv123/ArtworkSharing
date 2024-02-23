@@ -11,7 +11,7 @@
             </a>
             <ul class="dropdown-menu">
 
-                <li><a class="dropdown-item" asp-route-userId="@Context.Session.GetInt32("Id")" >Profile</a></li>
+                <li><a class="dropdown-item" asp-route-userId="@Context.Session.GetInt32("Id")"  asp-page="/User/Detail">Profile</a></li>
                 @if(User.IsInRole("Admin")){
                     <li><a class="dropdown-item" asp-page="/Admin/UserManagement">User Mangement</a></li>
                     <li><a class="dropdown-item" asp-page="/Account/Logout">Artwork Management</a></li>

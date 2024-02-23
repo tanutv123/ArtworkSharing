@@ -37,6 +37,8 @@
     <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ValidationScriptsPartial.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewImports.cshtml" />
     <_ContentIncludedByDefault Remove="Areas\Identity\Pages\_ViewStart.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ConfirmEmail.cshtml" />
+    <_ContentIncludedByDefault Remove="Areas\Identity\Pages\Account\ConfirmEmailChange.cshtml" />
   </ItemGroup>
 
 </Project>
