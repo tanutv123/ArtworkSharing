@@ -40,6 +40,7 @@ namespace DataAccess.Data
         public DbSet<ArtworkLike> ArtworkLikes { get; set; }
         public DbSet<CommissionRequest> CommissionRequests { get; set; }
         public DbSet<Commission> Commissions { get; set; }
+        public DbSet<CommissionImage> CommissionImages { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<UserImage> UserImages{ get; set; }
         public DbSet<ArtworkImage> ArtworkImages { get; set; }
