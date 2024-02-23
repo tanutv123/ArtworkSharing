@@ -1,0 +1,174 @@
+﻿@page
+@model Presentation.Pages.Artist.ArtistCommissionRequestDetailModel
+@{
+}
+@if(Model.CommissionImages != null && Model.CommissionImages.Count != 0)
+{
+	<div class="container">
+		<div class="row mb-3">
+			@foreach(var image in Model.CommissionImages)
+			{
+				<div class="col-md-4 mb-3">
+					<div class="card" style="width: 18rem">
+						<img src="@image.Url" class="card-img-top" alt="progress image">
+						<div class="card-body">
+							<p class="card-text">@image.CreatedDate.ToShortDateString()</p>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+		<div class="row mb-3">
+			<p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add progress image</button></p>
+			<p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">Done</button></p>
+			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Add Progress Image</h5>
+							<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form method="post" asp-page-handler="AddImage">
+							<div class="modal-body">
+								<div class="text text-danger" asp-validation-summary="All"></div>
+								<div class="mb-3">
+									<label for="commissionId" class="form-label">CommissionId: </label>
+									<input type="text" class="form-control" id="commissionId" asp-for="AddCommissionImageDTO.CommissionRequestId" readonly>
+									<span class="text-danger" asp-validation-for="AddCommissionImageDTO.CommissionRequestId"></span>
+								</div>
+								<div class="mb-3">
+									<label for="progressImageUpload" class="form-label">Upload Progress Image</label>
+									<input type="file" class="form-control" id="progressImageUpload">
+									<img src="" id="progressImageDisplay" style="display:none;width:300px;" />
+								</div>
+								<div class="mb-3">
+									<label for="publicId" class="form-label">Public Id</label>
+									<input type="text" readonly class="form-control" id="publicId" asp-for="AddCommissionImageDTO.PublicId">
+									<img src="" id="progressImageDisplay" style="display:none;width:300px;" />
+								</div>
+								<div class="mb-3">
+									<label for="progressImage" class="form-label">Progress Image Url</label>
+									<input type="text" class="form-control" id="progressImage" asp-for="AddCommissionImageDTO.Url" readonly>
+									<span class="text-danger" asp-validation-for="AddCommissionImageDTO.Url"></span>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+								<button type="submit" class="btn btn-primary">Add</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Do you readly want to confirm that the commission is DONE?</h5>
+							<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<form method="post" asp-page-handler="Done">
+							<div class="modal-body">
+								<div class="text text-danger" asp-validation-summary="All"></div>
+								<div class="mb-3">
+									<label for="commissionId" class="form-label">CommissionId: </label>
+									<input type="text" class="form-control" id="commissionId" asp-for="AddCommissionImageDTO.CommissionRequestId" readonly>
+									<span class="text-danger" asp-validation-for="AddCommissionImageDTO.CommissionRequestId"></span>
+								</div>
+								<div class="mb-3">
+									<p>The result for this commission:</p>
+									<img src="@Model.CommissionImages.SingleOrDefault(x => x.isMain == true).Url" id="progressImageDisplay" style="width:300px;" />
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+								<button type="submit" class="btn btn-primary">Yes</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+}
+else
+{
+	<h3>You did not add any image to this commission.</h3>
+	<p>Please add one to confirm that the commission is in progress</p>
+	<p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add progress image</button></p>
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Add Progress Image</h5>
+					<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form method="post" asp-page-handler="AddImage">
+					<div class="modal-body">
+						<div class="text text-danger" asp-validation-summary="All"></div>
+						<div class="mb-3">
+							<label for="commissionId" class="form-label">CommissionId: </label>
+							<input type="text" class="form-control" id="commissionId" asp-for="AddCommissionImageDTO.CommissionRequestId" readonly>
+							<span class="text-danger" asp-validation-for="AddCommissionImageDTO.CommissionRequestId"></span>
+						</div>
+						<div class="mb-3">
+							<label for="progressImageUpload" class="form-label">Upload Progress Image</label>
+							<input type="file" class="form-control" id="progressImageUpload">
+							<img src="" id="progressImageDisplay" style="display:none;width:300px;" />
+						</div>
+						<div class="mb-3">
+							<label for="publicId" class="form-label">Public Id</label>
+							<input type="text" readonly class="form-control" id="publicId" asp-for="AddCommissionImageDTO.PublicId">
+							<img src="" id="progressImageDisplay" style="display:none;width:300px;" />
+						</div>
+						<div class="mb-3">
+							<label for="progressImage" class="form-label">Progress Image Url</label>
+							<input type="text" class="form-control" id="progressImage" asp-for="AddCommissionImageDTO.Url" readonly>
+							<span class="text-danger" asp-validation-for="AddCommissionImageDTO.Url"></span>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+						<button type="submit" class="btn btn-primary">Add</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+}
+
+@section Scripts {
+	<script>
+		const progressImageUpload = document.getElementById('progressImageUpload');
+		const progressImage = document.getElementById('progressImage');
+		const progressImageDisplay = document.getElementById('progressImageDisplay');
+		const publicId = document.getElementById('publicId');
+		async function uploadProgressImage(e) {
+
+			let data = new FormData();
+			data.append('file', e.target.files[0]);
+
+			await fetch('/api/image', {
+				method: 'POST',
+				header: {
+					'Accept': '*/*',
+
+				},
+				body: data
+			}).then(response => response.json())
+				.then(result => {
+					progressImage.value = result.link;
+					progressImageDisplay.style.display = 'block';
+					progressImageDisplay.src = result.link;
+					publicId.value = result.publicId;
+				});
+		}
+		progressImageUpload.addEventListener('change', uploadProgressImage)
+	</script>
+}

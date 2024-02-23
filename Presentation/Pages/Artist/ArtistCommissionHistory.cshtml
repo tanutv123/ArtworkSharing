@@ -1,6 +1,14 @@
 ﻿@page
 @model Presentation.Pages.Artist.ArtistCommissionHistoryModel
 @{
+	var message = TempData["Message"] as string;
+}
+
+@if(!string.IsNullOrEmpty(message))
+{
+	<div class="alert alert-success">
+		<p>@message</p>
+	</div>
 }
 
 @if(Model.CommissionRequestHistoryDTOs != null && Model.CommissionRequestHistoryDTOs.Count != 0)
@@ -27,17 +35,41 @@
 						<td>@request.RequestDescription</td>
 						<td>@request.ActualPrice</td>
 						<td>@request.RequestDate</td>
-						<td>@request.CommissionStatusDescription</td>
+						<td>
+							@if(request.CommissionStatusDescription == "Pending")
+							{
+								<p class="text text-warning">@request.CommissionStatusDescription</p>
+							}
+							else if(request.CommissionStatusDescription == "Accepted")
+							{
+								<p class="text text-success">@request.CommissionStatusDescription</p>
+							}
+							else if(request.CommissionStatusDescription == "Not Accepted")
+							{
+								<p class="text text-danger">@request.CommissionStatusDescription</p>
+							}
+							else if (request.CommissionStatusDescription == "In Progress")
+							{
+								<p class="text text-primary">@request.CommissionStatusDescription</p>
+							}
+							else
+							{
+								<p class="text text-info-emphasis">@request.CommissionStatusDescription</p>
+							}
+						</td>
 						<td>
 							@if (request.CommissionStatusDescription == "Pending")
 							{
 								<form method="post">
-									<button type="button" class="btn btn-primary">Accept</button>
+									<div class="text text-danger" asp-validation-summary="All"></div>
+									<input type="hidden" asp-for="CommissionId" value="@request.Id"/>
+									<button type="submit" class="btn btn-primary" asp-page-handler="Accept">Accept</button>
+									<button type="submit" class="btn btn-danger" asp-page-handler="NotAccept">Not Accept</button>
 								</form>
 							}
-							else
+							else if(request.CommissionStatusDescription == "In Progress" || request.CommissionStatusDescription == "Accepted")
 							{
-								<a href="#">View Detail</a>
+								<a class="text" href="/artist/artistcommissionrequestdetail?id=@request.Id">View Detail</a>
 							}
 						</td>
 					</tr>
@@ -55,6 +87,5 @@ else
 		let table = new DataTable('#commissionTable', {
 			responsive: true
 		});
-		console.log(@Html.Raw(Json.Serialize(Model.CommissionRequestHistoryDTOs.ToArray())));
 	</script>
 }

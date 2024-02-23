@@ -14,11 +14,55 @@ namespace Presentation.Pages.Artist
         {
 			_commissionRepository = commissionRepository;
 		}
-        [BindProperty]
         public List<CommissionRequestHistoryDTO> CommissionRequestHistoryDTOs{ get; set; }
-        public async Task OnGet(string statusFilter = "")
+        [BindProperty]
+        public int CommissionId { get; set; }
+        public async Task OnGet(string statusFilter = "", string message = "")
         {
             CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), statusFilter);
+			TempData["Message"] = message;
+		}
+
+        public async Task<IActionResult> OnPostAccept()
+        {
+
+			if (!ModelState.IsValid)
+			{
+				CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), "");
+				return Page();
+			}
+            try
+            {
+                await _commissionRepository.AcceptCommissionRequest(CommissionId);
+                TempData["Message"] = "Commission Accepted";
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+			CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), "");
+			return Page();
         }
-    }
+
+		public async Task<IActionResult> OnPostNotAccept()
+		{
+
+			if (!ModelState.IsValid)
+			{
+				CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), "");
+				return Page();
+			}
+			try
+			{
+				await _commissionRepository.NotAcceptCommissionRequest(CommissionId);
+				TempData["Message"] = "Commission Denied";
+			}
+			catch (Exception ex)
+			{
+				ModelState.AddModelError(string.Empty, ex.Message);
+			}
+			CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), "");
+			return Page();
+		}
+	}
 }

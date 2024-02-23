@@ -12,7 +12,11 @@ namespace Repository
 
         Task<CommissionRequestHistoryDTO> GetSingleCommissionRequestHistory(int requestId);
 		Task<bool> CheckArtistRegisterCommission(int id);
+		Task AcceptCommissionRequest(int id);
+		Task NotAcceptCommissionRequest(int id);
+		Task DoneCommissionRequest(int id);
 		Task AddCommission(Commission commission);
 		Task AddCommissionRequest(CommissionRequest commissionRequest);
+		Task AddCommissionImage(CommissionImage commissionImage);
 	}
 }

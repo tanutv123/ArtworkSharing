@@ -20,12 +20,12 @@ namespace Presentation.Pages.Admin.User
         public AppUserDTO AppUserDTO { get; set; }
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            if(id == null || await _userRepository.GetUserDetail(id) == null)
+            if(id == null || await _userRepository.GetUserDetailAdmin(id) == null)
             {
                 return NotFound();
             }
 
-            var user = await _userRepository.GetUserDetail(id);
+            var user = await _userRepository.GetUserDetailAdmin(id);
             if (user == null)
             {
                 return NotFound();

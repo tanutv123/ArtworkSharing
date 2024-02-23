@@ -290,10 +290,7 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CommisionHistoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CommissionHistoryId")
+                    b.Property<int>("CommissionRequestId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
@@ -310,9 +307,9 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommisionHistoryId");
+                    b.HasIndex("CommissionRequestId");
 
-                    b.ToTable("CommissionImage");
+                    b.ToTable("CommissionImages");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.CommissionRequest", b =>
@@ -676,11 +673,13 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("BusinessObject.Entities.CommissionImage", b =>
                 {
-                    b.HasOne("BusinessObject.Entities.CommissionRequest", "CommisionHistory")
+                    b.HasOne("BusinessObject.Entities.CommissionRequest", "CommisionRequest")
                         .WithMany("CommissionImages")
-                        .HasForeignKey("CommisionHistoryId");
+                        .HasForeignKey("CommissionRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("CommisionHistory");
+                    b.Navigation("CommisionRequest");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.CommissionRequest", b =>

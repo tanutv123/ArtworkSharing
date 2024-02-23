@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Presentation.Pages.Admin
 {
+
     [Authorize(Policy = "RequireAdminManagerRole")]
     public class IndexModel : PageModel
     {

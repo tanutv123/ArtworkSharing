@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240220073702_AddStatusForCommission")]
-    partial class AddStatusForCommission
+    [Migration("20240223070708_ChangeCommissionImageTable2")]
+    partial class ChangeCommissionImageTable2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -170,6 +170,9 @@ namespace DataAccess.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("SoldNumber")
+                        .HasColumnType("int");
+
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
 
@@ -257,40 +260,6 @@ namespace DataAccess.Migrations
                     b.ToTable("ArtworkLikes");
                 });
 
-            modelBuilder.Entity("BusinessObject.Entities.CommisionHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("ActualPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("CommissionStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SenderId")
-                        .HasColumnType("int");
-
-                    b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommissionStatusId");
-
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("CommissionHistory");
-                });
-
             modelBuilder.Entity("BusinessObject.Entities.Commission", b =>
                 {
                     b.Property<int>("Id")
@@ -324,11 +293,11 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CommisionHistoryId")
+                    b.Property<int>("CommissionRequestId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CommissionHistoryId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("PublicId")
                         .HasColumnType("nvarchar(max)");
@@ -341,9 +310,49 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommisionHistoryId");
+                    b.HasIndex("CommissionRequestId");
 
-                    b.ToTable("CommissionImage");
+                    b.ToTable("CommissionImages");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entities.CommissionRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("ActualPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CommissionStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RequestDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("Status")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommissionStatusId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("CommissionRequests");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.CommissionStatus", b =>
@@ -360,6 +369,19 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CommissionStatus");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entities.Connection", b =>
+                {
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ConnectionId");
+
+                    b.ToTable("Connections");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.Genre", b =>
@@ -385,6 +407,12 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("AppUserId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("BuyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("BuyPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ArtworkId", "AppUserId");
 
@@ -635,7 +663,29 @@ namespace DataAccess.Migrations
                     b.Navigation("Artwork");
                 });
 
-            modelBuilder.Entity("BusinessObject.Entities.CommisionHistory", b =>
+            modelBuilder.Entity("BusinessObject.Entities.Commission", b =>
+                {
+                    b.HasOne("BusinessObject.Entities.AppUser", "AppUser")
+                        .WithOne("Commission")
+                        .HasForeignKey("BusinessObject.Entities.Commission", "AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entities.CommissionImage", b =>
+                {
+                    b.HasOne("BusinessObject.Entities.CommissionRequest", "CommisionRequest")
+                        .WithMany("CommissionImages")
+                        .HasForeignKey("CommissionRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CommisionRequest");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entities.CommissionRequest", b =>
                 {
                     b.HasOne("BusinessObject.Entities.CommissionStatus", "CommissionStatus")
                         .WithMany("CommisionHistories")
@@ -660,26 +710,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Receiver");
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("BusinessObject.Entities.Commission", b =>
-                {
-                    b.HasOne("BusinessObject.Entities.AppUser", "AppUser")
-                        .WithOne("Commission")
-                        .HasForeignKey("BusinessObject.Entities.Commission", "AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
-                });
-
-            modelBuilder.Entity("BusinessObject.Entities.CommissionImage", b =>
-                {
-                    b.HasOne("BusinessObject.Entities.CommisionHistory", "CommisionHistory")
-                        .WithMany("CommissionImages")
-                        .HasForeignKey("CommisionHistoryId");
-
-                    b.Navigation("CommisionHistory");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.Purchase", b =>
@@ -829,7 +859,7 @@ namespace DataAccess.Migrations
                     b.Navigation("Purchases");
                 });
 
-            modelBuilder.Entity("BusinessObject.Entities.CommisionHistory", b =>
+            modelBuilder.Entity("BusinessObject.Entities.CommissionRequest", b =>
                 {
                     b.Navigation("CommissionImages");
                 });

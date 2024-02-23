@@ -18,9 +18,19 @@ namespace Repository
 			_commissionManagement = commissionManagement;
 		}
 
+		public async Task AcceptCommissionRequest(int id)
+		{
+			await _commissionManagement.ChangeCommissionRequestStatusToAccept(id);
+		}
+
 		public async Task AddCommission(Commission commission)
 		{
 			await _commissionManagement.Add(commission);
+		}
+
+		public async Task AddCommissionImage(CommissionImage commissionImage)
+		{
+			await _commissionManagement.AddCommissionImage(commissionImage);
 		}
 
 		public async Task AddCommissionRequest(CommissionRequest commissionRequest)
@@ -38,7 +48,12 @@ namespace Repository
             return await _commissionManagement.GetAllCommissionRequestHistory();
         }
 
-        public async Task<Commission> GetArtistCommission(int id)
+		public async Task DoneCommissionRequest(int id)
+		{
+			await _commissionManagement.ChangeCommissionRequestStatusToDone(id);
+		}
+
+		public async Task<Commission> GetArtistCommission(int id)
 		{
 			return await _commissionManagement.GetArtistCommissionAsync(id);
 		}
@@ -57,5 +72,10 @@ namespace Repository
         {
 			return await _commissionManagement.GetSingleCommissionRequest(requestId);
         }
-    }
+
+		public async Task NotAcceptCommissionRequest(int id)
+		{
+			await _commissionManagement.ChangeCommissionRequestStatusToNotAccept(id);
+		}
+	}
 }

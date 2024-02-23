@@ -22,7 +22,7 @@ namespace Presentation.Pages.Admin.User
                 return NotFound();
             }
 
-            var user = await _userRepository.GetUserDetail(id);
+            var user = await _userRepository.GetUserDetailAdmin(id);
             if(user != null)
             {
                 AppUserDTO = user;

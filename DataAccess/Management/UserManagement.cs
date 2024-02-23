@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -70,6 +72,21 @@ namespace DataAccess.Management
             return user != null;
         }
 
+        public async Task<AppUser> GetUserDetail(int userId)
+        {
+            AppUser userDetailDto = null;
+            try
+            {
+                userDetailDto = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return userDetailDto;
+        }
+
         public async Task<AppUserProfileDTO> GetUserProfile(int id)
         {
             AppUserProfileDTO result = null;
@@ -83,6 +100,19 @@ namespace DataAccess.Management
                 throw new Exception(ex.Message);
             }
             return result;
+        }
+        
+        public async Task<bool> ChangeUserPassword(AppUser user, string currentPass, string newPass)
+        {
+            try
+            {
+                await _userManager.ChangePasswordAsync(user, currentPass, newPass);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<List<AppUserDTO>> GetAllUser()
@@ -100,7 +130,7 @@ namespace DataAccess.Management
             return appUsers;
         }
 
-        public async Task<AppUserDTO> GetUserDetail(int id)
+        public async Task<AppUserDTO> GetUserDetailAdmin(int id)
         {
             AppUserDTO user = null;
 
