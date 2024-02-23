@@ -158,5 +158,128 @@ namespace DataAccess.Management
 			}
 			return result;
 		}
-    }
+
+		public async Task ChangeCommissionRequestStatusToAccept(int id)
+		{
+			try
+			{
+				var commission = await _context.CommissionRequests.FindAsync(id);
+				if(commission != null)
+				{
+					var currentStatus = await _context.CommissionStatus.AsNoTracking().SingleOrDefaultAsync(x => x.Id == commission.CommissionStatusId);
+					if(currentStatus.Description == "Pending")
+					{
+						var acceptStatus = await _context.CommissionStatus.AsNoTracking().SingleOrDefaultAsync(x => x.Description == "Accepted");
+						commission.CommissionStatusId = acceptStatus.Id;
+						await _context.SaveChangesAsync();
+					}
+					else
+					{
+						throw new Exception("An exception occurred while changing the commission status");
+					}
+				}
+				else
+				{
+					throw new Exception("Commission Not Found");
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		public async Task ChangeCommissionRequestStatusToNotAccept(int id)
+		{
+			try
+			{
+				var commission = await _context.CommissionRequests.FindAsync(id);
+				if (commission != null)
+				{
+					var currentStatus = await _context.CommissionStatus.AsNoTracking().SingleOrDefaultAsync(x => x.Id == commission.CommissionStatusId);
+					if (currentStatus.Description == "Pending")
+					{
+						var acceptStatus = await _context.CommissionStatus.AsNoTracking().SingleOrDefaultAsync(x => x.Description == "Not Accepted");
+						commission.CommissionStatusId = acceptStatus.Id;
+						await _context.SaveChangesAsync();
+					}
+					else
+					{
+						throw new Exception("An exception occurred while changing the commission status");
+					}
+				}
+				else
+				{
+					throw new Exception("Commission Not Found");
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		public async Task ChangeCommissionRequestStatusToDone(int id)
+		{
+			try
+			{
+				var commission = await _context.CommissionRequests.FindAsync(id);
+				if (commission != null)
+				{
+					var currentStatus = await _context.CommissionStatus.AsNoTracking().SingleOrDefaultAsync(x => x.Id == commission.CommissionStatusId);
+					if (currentStatus.Description == "In Progress")
+					{
+						var doneStatus = await _context.CommissionStatus.AsNoTracking().SingleOrDefaultAsync(x => x.Description == "Done");
+						commission.CommissionStatusId = doneStatus.Id;
+						await _context.SaveChangesAsync();
+					}
+					else
+					{
+						throw new Exception("An exception occurred while changing the commission status");
+					}
+				}
+				else
+				{
+					throw new Exception("Commission Not Found");
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		public async Task AddCommissionImage(CommissionImage commissionImage)
+		{
+			try
+			{
+				var commission = await _context.CommissionRequests.SingleOrDefaultAsync(x => x.Id == commissionImage.CommissionRequestId);
+				if(commission != null)
+				{
+					var pendingStatus = await _context.CommissionStatus.Where(x => x.Description == "Accepted").SingleOrDefaultAsync();
+					if(commission.CommissionStatusId == pendingStatus.Id)
+					{
+						var inProgressStatus = await _context.CommissionStatus.Where(x => x.Description == "In Progress").SingleOrDefaultAsync();
+						commission.CommissionStatusId = inProgressStatus.Id;
+					}
+					var isMainImage = await _context.CommissionImages.Where(x => x.CommissionRequestId == commissionImage.CommissionRequestId && x.isMain == true).SingleOrDefaultAsync();
+					if(isMainImage != null)
+					{
+						isMainImage.isMain = false;
+					}
+					_context.CommissionImages.Add(commissionImage);
+					await _context.SaveChangesAsync();
+				}
+				else
+				{
+					throw new Exception("Commission not found!");
+				}
+			}
+			catch(Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+	}
 }
