@@ -1,0 +1,40 @@
+﻿@page
+@model Presentation.Pages.Home.ArtworkDetailModel
+@{
+}
+<h1>@Model.Artwork.Title</h1>
+
+<div>
+    <img src="@Model.Artwork.ArtworkImage.Url" alt="@Model.Artwork.Title" class="img-fluid" />
+    <p><strong>Description:</strong> @Model.Artwork.Description</p>
+    <p><strong>Genre:</strong> @Model.Artwork.Genre.Name</p>
+    <p><strong>Price:</strong> @Model.Artwork.Price</p>
+    <p><strong>Artist:</strong> @Model.Artwork.AppUserId</p>
+</div>
+<br/>
+<br/>
+<div id="comment-section">
+    <!-- Comments will be displayed here -->
+    @foreach (var artwork in Model.ArtworkComment)
+    {
+        <div>
+        <p><strong>User Name:</strong> @artwork.AppUser.Name</p>
+        <p><strong>Content:</strong> @artwork.Content</p>
+        <p><strong>Comment Date:</strong> @artwork.CreatedDate</p>
+        </div>
+    }
+    <br/>
+</div>
+
+<hr />
+
+<!-- Form for submitting new comments -->
+<form id="comment-form" method="post" asp-page-handler="Comment" asp-route-artworkId="@Model.Artwork.Id">
+    <div class="form-group">
+        <label for="comment">Add a Comment:</label>
+        <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+    </div>
+    <div class="text text-danger" asp-validation-summary="All"></div>
+    <input type="hidden" asp-for="AddComment.Artworkid" value="@Model.Artwork.Id" />
+    <button type="submit" class="btn btn-primary">Comment</button>
+</form>
