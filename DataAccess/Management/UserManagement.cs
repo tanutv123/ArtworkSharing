@@ -115,7 +115,7 @@ namespace DataAccess.Management
             }
         }
 
-        public async Task<IEnumerable<AppUserDTO>> GetAllUser()
+        public async Task<List<AppUserDTO>> GetAllUser()
         {
             List<AppUserDTO> appUsers = null;
             try
@@ -128,6 +128,71 @@ namespace DataAccess.Management
                 throw new Exception(ex.Message);
             }
             return appUsers;
+        }
+
+        public async Task<AppUserDTO> GetUserDetailAdmin(int id)
+        {
+            AppUserDTO user = null;
+
+            try
+            {
+                user = await _dataContext.Users.Where(x => x.Id == id).ProjectTo<AppUserDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return user;
+        }
+
+        public async Task UpdateUser(AppUser appUser)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(appUser.Email);
+                if (user != null)
+                {
+                    user.Name = appUser.Name;
+                    user.PhoneNumber = appUser.PhoneNumber;
+                    user.Email = appUser.Email;
+                    user.Description = appUser.Description;
+                    user.UserRoles = appUser.UserRoles;
+                    user.Status = appUser.Status;
+                    await _userManager.UpdateAsync(user);
+                }
+                else
+                {
+                    throw new Exception("User does not exist");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public async Task DeleteUser(AppUser appUser)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(appUser.Email);
+                if(user != null)
+                {
+                    user.Status = 0; 
+
+/*                    if (user.Status == 0)
+                    {
+                        user.SecurityStamp = Guid.NewGuid().ToString();
+                    }*/
+                    await _userManager.UpdateAsync(user);
+                }
+                else
+                {
+                    throw new Exception("User does not exist");
+                }
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

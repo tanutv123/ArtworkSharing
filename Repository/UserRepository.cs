@@ -20,9 +20,19 @@ namespace Repository
             _userManagement = userManagement;
 		}
 
-        public async Task<IEnumerable<AppUserDTO>> GetAllUser()
+        public async Task DeleteUser(AppUser appUser)
+        {
+            await _userManagement.DeleteUser(appUser);
+        }
+
+        public async Task<List<AppUserDTO>> GetAllUser()
         {
             return await _userManagement.GetAllUser();
+        }
+
+        public async Task<AppUserDTO> GetUserDetailAdmin(int id)
+        {
+            return await _userManagement.GetUserDetailAdmin(id);
         }
 
         public async Task<AppUserProfileDTO> GetUserProfile(int id)
@@ -34,7 +44,7 @@ namespace Repository
         {
             try
             {
-                _userManagement.ChangeUserPassword(appUser, currentPassword, newPassword);
+                await _userManagement.ChangeUserPassword(appUser, currentPassword, newPassword);
             }
             catch (Exception ex)
             {
@@ -57,6 +67,10 @@ namespace Repository
             await _userManagement.SignOutAsync();
         }
 
+        public async Task UpdateUser(AppUser appUser)
+        {
+            await _userManagement.UpdateUser(appUser);
+        }
         public async Task<AppUser> GetUserById(int userId)
         {
             return await _userManagement.GetUserDetail(userId);

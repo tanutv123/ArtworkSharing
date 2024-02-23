@@ -1,5 +1,5 @@
 ﻿@page
-@model Presentation.Pages.Admin.UserManagementModel
+@model UserManagementModel
 @{
     ViewData["Title"] = "User Management";
 }
@@ -45,9 +45,9 @@
                             }
                         </td>
                         <td>
-                            <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                            <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-page="./UserEdit" asp-route-id="@item.Id">Edit</a> |
+                            <a asp-page="./UserDetail" asp-route-id="@item.Id">Details</a> |
+                            <a asp-page="./UserDelete" asp-route-id="@item.Id">Delete</a>
                         </td>
                     </tr>
                 }
