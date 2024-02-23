@@ -1,10 +1,12 @@
 using BusinessObject.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repository;
 
 namespace Presentation.Pages.Admin.User
 {
+    [Authorize(Policy = "RequireAdminRole")]
     public class UserDetailModel : PageModel
     {
         private readonly IUserRepository _userRepository;
