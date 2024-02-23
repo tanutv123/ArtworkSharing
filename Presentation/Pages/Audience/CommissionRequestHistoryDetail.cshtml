@@ -1,0 +1,14 @@
+﻿@page
+@model Presentation.Pages.Audience.CommissionRequestHistoryDetailModel
+@{
+}
+
+@if(Model.CommissionRequestHistoryDTO != null && Model.CommissionRequestHistoryDTO.CommissionImages != null && Model.CommissionRequestHistoryDTO.CommissionImages.Count != 0)
+{
+	<p>This is for commission image section</p>
+}
+else
+{
+	<h3>The artist have not added any progress image yet.</h3>
+	<p><a href="#">Click this link to request progress image from the artist.</a></p>
+}

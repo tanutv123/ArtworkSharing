@@ -1,4 +1,6 @@
-﻿namespace BusinessObject.Entities
+﻿using System;
+
+namespace BusinessObject.Entities
 {
 	public class CommissionImage
 	{
@@ -6,7 +8,8 @@
 		public string Url { get; set; }
 		public bool isMain { get; set; }
 		public string PublicId { get; set; }
-		public int CommissionHistoryId { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int CommissionHistoryId { get; set; }
 		public CommissionRequest CommisionHistory { get; set; }
 	}
 }
