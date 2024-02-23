@@ -17,9 +17,34 @@ namespace Repository
             _artworkManagement = artworkManagement;
         }
 
-        public IEnumerable<Artwork> GetArtworks()
+        public async Task AddArtworkComment(int artworkid, int commentid, string content, DateTime createdDate)
         {
-            return _artworkManagement.GetArtworks();
+            await _artworkManagement.ArtworkCommentAsync(artworkid, commentid, content, createdDate);
+        }
+
+        public async Task<bool> FollowArtist(int sourceid, int followerid)
+        {
+            return await _artworkManagement.FollowUserAsync(sourceid, followerid);
+        }
+
+        public async Task<Artwork> GetArtworkById(int artworkid)
+        {
+            return await _artworkManagement.GetArtworkAsync(artworkid);
+        }
+
+        public async Task<IEnumerable<ArtworkComment>> GetArtworkComments(int artworkid)
+        {
+            return await _artworkManagement.GetCommentsByArtworkId(artworkid);
+        }
+
+        public async Task<IEnumerable<Artwork>> GetArtworks()
+        {
+            return await _artworkManagement.GetArtworksAsync();
+        }
+
+        public async Task<bool> LikeArtwork(int userid, int artworkid)
+        {
+            return await _artworkManagement.LikeArtworkAsync(userid, artworkid);
         }
     }
 }

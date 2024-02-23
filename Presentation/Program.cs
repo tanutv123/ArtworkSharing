@@ -54,7 +54,8 @@ builder.Services.AddScoped<UserManagement>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<CommissionManagement>();
 builder.Services.AddScoped<ICommissionRepository, CommissionRepository>();
-
+builder.Services.AddScoped<ArtworkManagement>();
+builder.Services.AddScoped<IArtworkRepository, ArtworkRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

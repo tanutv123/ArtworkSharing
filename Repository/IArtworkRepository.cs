@@ -9,6 +9,12 @@ namespace Repository
 {
     public interface IArtworkRepository
     {
-        IEnumerable<Artwork> GetArtworks();
+        Task<IEnumerable<Artwork>> GetArtworks();
+        Task<bool> LikeArtwork(int userid, int artworkid);
+        Task<bool> FollowArtist(int sourceid, int followerid);
+        Task<Artwork> GetArtworkById(int artworkid);
+        Task<IEnumerable<ArtworkComment>> GetArtworkComments(int artworkid);
+        Task AddArtworkComment(int artworkid, int  commentid, string content, DateTime createdDate);
     }
+
 }
