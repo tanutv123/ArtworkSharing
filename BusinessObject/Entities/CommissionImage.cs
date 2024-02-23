@@ -9,7 +9,7 @@ namespace BusinessObject.Entities
 		public bool isMain { get; set; }
 		public string PublicId { get; set; }
         public DateTime CreatedDate { get; set; }
-        public int CommissionHistoryId { get; set; }
-		public CommissionRequest CommisionHistory { get; set; }
+        public int CommissionRequestId { get; set; }
+		public CommissionRequest CommisionRequest { get; set; }
 	}
 }

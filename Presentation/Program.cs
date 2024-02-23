@@ -3,6 +3,8 @@ using DataAccess.Data;
 using DataAccess.Management;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Presentation.Helpers;
+using Presentation.Services;
 using Presentation.SignalR;
 using Repository;
 
@@ -13,11 +15,13 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
 {
     options.Conventions.AddPageRoute("/Account/LoginPage", "");
 });
+builder.Services.AddControllers();
 builder.Services.AddDbContext<DataContext>(options =>
 {
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddIdentityCore<AppUser>(opt =>
 {
 	opt.Password.RequiredLength = 5;
@@ -57,6 +61,7 @@ builder.Services.AddScoped<UserManagement>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<CommissionManagement>();
 builder.Services.AddScoped<ICommissionRepository, CommissionRepository>();
+builder.Services.AddScoped<IImageService, ImageService>();
 
 var app = builder.Build();
 
@@ -76,6 +81,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 app.MapRazorPages();
+app.MapControllers();
 
 app.MapHub<PresenceHub>("/presensehub");
 

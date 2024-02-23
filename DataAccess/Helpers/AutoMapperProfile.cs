@@ -9,6 +9,7 @@ namespace DataAccess.Helpers
 		public AutoMapperProfile()
 		{
 			CreateMap<Commission, AddCommisionDTO>().ReverseMap();
+			CreateMap<CommissionImage, AddCommissionImageDTO>().ReverseMap();
 			CreateMap<CommissionRequest, CommissionRequestDTO>().ReverseMap();
 			CreateMap<AppUser, AppUserProfileDTO>()
 				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.UserImage.Url))
