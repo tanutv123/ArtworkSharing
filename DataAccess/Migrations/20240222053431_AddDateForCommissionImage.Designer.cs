@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240131140349_Init")]
-    partial class Init
+    [Migration("20240222053431_AddDateForCommissionImage")]
+    partial class AddDateForCommissionImage
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,9 +80,6 @@ namespace DataAccess.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -123,9 +120,6 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ImageId")
-                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -173,11 +167,11 @@ namespace DataAccess.Migrations
                     b.Property<int>("GenreId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("SoldNumber")
+                        .HasColumnType("int");
 
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
@@ -190,9 +184,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("AppUserId");
 
                     b.HasIndex("GenreId");
-
-                    b.HasIndex("ImageId")
-                        .IsUnique();
 
                     b.ToTable("Artworks");
                 });
@@ -226,6 +217,34 @@ namespace DataAccess.Migrations
                     b.ToTable("ArtworkComments");
                 });
 
+            modelBuilder.Entity("BusinessObject.Entities.ArtworkImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ArtworkId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isMain")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtworkId")
+                        .IsUnique();
+
+                    b.ToTable("ArtworkImages");
+                });
+
             modelBuilder.Entity("BusinessObject.Entities.ArtworkLike", b =>
                 {
                     b.Property<int>("ArtworkId")
@@ -239,40 +258,6 @@ namespace DataAccess.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("ArtworkLikes");
-                });
-
-            modelBuilder.Entity("BusinessObject.Entities.CommisionHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("ActualPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("ProgressImageId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SenderId")
-                        .HasColumnType("int");
-
-                    b.Property<byte>("Status")
-                        .HasColumnType("tinyint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProgressImageId");
-
-                    b.HasIndex("ReceiverId");
-
-                    b.HasIndex("SenderId");
-
-                    b.ToTable("CommissionHistory");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.Commission", b =>
@@ -300,6 +285,105 @@ namespace DataAccess.Migrations
                     b.ToTable("Commissions");
                 });
 
+            modelBuilder.Entity("BusinessObject.Entities.CommissionImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CommisionHistoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommissionHistoryId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isMain")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommisionHistoryId");
+
+                    b.ToTable("CommissionImage");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entities.CommissionRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("ActualPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CommissionStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RequestDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("Status")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommissionStatusId");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("CommissionRequests");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entities.CommissionStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CommissionStatus");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entities.Connection", b =>
+                {
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ConnectionId");
+
+                    b.ToTable("Connections");
+                });
+
             modelBuilder.Entity("BusinessObject.Entities.Genre", b =>
                 {
                     b.Property<int>("Id")
@@ -316,28 +400,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("BusinessObject.Entities.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("PublicId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("isMain")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("BusinessObject.Entities.Purchase", b =>
                 {
                     b.Property<int>("ArtworkId")
@@ -345,6 +407,12 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("AppUserId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("BuyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("BuyPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ArtworkId", "AppUserId");
 
@@ -390,6 +458,34 @@ namespace DataAccess.Migrations
                     b.HasIndex("TargetUserId");
 
                     b.ToTable("UserFollows");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entities.UserImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AppUserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("isMain")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId")
+                        .IsUnique();
+
+                    b.ToTable("UserImages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -480,17 +576,6 @@ namespace DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("BusinessObject.Entities.AppUser", b =>
-                {
-                    b.HasOne("BusinessObject.Entities.Image", "Image")
-                        .WithOne("AppUser")
-                        .HasForeignKey("BusinessObject.Entities.AppUser", "ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Image");
-                });
-
             modelBuilder.Entity("BusinessObject.Entities.AppUserRole", b =>
                 {
                     b.HasOne("BusinessObject.Entities.AppRole", "Role")
@@ -524,17 +609,9 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BusinessObject.Entities.Image", "Image")
-                        .WithOne("Artwork")
-                        .HasForeignKey("BusinessObject.Entities.Artwork", "ImageId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.Navigation("AppUser");
 
                     b.Navigation("Genre");
-
-                    b.Navigation("Image");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.ArtworkComment", b =>
@@ -552,6 +629,17 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
+
+                    b.Navigation("Artwork");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entities.ArtworkImage", b =>
+                {
+                    b.HasOne("BusinessObject.Entities.Artwork", "Artwork")
+                        .WithOne("ArtworkImage")
+                        .HasForeignKey("BusinessObject.Entities.ArtworkImage", "ArtworkId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Artwork");
                 });
@@ -575,11 +663,33 @@ namespace DataAccess.Migrations
                     b.Navigation("Artwork");
                 });
 
-            modelBuilder.Entity("BusinessObject.Entities.CommisionHistory", b =>
+            modelBuilder.Entity("BusinessObject.Entities.Commission", b =>
                 {
-                    b.HasOne("BusinessObject.Entities.Image", "ProgressImage")
-                        .WithMany()
-                        .HasForeignKey("ProgressImageId");
+                    b.HasOne("BusinessObject.Entities.AppUser", "AppUser")
+                        .WithOne("Commission")
+                        .HasForeignKey("BusinessObject.Entities.Commission", "AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entities.CommissionImage", b =>
+                {
+                    b.HasOne("BusinessObject.Entities.CommissionRequest", "CommisionHistory")
+                        .WithMany("CommissionImages")
+                        .HasForeignKey("CommisionHistoryId");
+
+                    b.Navigation("CommisionHistory");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entities.CommissionRequest", b =>
+                {
+                    b.HasOne("BusinessObject.Entities.CommissionStatus", "CommissionStatus")
+                        .WithMany("CommisionHistories")
+                        .HasForeignKey("CommissionStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BusinessObject.Entities.AppUser", "Receiver")
                         .WithMany("CommissionReceived")
@@ -593,22 +703,11 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ProgressImage");
+                    b.Navigation("CommissionStatus");
 
                     b.Navigation("Receiver");
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("BusinessObject.Entities.Commission", b =>
-                {
-                    b.HasOne("BusinessObject.Entities.AppUser", "AppUser")
-                        .WithOne("Commission")
-                        .HasForeignKey("BusinessObject.Entities.Commission", "AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.Purchase", b =>
@@ -666,6 +765,17 @@ namespace DataAccess.Migrations
                     b.Navigation("SourceUser");
 
                     b.Navigation("TargetUser");
+                });
+
+            modelBuilder.Entity("BusinessObject.Entities.UserImage", b =>
+                {
+                    b.HasOne("BusinessObject.Entities.AppUser", "AppUser")
+                        .WithOne("UserImage")
+                        .HasForeignKey("BusinessObject.Entities.UserImage", "AppUserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -731,11 +841,15 @@ namespace DataAccess.Migrations
 
                     b.Navigation("TransactionSents");
 
+                    b.Navigation("UserImage");
+
                     b.Navigation("UserRoles");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.Artwork", b =>
                 {
+                    b.Navigation("ArtworkImage");
+
                     b.Navigation("Comments");
 
                     b.Navigation("Likes");
@@ -743,11 +857,14 @@ namespace DataAccess.Migrations
                     b.Navigation("Purchases");
                 });
 
-            modelBuilder.Entity("BusinessObject.Entities.Image", b =>
+            modelBuilder.Entity("BusinessObject.Entities.CommissionRequest", b =>
                 {
-                    b.Navigation("AppUser");
+                    b.Navigation("CommissionImages");
+                });
 
-                    b.Navigation("Artwork");
+            modelBuilder.Entity("BusinessObject.Entities.CommissionStatus", b =>
+                {
+                    b.Navigation("CommisionHistories");
                 });
 #pragma warning restore 612, 618
         }

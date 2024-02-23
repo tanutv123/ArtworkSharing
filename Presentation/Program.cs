@@ -2,9 +2,12 @@ using BusinessObject.Entities;
 using DataAccess.Data;
 using DataAccess.Management;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Presentation.SignalR;
 using Repository;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 {
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddIdentityCore<AppUser>(opt =>
 {
@@ -39,6 +43,9 @@ builder.Services.AddAuthorization(options =>
 	options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
 	options.AddPolicy("RequireManagerRole", policy => policy.RequireRole("Manager"));
 	options.AddPolicy("RequireArtistRole", policy => policy.RequireRole("Artist"));
+    options.AddPolicy("RequireAdminManagerRole", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("Admin") || context.User.IsInRole("Manager")));
 });
 
 builder.Services.AddSession(options =>
@@ -56,6 +63,12 @@ builder.Services.AddScoped<CommissionManagement>();
 builder.Services.AddScoped<ICommissionRepository, CommissionRepository>();
 builder.Services.AddScoped<ArtworkManagement>();
 builder.Services.AddScoped<IArtworkRepository, ArtworkRepository>();
+
+builder.Services.AddOptions();
+var mailsettings = builder.Configuration.GetSection("MailSettings");
+builder.Services.Configure<MailSettings>(mailsettings);
+builder.Services.AddTransient<IEmailSender, MailRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

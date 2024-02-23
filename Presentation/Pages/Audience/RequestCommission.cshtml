@@ -2,3 +2,33 @@
 @model Presentation.Pages.Audience.RequestCommissionModel
 @{
 }
+
+@if(!string.IsNullOrEmpty(Model.Message))
+{
+	<div class="alert alert-success">
+		<p>@Model.Message</p>
+	</div>
+}
+
+<h3>Request a commission from @Model.ArtistName</h3>
+<div class="container">
+	<form method="post">
+		<div class="text-danger" asp-validation-summary="All"></div>
+		<input type="hidden" asp-for="ArtistName"/>
+		<input type="hidden" asp-for="CommissionRequestDTO.SenderId"/>
+		<input type="hidden" asp-for="CommissionRequestDTO.ReceiverId"/>
+		<div class="mb-3">
+			<label for="description" class="form-label">Your description for this commission: </label>
+			<input type="text" class="form-control" id="description" asp-for="CommissionRequestDTO.RequestDescription">
+			<span class="text-danger" asp-validation-for="CommissionRequestDTO.RequestDescription"></span>
+		</div>
+		<div class="mb-3">
+			<label for="targetPrice" class="form-label">Your price: </label>
+			<input type="number" class="form-control" id="targetPrice" asp-for="CommissionRequestDTO.ActualPrice">
+			<span class="text-danger" asp-validation-for="CommissionRequestDTO.ActualPrice"></span>
+		</div>
+		<div class="mb-3">
+			<button type="submit" class="btn btn-success">Send this request</button>
+		</div>
+	</form>
+</div>

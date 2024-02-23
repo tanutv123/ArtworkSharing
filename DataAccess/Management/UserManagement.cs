@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,6 +37,11 @@ namespace DataAccess.Management
 
         public async Task<IdentityResult> RegisterAsync(AppUser newUser, string password)
         {
+            if (await IsPhoneExistAsync(newUser.PhoneNumber))
+            {
+                throw new Exception("Phone number already exists.");
+            }
+            newUser.UserName = newUser.Email;
             var result = await _userManager.CreateAsync(newUser, password);
             if (result.Succeeded)
             {
@@ -65,6 +72,21 @@ namespace DataAccess.Management
             return user != null;
         }
 
+        public async Task<AppUser> GetUserDetail(int userId)
+        {
+            AppUser userDetailDto = null;
+            try
+            {
+                userDetailDto = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return userDetailDto;
+        }
+
         public async Task<AppUserProfileDTO> GetUserProfile(int id)
         {
             AppUserProfileDTO result = null;
@@ -78,6 +100,34 @@ namespace DataAccess.Management
                 throw new Exception(ex.Message);
             }
             return result;
+        }
+        
+        public async Task<bool> ChangeUserPassword(AppUser user, string currentPass, string newPass)
+        {
+            try
+            {
+                await _userManager.ChangePasswordAsync(user, currentPass, newPass);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<AppUserDTO>> GetAllUser()
+        {
+            List<AppUserDTO> appUsers = null;
+            try
+            {
+                appUsers = await _dataContext.Users
+                    .Include(a => a.UserRoles)
+                    .ProjectTo<AppUserDTO>(_mapper.ConfigurationProvider).ToListAsync();
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return appUsers;
         }
     }
 }

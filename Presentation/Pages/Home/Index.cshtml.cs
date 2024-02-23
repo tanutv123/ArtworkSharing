@@ -8,6 +8,7 @@ using Repository;
 
 namespace Presentation.Pages.Home
 {
+
     [Authorize]
     public class IndexModel : PageModel
     {

@@ -20,12 +20,29 @@ namespace Repository
             _userManagement = userManagement;
 		}
 
-		public async Task<AppUserProfileDTO> GetUserProfile(int id)
+        public async Task<IEnumerable<AppUserDTO>> GetAllUser()
+        {
+            return await _userManagement.GetAllUser();
+        }
+
+        public async Task<AppUserProfileDTO> GetUserProfile(int id)
 		{
 			return await _userManagement.GetUserProfile(id);
 		}
 
-		public async Task<SignInResult> LoginAsync(string email, string password)
+        public async Task changeUserPassword(AppUser appUser, string currentPassword, string newPassword)
+        {
+            try
+            {
+                _userManagement.ChangeUserPassword(appUser, currentPassword, newPassword);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<SignInResult> LoginAsync(string email, string password)
         {
             return await _userManagement.LoginAsync(email, password);
         }
@@ -38,6 +55,11 @@ namespace Repository
         public async Task SignOutAsync()
         {
             await _userManagement.SignOutAsync();
+        }
+
+        public async Task<AppUser> GetUserById(int userId)
+        {
+            return await _userManagement.GetUserDetail(userId);
         }
     }
 }

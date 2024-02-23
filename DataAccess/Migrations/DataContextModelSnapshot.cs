@@ -296,6 +296,9 @@ namespace DataAccess.Migrations
                     b.Property<int>("CommissionHistoryId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PublicId")
                         .HasColumnType("nvarchar(max)");
 
@@ -328,6 +331,9 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("ReceiverId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("RequestDescription")
                         .HasColumnType("nvarchar(max)");
