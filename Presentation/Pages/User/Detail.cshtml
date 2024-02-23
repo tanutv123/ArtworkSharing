@@ -1,50 +1,51 @@
 @page
 @using BusinessObject.Entities
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.UI.V5.Pages.Account.Manage.Internal
 @using Presentation.Extensions
 @model Presentation.Pages.User.Detail
 @inject SignInManager<AppUser> signInManager;
 @{
     ViewData["Title"] = "User Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
 }
 <h4>@ViewData["Title"]</h4>
-@* <partial name="_StatusMessage" model="Model.StatusMessage" /> *@
+<partial name="_StatusMessage" model="Model.StatusMessage" />
 <div class="row">
-    <div class="col-md-6">
+     <div class="col-md-3">
+                <partial name="_ManageNav" />
+            </div>
+</div>
+<div class="row">
+    <div class="col-md-9">
         <form id="profile-form" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="AppUser.UserImage"></label>
-                <input asp-for="AppUser.UserImage" class="form-control" />
-                <span asp-validation-for="User" class="text-danger"></span>
-                </div>
-            <div class="form-group">
-                <label asp-for="AppUser.Name"></label>
-                <input asp-for="AppUser.Name" class="form-control" disabled />
-                <span asp-validation-for="User" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AppUser.Description"></label>
-                <input asp-for="AppUser.Description" class="form-control" />
-                <span asp-validation-for="AppUser.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AppUser.UserRoles"></label>
-                <input asp-for="AppUser.UserRoles" class="form-control" />
-                <span asp-validation-for="AppUser.UserRoles" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                            <label asp-for="AppUser.PhoneNumber"></label>
-                            <input asp-for="AppUser.PhoneNumber" class="form-control" />
-                            <span asp-validation-for="AppUser.PhoneNumber" class="text-danger"></span>
-                            </div>
             @* <div class="form-group"> *@
-            @*     <label asp-for="AppUser.PhoneNumber"></label> *@
-            @*     @Html.TextBoxFor(m => m.Input.Birthday, "{0:d}", new {@class = "form-control"}) *@
-            @*     <span asp-validation-for="Input.Birthday" class="text-danger"></span> *@
-            @* </div> *@
-
-            <button id="update-profile-button" type="submit" class="btn btn-danger">Lưu hồ sơ</button>
+            @*     <label asp-for="Input.UserImage"></label> *@
+            @*     <input asp-for="Input.UserImage" class="form-control" /> *@
+            @*     <span asp-validation-for="Input.UserImage" class="text-danger"></span> *@
+            @*     </div> *@
+            <div class="form-group">
+                <label asp-for="Username"></label>
+                <input asp-for="Username" class="form-control" disabled="" />
+            </div>
+            @* <div class="form-group"> *@
+            @*     <label asp-for="AppUser.Email"></label> *@
+            @*     <input asp-for="AppUser.Email" class="form-control" disabled="" /> *@
+            @*     <span asp-validation-for="AppUser.Email" class="text-danger"></span> *@
+            @*     </div> *@
+            <div class="form-group">
+                <label asp-for="Input.Description"></label>
+                <input asp-for="Input.Description" class="form-control" />
+                <span asp-validation-for="Input.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.PhoneNumber"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div> 
+            <br/>
+            <button id="update-profile-button" type="submit" class="btn btn-danger">Save Changes</button>
         </form>
     </div>
 </div>

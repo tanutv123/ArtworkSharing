@@ -16,5 +16,6 @@ namespace Repository
         Task SignOutAsync();
         Task<AppUser> GetUserById(int userId);
         Task<AppUserProfileDTO> GetUserProfile(int id);
+        Task changeUserPassword(AppUser appUser, string currentPassword, string newPassword);
     }
 }

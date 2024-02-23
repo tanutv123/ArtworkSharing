@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -68,8 +69,17 @@ namespace DataAccess.Management
 
         public async Task<AppUser> GetUserDetail(int userId)
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
-            return user;
+            AppUser userDetailDto = null;
+            try
+            {
+                userDetailDto = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return userDetailDto;
         }
 
         public async Task<AppUserProfileDTO> GetUserProfile(int id)
@@ -85,6 +95,20 @@ namespace DataAccess.Management
                 throw new Exception(ex.Message);
             }
             return result;
+        }
+
+        public async Task<bool> ChangeUserPassword(AppUser user, string currentPass, string newPass)
+        {
+            try
+            {
+                await _userManager.ChangePasswordAsync(user, currentPass, newPass);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
     }
 }
