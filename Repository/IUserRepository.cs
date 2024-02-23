@@ -14,6 +14,9 @@ namespace Repository
         Task<IdentityResult> RegisterAsync(AppUser newUser, string password);
         Task<SignInResult> LoginAsync(string email, string password);
         Task SignOutAsync();
+        Task<AppUser> GetUserById(int userId);
         Task<AppUserProfileDTO> GetUserProfile(int id);
+        Task changeUserPassword(AppUser appUser, string currentPassword, string newPassword);
+        Task<IEnumerable<AppUserDTO>> GetAllUser();
     }
 }
