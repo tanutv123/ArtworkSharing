@@ -1,0 +1,60 @@
+﻿@page
+@model Presentation.Pages.Admin.User.UserEditModel
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<h1>Edit</h1>
+
+<h4>User</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="AppUserDTO.Id" />
+            <input type="hidden" asp-for="AppUserDTO.Role" />
+            <div class="form-group">
+                <label asp-for="AppUserDTO.Name" class="control-label"></label>
+                <input asp-for="AppUserDTO.Name" class="form-control" />
+                <span asp-validation-for="AppUserDTO.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AppUserDTO.PhoneNumber" class="control-label"></label>
+                <input asp-for="AppUserDTO.PhoneNumber" class="form-control" />
+                <span asp-validation-for="AppUserDTO.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AppUserDTO.Email" class="control-label"></label>
+                <input asp-for="AppUserDTO.Email" class="form-control" />
+                <span asp-validation-for="AppUserDTO.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AppUserDTO.Description" class="control-label"></label>
+                <input asp-for="AppUserDTO.Description" class="form-control" />
+                <span asp-validation-for="AppUserDTO.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AppUserDTO.Status" class="control-label"></label>
+                <select asp-for="AppUserDTO.Status" class="form-control">
+                    <option value="1">Available</option>
+                    <option value="0">Unavailable</option>
+                </select>
+                <span asp-validation-for="AppUserDTO.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./UserManagement">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

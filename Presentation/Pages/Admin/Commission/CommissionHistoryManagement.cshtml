@@ -1,0 +1,75 @@
+﻿@page
+@model CommissionHistoryManagementModel
+@{
+    ViewData["Title"] = "Commission History Management";
+}
+@if (Model.CommissionRequestHistoryDTOs != null && Model.CommissionRequestHistoryDTOs.Count != 0)
+{
+    <div class="container">
+        <table class="table" id="commissionTable">
+            <thead>
+                <tr>
+                    <td>Sender Email</td>
+                    <td>Receiver Email</td>
+                    <td>Description</td>
+                    <td>Actual Price</td>
+                    <td>Request Date</td>
+                    <td>Status</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CommissionRequestHistoryDTOs)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SenderEmail)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ReceiverEmail)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RequestDescription)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ActualPrice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RequestDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CommissionStatusDescription)
+                        </td>
+                        <td>
+                            @if (item.CommissionStatusDescription == "Pending")
+                            {
+                                <form method="post">
+                                    <button type="button" class="btn btn-primary">Accept</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <a href="#">View Detail</a>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="row">
+        <h3 class="d-flex align-items-center">No commission to be displayed</h3>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        let table = new DataTable('#commissionTable', {
+            responsive: true
+        });
+        console.log(@Html.Raw(Json.Serialize(Model.CommissionRequestHistoryDTOs.ToArray())));
+    </script>
+}

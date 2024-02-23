@@ -8,7 +8,9 @@ namespace Repository
 		Task<Commission> GetArtistCommission(int id);
 		Task<List<CommissionRequestHistoryDTO>> GetCommissionRequestHistory(int audienceId);
 		Task<List<CommissionRequestHistoryDTO>> GetCommissionRequestHistoryForArtist(int artistId, string statusFilter);
-		Task<CommissionRequestHistoryDTO> GetSingleCommissionRequestHistory(int requestId);
+		Task<List<CommissionRequestHistoryDTO>> GetAllCommissionRequestHistory();
+
+        Task<CommissionRequestHistoryDTO> GetSingleCommissionRequestHistory(int requestId);
 		Task<bool> CheckArtistRegisterCommission(int id);
 		Task AddCommission(Commission commission);
 		Task AddCommissionRequest(CommissionRequest commissionRequest);

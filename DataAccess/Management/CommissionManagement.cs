@@ -158,5 +158,18 @@ namespace DataAccess.Management
 			}
 			return result;
 		}
+
+		public async Task<List<CommissionRequestHistoryDTO>> GetAllCommissionRequestHistory()
+		{
+			List<CommissionRequestHistoryDTO> commissions = null;
+			try
+			{
+				commissions = await _context.CommissionRequests.ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
+			}catch(Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+			return commissions;
+		}
     }
 }

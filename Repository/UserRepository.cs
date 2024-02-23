@@ -20,9 +20,19 @@ namespace Repository
             _userManagement = userManagement;
 		}
 
-        public async Task<IEnumerable<AppUserDTO>> GetAllUser()
+        public async Task DeleteUser(AppUser appUser)
+        {
+            await _userManagement.DeleteUser(appUser);
+        }
+
+        public async Task<List<AppUserDTO>> GetAllUser()
         {
             return await _userManagement.GetAllUser();
+        }
+
+        public async Task<AppUserDTO> GetUserDetail(int id)
+        {
+            return await _userManagement.GetUserDetail(id);
         }
 
         public async Task<AppUserProfileDTO> GetUserProfile(int id)
@@ -43,6 +53,11 @@ namespace Repository
         public async Task SignOutAsync()
         {
             await _userManagement.SignOutAsync();
+        }
+
+        public async Task UpdateUser(AppUser appUser)
+        {
+            await _userManagement.UpdateUser(appUser);
         }
     }
 }
