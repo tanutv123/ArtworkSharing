@@ -69,6 +69,8 @@ var mailsettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailsettings);
 builder.Services.AddTransient<IEmailSender, MailRepository>();
 
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
