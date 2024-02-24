@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class initDb : Migration
+    public partial class InitDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -291,12 +291,14 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CommissionHistory",
+                name: "CommissionRequests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ActualPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    RequestDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<byte>(type: "tinyint", nullable: false),
                     SenderId = table.Column<int>(type: "int", nullable: false),
                     ReceiverId = table.Column<int>(type: "int", nullable: false),
@@ -304,20 +306,20 @@ namespace DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CommissionHistory", x => x.Id);
+                    table.PrimaryKey("PK_CommissionRequests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CommissionHistory_AspNetUsers_ReceiverId",
+                        name: "FK_CommissionRequests_AspNetUsers_ReceiverId",
                         column: x => x.ReceiverId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_CommissionHistory_AspNetUsers_SenderId",
+                        name: "FK_CommissionRequests_AspNetUsers_SenderId",
                         column: x => x.SenderId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CommissionHistory_CommissionStatus_CommissionStatusId",
+                        name: "FK_CommissionRequests_CommissionStatus_CommissionStatusId",
                         column: x => x.CommissionStatusId,
                         principalTable: "CommissionStatus",
                         principalColumn: "Id",
@@ -334,6 +336,7 @@ namespace DataAccess.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GenreId = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SoldNumber = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AppUserId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<byte>(type: "tinyint", nullable: false)
@@ -356,7 +359,7 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CommissionImage",
+                name: "CommissionImages",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -364,17 +367,18 @@ namespace DataAccess.Migrations
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isMain = table.Column<bool>(type: "bit", nullable: false),
                     PublicId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CommissionHistoryId = table.Column<int>(type: "int", nullable: false),
-                    CommisionHistoryId = table.Column<int>(type: "int", nullable: true)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CommissionRequestId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CommissionImage", x => x.Id);
+                    table.PrimaryKey("PK_CommissionImages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CommissionImage_CommissionHistory_CommisionHistoryId",
-                        column: x => x.CommisionHistoryId,
-                        principalTable: "CommissionHistory",
-                        principalColumn: "Id");
+                        name: "FK_CommissionImages_CommissionRequests_CommissionRequestId",
+                        column: x => x.CommissionRequestId,
+                        principalTable: "CommissionRequests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -453,7 +457,9 @@ namespace DataAccess.Migrations
                 columns: table => new
                 {
                     AppUserId = table.Column<int>(type: "int", nullable: false),
-                    ArtworkId = table.Column<int>(type: "int", nullable: false)
+                    ArtworkId = table.Column<int>(type: "int", nullable: false),
+                    BuyDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BuyPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -542,24 +548,24 @@ namespace DataAccess.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CommissionHistory_CommissionStatusId",
-                table: "CommissionHistory",
+                name: "IX_CommissionImages_CommissionRequestId",
+                table: "CommissionImages",
+                column: "CommissionRequestId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CommissionRequests_CommissionStatusId",
+                table: "CommissionRequests",
                 column: "CommissionStatusId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CommissionHistory_ReceiverId",
-                table: "CommissionHistory",
+                name: "IX_CommissionRequests_ReceiverId",
+                table: "CommissionRequests",
                 column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CommissionHistory_SenderId",
-                table: "CommissionHistory",
+                name: "IX_CommissionRequests_SenderId",
+                table: "CommissionRequests",
                 column: "SenderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CommissionImage_CommisionHistoryId",
-                table: "CommissionImage",
-                column: "CommisionHistoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Commissions_AppUserId",
@@ -617,7 +623,7 @@ namespace DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CommissionImage");
+                name: "CommissionImages");
 
             migrationBuilder.DropTable(
                 name: "Commissions");
@@ -641,7 +647,7 @@ namespace DataAccess.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "CommissionHistory");
+                name: "CommissionRequests");
 
             migrationBuilder.DropTable(
                 name: "Artworks");
