@@ -1,5 +1,6 @@
 using AutoMapper;
 using BusinessObject.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repository;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 
 namespace Presentation.Pages.Admin.User
 {
+    [Authorize(Policy = "RequireAdminRole")]
     public class UserDeleteModel : PageModel
     {
         private readonly IUserRepository _userRepository;

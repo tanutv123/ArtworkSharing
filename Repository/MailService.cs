@@ -20,11 +20,11 @@ namespace Repository
         public int Port { get; set; }
 
     }
-    public class MailRepository : IEmailSender
+    public class MailService : IEmailSender
     {
         private readonly MailSettings mailSettings;
-        private readonly ILogger<MailRepository> logger;
-        public MailRepository(IOptions<MailSettings> _mailSettings, ILogger<MailRepository> _logger)
+        private readonly ILogger<MailService> logger;
+        public MailService(IOptions<MailSettings> _mailSettings, ILogger<MailService> _logger)
         {
             mailSettings = _mailSettings.Value;
             logger = _logger;

@@ -44,7 +44,7 @@ namespace Presentation.Pages.Account
             var result = await _userRepository.RegisterAsync(user, Password);
             if (result.Succeeded)
             {
-                return RedirectToPage("/Account/LoginPage");
+                return RedirectToPage("/Account/ConfirmEmail");
             }
             else
             {

@@ -21,19 +21,19 @@ namespace DataAccess.Management
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly DataContext _dataContext;
-		private readonly IMapper _mapper;
+        private readonly IMapper _mapper;
 
-		public UserManagement(
-            UserManager<AppUser> userManager, 
-            SignInManager<AppUser> signInManager, 
-            DataContext dataContext, 
+        public UserManagement(
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            DataContext dataContext,
             IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _dataContext = dataContext;
-			_mapper = mapper;
-		}
+            _mapper = mapper;
+        }
 
         public async Task<IdentityResult> RegisterAsync(AppUser newUser, string password)
         {
@@ -41,10 +41,10 @@ namespace DataAccess.Management
             {
                 throw new Exception("Phone number already exists.");
             }
-            newUser.UserName = newUser.Email;
             var result = await _userManager.CreateAsync(newUser, password);
             if (result.Succeeded)
             {
+                await _userManager.SetUserNameAsync(newUser, newUser.Email);
                 await _userManager.AddToRoleAsync(newUser, "Audience");
             }
             return result;
@@ -53,7 +53,7 @@ namespace DataAccess.Management
         public async Task<SignInResult> LoginAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if(user == null)
+            if (user == null || user.Status == 0)
             {
                 return SignInResult.Failed;
             }

@@ -72,7 +72,7 @@ builder.Services.AddScoped<IArtworkRepository, ArtworkRepository>();
 builder.Services.AddOptions();
 var mailsettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailsettings);
-builder.Services.AddTransient<IEmailSender, MailRepository>();
+builder.Services.AddTransient<IEmailSender, MailService>();
 
 var app = builder.Build();
 
