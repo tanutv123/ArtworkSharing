@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240221133001_ChangeNameOfTableCommissionHistory")]
-    partial class ChangeNameOfTableCommissionHistory
+    [Migration("20240224042608_InitDB")]
+    partial class InitDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -170,6 +170,9 @@ namespace DataAccess.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("SoldNumber")
+                        .HasColumnType("int");
+
                     b.Property<byte>("Status")
                         .HasColumnType("tinyint");
 
@@ -290,11 +293,11 @@ namespace DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CommisionHistoryId")
+                    b.Property<int>("CommissionRequestId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CommissionHistoryId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("PublicId")
                         .HasColumnType("nvarchar(max)");
@@ -307,9 +310,9 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommisionHistoryId");
+                    b.HasIndex("CommissionRequestId");
 
-                    b.ToTable("CommissionImage");
+                    b.ToTable("CommissionImages");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.CommissionRequest", b =>
@@ -328,6 +331,12 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("ReceiverId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RequestDescription")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SenderId")
                         .HasColumnType("int");
@@ -398,6 +407,12 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("AppUserId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("BuyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("BuyPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ArtworkId", "AppUserId");
 
@@ -661,11 +676,13 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("BusinessObject.Entities.CommissionImage", b =>
                 {
-                    b.HasOne("BusinessObject.Entities.CommissionRequest", "CommisionHistory")
+                    b.HasOne("BusinessObject.Entities.CommissionRequest", "CommisionRequest")
                         .WithMany("CommissionImages")
-                        .HasForeignKey("CommisionHistoryId");
+                        .HasForeignKey("CommissionRequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("CommisionHistory");
+                    b.Navigation("CommisionRequest");
                 });
 
             modelBuilder.Entity("BusinessObject.Entities.CommissionRequest", b =>
