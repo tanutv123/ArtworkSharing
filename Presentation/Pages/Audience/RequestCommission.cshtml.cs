@@ -14,36 +14,46 @@ namespace Presentation.Pages.Audience
     {
 		private readonly ICommissionRepository _commissionRepository;
 		private readonly IUserRepository _userRepository;
-		private readonly IMapper _mapper;
+        private readonly IGenreRepository _genreRepository;
+        private readonly IMapper _mapper;
 
 		public RequestCommissionModel(
             ICommissionRepository commissionRepository,
             IUserRepository userRepository,
+            IGenreRepository genreRepository,
             IMapper mapper
             )
         {
 			_commissionRepository = commissionRepository;
 			_userRepository = userRepository;
-			_mapper = mapper;
+            _genreRepository = genreRepository;
+            _mapper = mapper;
 		}
         [BindProperty]
         public CommissionRequestDTO CommissionRequestDTO{ get; set; } = new CommissionRequestDTO();
         [BindProperty]
         public string ArtistName { get; set; }
         public string Message { get; set; }
+        public List<Genre> Genres { get; set; }
         public async Task OnGetAsync(int artistId)
         {
-            CommissionRequestDTO.SenderId = User.GetUserId();
-            CommissionRequestDTO.ReceiverId = artistId;
             if(artistId != null)
             {
                 var artist = await _userRepository.GetUserProfile(artistId);
 				ArtistName = artist.Name;
+                CommissionRequestDTO.SenderId = User.GetUserId();
+                CommissionRequestDTO.ReceiverId = artistId;
+                Genres = await _genreRepository.GetAll();
+            }
+            else
+            {
+                Message = "Something went wrong";
             }
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            Genres = await _genreRepository.GetAll();
             if (!ModelState.IsValid) return Page();
             try
             {
