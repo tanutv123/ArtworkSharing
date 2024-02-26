@@ -57,6 +57,10 @@ namespace Presentation.Pages.Audience
             if (!ModelState.IsValid) return Page();
             try
             {
+                if(CommissionRequestDTO.MinPrice <= 0 && CommissionRequestDTO.MaxPrice <= 0)  
+                {
+                    throw new Exception("Price must be greater than 0");
+                }
                 await _commissionRepository.AddCommissionRequest(_mapper.Map<CommissionRequest>(CommissionRequestDTO));
                 Message = "Your request has been sent to the artist. Please wait for the artist to reply";
             }
