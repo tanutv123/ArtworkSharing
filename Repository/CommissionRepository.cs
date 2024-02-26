@@ -73,9 +73,14 @@ namespace Repository
 			return await _commissionManagement.GetSingleCommissionRequest(requestId);
         }
 
-		public async Task NotAcceptCommissionRequest(int id)
+		public async Task NotAcceptCommissionRequest(int id, string notAcceptReason)
 		{
-			await _commissionManagement.ChangeCommissionRequestStatusToNotAccept(id);
+			await _commissionManagement.ChangeCommissionRequestStatusToNotAccept(id, notAcceptReason);
+		}
+
+		public async Task RequestProgressImage(int id)
+		{
+			await _commissionManagement.RequestProgressImage(id);
 		}
 	}
 }

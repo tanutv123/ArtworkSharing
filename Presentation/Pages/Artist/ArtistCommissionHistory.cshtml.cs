@@ -17,6 +17,8 @@ namespace Presentation.Pages.Artist
         public List<CommissionRequestHistoryDTO> CommissionRequestHistoryDTOs{ get; set; }
         [BindProperty]
         public int CommissionId { get; set; }
+		[BindProperty]
+		public string NotAcceptedReason { get; set; }
         public async Task OnGet(string statusFilter = "", string message = "")
         {
             CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), statusFilter);
@@ -26,7 +28,7 @@ namespace Presentation.Pages.Artist
         public async Task<IActionResult> OnPostAccept()
         {
 
-			if (!ModelState.IsValid)
+			if (CommissionId == 0)
 			{
 				CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), "");
 				return Page();
@@ -54,7 +56,7 @@ namespace Presentation.Pages.Artist
 			}
 			try
 			{
-				await _commissionRepository.NotAcceptCommissionRequest(CommissionId);
+				await _commissionRepository.NotAcceptCommissionRequest(CommissionId, NotAcceptedReason);
 				TempData["Message"] = "Commission Denied";
 			}
 			catch (Exception ex)

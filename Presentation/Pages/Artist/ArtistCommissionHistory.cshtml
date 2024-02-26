@@ -14,13 +14,19 @@
 @if(Model.CommissionRequestHistoryDTOs != null && Model.CommissionRequestHistoryDTOs.Count != 0)
 {
 	<div class="container">
+		<div class="row">
+			<div style="height:20px;width:20px;background-color: rgba(236, 166, 13, 0.79); display:inline">
+			</div>
+			<div class="col-md-4">: Progress image request from audience</div>
+		</div>
 		<table class="table" id="commissionTable">
 			<thead>
 				<tr>
 					<td>Sender Email</td>
 					<td>Receiver Email</td>
 					<td>Description</td>
-					<td>Actual Price</td>
+					<td>Min Price</td>
+					<td>Max Price</td>
 					<td>Request Date</td>
 					<td>Status</td>
 					<td></td>
@@ -29,11 +35,18 @@
 			<tbody>
 				@foreach(var request in Model.CommissionRequestHistoryDTOs)
 				{
-					<tr>
+					var style = "";
+					@if(request.Status == 1)
+					{
+						style = "background-color: rgba(236, 166, 13, 0.79)";
+					}
+
+					<tr style="@Html.Raw(style)">
 						<td>@request.SenderEmail</td>
 						<td>@request.ReceiverEmail</td>
 						<td>@request.RequestDescription</td>
-						<td>@request.ActualPrice</td>
+						<td>@request.MinPrice</td>
+						<td>@request.MaxPrice</td>
 						<td>@request.RequestDate</td>
 						<td>
 							@if(request.CommissionStatusDescription == "Pending")
@@ -64,8 +77,39 @@
 									<div class="text text-danger" asp-validation-summary="All"></div>
 									<input type="hidden" asp-for="CommissionId" value="@request.Id"/>
 									<button type="submit" class="btn btn-primary" asp-page-handler="Accept">Accept</button>
-									<button type="submit" class="btn btn-danger" asp-page-handler="NotAccept">Not Accept</button>
+									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal">Not Accept</button>
 								</form>
+								<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">Do you readly want to deny this commission?</h5>
+												<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<form method="post" asp-page-handler="NotAccept">
+												<div class="modal-body">
+													<div class="text text-danger" asp-validation-summary="All"></div>
+													<div class="mb-3">
+														<label for="commissionId" class="form-label">CommissionId: </label>
+														<input type="text" class="form-control" id="commissionId" asp-for="CommissionId" value="@request.Id" readonly>
+														<span class="text-danger" asp-validation-for="CommissionId"></span>
+													</div>
+													<div class="mb-3">
+														<label for="reason" class="form-label">Reason: </label>
+														<input type="text" class="form-control" id="reason" asp-for="NotAcceptedReason">
+														<span class="text-danger" asp-validation-for="NotAcceptedReason"></span>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+													<button type="submit" class="btn btn-primary">Submit</button>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
 							}
 							else if(request.CommissionStatusDescription == "In Progress" || request.CommissionStatusDescription == "Accepted")
 							{

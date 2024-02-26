@@ -12,7 +12,8 @@
                     <td>Sender Email</td>
                     <td>Receiver Email</td>
                     <td>Description</td>
-                    <td>Actual Price</td>
+                    <td>Min Price</td>
+                    <td>Max Price</td>
                     <td>Request Date</td>
                     <td>Status</td>
                     <td></td>
@@ -32,7 +33,10 @@
                             @Html.DisplayFor(modelItem => item.RequestDescription)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ActualPrice)
+                            @Html.DisplayFor(modelItem => item.MinPrice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MaxPrice)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.RequestDate)
