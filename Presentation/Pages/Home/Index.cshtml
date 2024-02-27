@@ -5,6 +5,45 @@
 }
 
 <h1>Artworks</h1>
+<form method="get" asp-page-handler ="Index">
+    <div class="search">
+        <span id="search-icon" class="material-symbols-outlined">search</span>
+        <input name="title" id="search-title" class="search-input" type="search" placeholder="Search a title"/>
+    </div>
+</form>
+<style>
+    .search{
+      --padding: 14px;
+      
+      width: max-content;
+      display: flex;
+      align-items: center;
+      padding: var(--padding);
+      border-radius: 28px;
+      background: #f6f6f6;
+      transition: box-shadow 0.25s;
+    }
+    
+    .search:focus-within{
+      box-shadow: 0 0 2px rgba(0, 0, 0 , 0.75);
+      
+    }
+    
+    .search-input{
+      font-size: 14px ;
+      font-family: 'Lexend', sans-serif;
+      color: #333333;
+      margin-left: var(--padding);
+      outline: none;
+      border: none;
+      background: transparent;
+      width: 800px;  
+    }
+    
+    .search-input::placeholder{
+      color: rgba(0, 0, 0, 0.5);
+    }
+</style>
 <div class="container">
     @if (Model.Artworks != null)
     {
@@ -37,3 +76,13 @@
     }
 </div>
 
+    @section Scripts
+    {
+        <script>
+            $(function() {
+                $("#search-icon").click(function() {
+                    $("form").submit(); // Submit the form
+                });
+            });
+        </script>
+    }

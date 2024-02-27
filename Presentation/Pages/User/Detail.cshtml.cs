@@ -83,13 +83,6 @@ public class Detail : PageModel
             return NotFound($"Can not load user ID: ''{_userManager.GetUserId(User)}");
         }
 
-        // if (!ModelState.IsValid)
-        // {
-        //     await LoadAsync(user);
-        //     return Page();
-        // }
-        
-
         var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
         if (Input.PhoneNumber != phoneNumber)
         {

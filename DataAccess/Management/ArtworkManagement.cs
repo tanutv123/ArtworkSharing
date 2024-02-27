@@ -108,5 +108,26 @@ namespace DataAccess.Management
             _dataContext.ArtworkComments.Add(comment);
             await _dataContext.SaveChangesAsync();
         }
+
+            public async Task<IEnumerable<Artwork>> GetArtworkBySearchString(string title)
+            {
+                IList<Artwork> artworks = new List<Artwork>();
+                try
+                {
+                    if (_dataContext != null && _dataContext.Artworks != null)
+                    artworks = await _dataContext.Artworks
+                        .Include(a => a.Genre)
+                        .Include(a => a.AppUser)
+                        .Include(a => a.ArtworkImage).Where(a => a.Title.Contains(title))
+                        .ToListAsync();
+
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+
+                return artworks;
+            }
     }
 }

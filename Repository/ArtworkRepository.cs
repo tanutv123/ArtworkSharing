@@ -22,6 +22,9 @@ namespace Repository
             await _artworkManagement.ArtworkCommentAsync(artworkid, commentid, content, createdDate);
         }
 
+        public async Task<IEnumerable<Artwork>> GetArtworkByTitle(string title)
+            => await _artworkManagement.GetArtworkBySearchString(title);
+
         public async Task<bool> FollowArtist(int sourceid, int followerid)
         {
             return await _artworkManagement.FollowUserAsync(sourceid, followerid);
