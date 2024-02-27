@@ -4,11 +4,10 @@ namespace BusinessObject.DTOs;
 
 public class UserDetailDTO
 {
-    private UserImage? userImage { get; set; }
-    private string Name { get; set; }
-    private string emailAddress { get; set; }
-    private string Description { get; set; }
-    private string PhoneNumber { get; set; }
-    private string currentPassword { get; set; }
-    private string newPassword { get; set; }
+    public string userImageUrl { get; set; }
+    public string Name { get; set; }
+    public string emailAddress { get; set; }
+    public string Description { get; set; }
+    public string PhoneNumber { get; set; }
+   
 }

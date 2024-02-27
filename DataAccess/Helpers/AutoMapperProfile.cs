@@ -24,7 +24,8 @@ namespace DataAccess.Helpers
 			CreateMap<AppUser, AppUserDTO>()
 				.ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.UserRoles.FirstOrDefault().Role.Name))
 				.ReverseMap();
-		}
+            CreateMap<AppUser, UserDetailDTO>().ReverseMap();
+        }
         }
 	
 }

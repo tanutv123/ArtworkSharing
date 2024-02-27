@@ -24,7 +24,8 @@ public class Detail : PageModel
 
     [BindProperty]
     public InputModel Input { get; set; }
-    
+    [BindProperty]
+    public string image { get; set; }
     [BindProperty] 
     public AppUser AppUser { get; set; }
     [TempData]
@@ -33,7 +34,7 @@ public class Detail : PageModel
     public string Username { get; set; }
     public class InputModel
     {
-        public UserImage UserImage { get; set; }
+        public String ImageURL { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Description { get; set; }
@@ -41,21 +42,25 @@ public class Detail : PageModel
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
     }
+    
+    public UserDetailDTO dto { get; set; }
 
     private async Task LoadAsync(AppUser appUser)
     {
+        var userD = await _userRepository.getUserDetail(appUser);
+        
         var userName = await _userManager.GetUserNameAsync(appUser);
         var userEmail = await _userManager.GetEmailAsync(appUser);
         var userPhone = await _userManager.GetPhoneNumberAsync(appUser);
         Username = userName;
         Input = new InputModel
         {
-            // UserImage = appUser.UserImage,
+            ImageURL = userD.userImageUrl,
             Name = userName,
             PhoneNumber = userPhone,
             Description = appUser.Description
         };
-
+        
     }
 
     public async Task<IActionResult> OnGetAsync()
