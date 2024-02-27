@@ -96,6 +96,7 @@ namespace DataAccess.Management
 					var pendingStatus = await _context.CommissionStatus
 						.SingleOrDefaultAsync(x => x.Description == "Pending");
 					commissionRequest.CommissionStatusId = pendingStatus.Id;
+					commissionRequest.RequestDate = DateTime.UtcNow;
 					await _context.CommissionRequests.AddAsync(commissionRequest);
 					await _context.SaveChangesAsync();
 				}
@@ -202,7 +203,7 @@ namespace DataAccess.Management
 			}
 		}
 
-		public async Task ChangeCommissionRequestStatusToNotAccept(int id)
+		public async Task ChangeCommissionRequestStatusToNotAccept(int id, string notAcceptReason)
 		{
 			try
 			{
@@ -214,6 +215,7 @@ namespace DataAccess.Management
 					{
 						var acceptStatus = await _context.CommissionStatus.AsNoTracking().SingleOrDefaultAsync(x => x.Description == "Not Accepted");
 						commission.CommissionStatusId = acceptStatus.Id;
+						commission.NotAcceptedReason = notAcceptReason;
 						await _context.SaveChangesAsync();
 					}
 					else
@@ -280,7 +282,29 @@ namespace DataAccess.Management
 					{
 						isMainImage.isMain = false;
 					}
+					commission.Status = 0;
 					_context.CommissionImages.Add(commissionImage);
+					await _context.SaveChangesAsync();
+				}
+				else
+				{
+					throw new Exception("Commission not found!");
+				}
+			}
+			catch(Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		public async Task RequestProgressImage(int id)
+		{
+			try
+			{
+				var commission = await _context.CommissionRequests.SingleOrDefaultAsync(x => x.Id == id);
+				if(commission != null)
+				{
+					commission.Status = 1;
 					await _context.SaveChangesAsync();
 				}
 				else

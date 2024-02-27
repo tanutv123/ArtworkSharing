@@ -1,14 +1,57 @@
 ﻿@page
 @model Presentation.Pages.Audience.CommissionRequestHistoryDetailModel
 @{
+	var message = TempData["Message"] as string;
+}
+@if (!string.IsNullOrEmpty(message))
+{
+	<div class="alert alert-success">
+		<p>@message</p>
+	</div>
 }
 
-@if(Model.CommissionRequestHistoryDTO != null && Model.CommissionRequestHistoryDTO.CommissionImages != null && Model.CommissionRequestHistoryDTO.CommissionImages.Count != 0)
+@if (Model.CommissionRequestHistoryDTO != null)
 {
-	<p>This is for commission image section</p>
+	<div class="container">
+		@if (Model.CommissionRequestHistoryDTO.CommissionImages != null && Model.CommissionRequestHistoryDTO.CommissionImages.Count != 0)
+		{
+			<div class="row mb-3">
+				@foreach (var image in Model.CommissionRequestHistoryDTO.CommissionImages)
+				{
+					<div class="col-md-4 mb-3">
+						<div class="card" style="width: 18rem">
+							<img src="@image.Url" class="card-img-top" alt="progress image">
+							<div class="card-body">
+								<p class="card-text">@image.CreatedDate.ToShortDateString()</p>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+		}
+		else
+		{
+			@if (Model.CommissionRequestHistoryDTO.CommissionStatusDescription == "Not Accepted")
+			{
+				<h3>Your commission is denied by the artist</h3>
+				<p>The reason: @Model.CommissionRequestHistoryDTO.NotAcceptedReason</p>
+			}
+			else
+			{
+				<h3>The artist have not added any progress image yet.</h3>
+			}
+		}
+
+		<form method="post">
+			<input type="hidden" asp-for="CommissionId"/>
+			<div class="text text-danger" asp-asp-validation-summary="All"></div>
+			<div class="mb-3">
+				<button type="submit" class="btn btn-primary">Request progress image</button>
+			</div>
+		</form>
+	</div>
 }
 else
 {
-	<h3>The artist have not added any progress image yet.</h3>
-	<p><a href="#">Click this link to request progress image from the artist.</a></p>
+	<h3>Commission Not Found</h3>
 }

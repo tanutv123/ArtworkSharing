@@ -68,6 +68,8 @@ builder.Services.AddScoped<ICommissionRepository, CommissionRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<ArtworkManagement>();
 builder.Services.AddScoped<IArtworkRepository, ArtworkRepository>();
+builder.Services.AddScoped<GenreManagement>();
+builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 
 builder.Services.AddOptions();
 var mailsettings = builder.Configuration.GetSection("MailSettings");

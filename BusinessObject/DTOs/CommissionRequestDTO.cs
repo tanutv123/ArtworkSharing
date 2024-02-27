@@ -5,7 +5,9 @@ namespace BusinessObject.DTOs
 	public class CommissionRequestDTO
 	{
         [Required]
-        public decimal ActualPrice { get; set; }
+        public decimal MinPrice { get; set; }
+        [Required]
+        public decimal MaxPrice { get; set; }
         [Required]
         public string RequestDescription { get; set; }
         [Required]
@@ -13,5 +15,7 @@ namespace BusinessObject.DTOs
         [Required]
         public int ReceiverId { get; set; }
         public int CommissionStatusId { get; set; }
+        [Required]
+        public int GenreId { get; set; }
     }
 }
