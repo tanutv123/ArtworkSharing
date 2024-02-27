@@ -18,14 +18,29 @@
 		<input type="hidden" asp-for="CommissionRequestDTO.SenderId"/>
 		<input type="hidden" asp-for="CommissionRequestDTO.ReceiverId"/>
 		<div class="mb-3">
+			<label for="genre" class="form-label">Genre: </label>
+			<select asp-for="CommissionRequestDTO.GenreId" class="form-control">
+				@foreach(var genre in Model.Genres)
+				{
+					<option value="@genre.Id">@genre.Name</option>
+				}
+			</select>
+			<span class="text-danger" asp-validation-for="CommissionRequestDTO.RequestDescription"></span>
+		</div>
+		<div class="mb-3">
 			<label for="description" class="form-label">Your description for this commission: </label>
 			<input type="text" class="form-control" id="description" asp-for="CommissionRequestDTO.RequestDescription">
 			<span class="text-danger" asp-validation-for="CommissionRequestDTO.RequestDescription"></span>
 		</div>
 		<div class="mb-3">
-			<label for="targetPrice" class="form-label">Your price: </label>
-			<input type="number" class="form-control" id="targetPrice" asp-for="CommissionRequestDTO.ActualPrice">
-			<span class="text-danger" asp-validation-for="CommissionRequestDTO.ActualPrice"></span>
+			<label for="minPrice" class="form-label">Min price: </label>
+			<input type="number" class="form-control" id="minPrice" asp-for="CommissionRequestDTO.MinPrice">
+			<span class="text-danger" asp-validation-for="CommissionRequestDTO.MinPrice"></span>
+		</div>
+		<div class="mb-3">
+			<label for="maxPrice" class="form-label">Max price: </label>
+			<input type="number" class="form-control" id="maxPrice" asp-for="CommissionRequestDTO.MaxPrice">
+			<span class="text-danger" asp-validation-for="CommissionRequestDTO.MaxPrice"></span>
 		</div>
 		<div class="mb-3">
 			<button type="submit" class="btn btn-success">Send this request</button>

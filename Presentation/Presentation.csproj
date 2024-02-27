@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <None Include="D:\du lieu o kia\WPF\ArtworkSharing\Presentation\.editorconfig" />
+    <None Include="wwwroot\assets\images\mashup-logo.svg" />
   </ItemGroup>
 
   <ItemGroup>
