@@ -75,5 +75,10 @@ namespace Repository
         {
             return await _userManagement.GetUserDetail(userId);
         }
+
+        public async Task AddUser(AppUser appUser, string password)
+        {
+            await _userManagement.AddUser(appUser, password);
+        }
     }
 }

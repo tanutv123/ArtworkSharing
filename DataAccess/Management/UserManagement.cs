@@ -37,23 +37,29 @@ namespace DataAccess.Management
 
         public async Task<IdentityResult> RegisterAsync(AppUser newUser, string password)
         {
-            if (await IsPhoneExistAsync(newUser.PhoneNumber))
+            try
             {
-                throw new Exception("Phone number already exists.");
-            }
-            var result = await _userManager.CreateAsync(newUser, password);
-            if (result.Succeeded)
+                if (await IsPhoneExistAsync(newUser.PhoneNumber))
+                {
+                    throw new Exception("Phone number already exists.");
+                }
+                var result = await _userManager.CreateAsync(newUser, password);
+                if (result.Succeeded)
+                {
+                    await _userManager.SetUserNameAsync(newUser, newUser.Email);
+                    await _userManager.AddToRoleAsync(newUser, "Audience");
+                }
+                return result;
+            } catch (Exception ex)
             {
-                await _userManager.SetUserNameAsync(newUser, newUser.Email);
-                await _userManager.AddToRoleAsync(newUser, "Audience");
+                throw new Exception(ex.Message);
             }
-            return result;
         }
 
         public async Task<SignInResult> LoginAsync(string email, string password)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user == null || user.Status == 0)
+            if (user == null || user.Status == 0 || user.EmailConfirmed == false)
             {
                 return SignInResult.Failed;
             }
@@ -143,6 +149,21 @@ namespace DataAccess.Management
                 throw new Exception(ex.Message);
             }
             return user;
+        }
+        public async Task AddUser(AppUser appUser, string password)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(appUser.Email);
+                if(user == null)
+                {
+                    await _userManager.CreateAsync(appUser, password);
+                    await _userManager.SetUserNameAsync(appUser, appUser.Email);
+                }
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message);    
+            }
         }
 
         public async Task UpdateUser(AppUser appUser)

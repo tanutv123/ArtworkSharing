@@ -45,7 +45,8 @@ namespace DataAccess.Data
 				Name = "admin",
 				Description = "admin",
 				Email = "admin@fas.com",
-				Status = 1
+				Status = 1,
+				EmailConfirmed = true
 			};
 
 			var resultAdmin = await userManager.CreateAsync(admin, "Pa$$w0rd");
@@ -55,8 +56,9 @@ namespace DataAccess.Data
 			{
 				UserName = "manager@fas.com",
 				Email = "manager@fas.com",
-				Status = 1
-			};
+				Status = 1,
+                EmailConfirmed = true
+            };
 			await userManager.CreateAsync(manager, "Pa$$w0rd");
 			await userManager.AddToRoleAsync(manager, "Manager");
 

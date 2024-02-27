@@ -1,9 +1,7 @@
-@page
-@model Presentation.Pages.Account.ConfirmEmail
-
+﻿@page
+@model Presentation.Pages.Account.ConfirmEmailModel
 @{
-    ViewData["Title"] = "Confirm email";
+    ViewData["Title"] = "Confirm Email";
 }
-
 <h1>@ViewData["Title"]</h1>
-<h3>@Model.StatusMessage</h3>
+<partial name="_StatusMessage" model="Model.StatusMessage" />

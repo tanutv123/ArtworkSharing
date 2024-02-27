@@ -20,6 +20,7 @@ namespace Repository
         Task<AppUserDTO> GetUserDetailAdmin(int id);
         Task UpdateUser(AppUser appUser);
         Task DeleteUser(AppUser appUser);
+        Task AddUser(AppUser appUser, string password);
         Task changeUserPassword(AppUser appUser, string currentPassword, string newPassword);
 /*        Task<IEnumerable<AppUserDTO>> GetAllUser();*/
     }
