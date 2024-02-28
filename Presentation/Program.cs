@@ -70,6 +70,7 @@ builder.Services.AddScoped<ArtworkManagement>();
 builder.Services.AddScoped<IArtworkRepository, ArtworkRepository>();
 builder.Services.AddScoped<GenreManagement>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
+builder.Services.AddSingleton<PresenceTracker>();
 
 builder.Services.AddOptions();
 var mailsettings = builder.Configuration.GetSection("MailSettings");
@@ -97,6 +98,7 @@ app.MapRazorPages();
 app.MapControllers();
 
 app.MapHub<PresenceHub>("/presensehub");
+app.MapHub<CommissionHub>("/commissionhub");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;

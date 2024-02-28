@@ -33,14 +33,20 @@ namespace Presentation.Pages.Audience
         public CommissionRequestDTO CommissionRequestDTO{ get; set; } = new CommissionRequestDTO();
         [BindProperty]
         public string ArtistName { get; set; }
+        [BindProperty]
+        public string ArtistEmail { get; set; }
         public string Message { get; set; }
+        public bool IsRequestSentSuccess { get; set; } = false;
         public List<Genre> Genres { get; set; }
-        public async Task OnGetAsync(int artistId)
+        public async Task OnGetAsync(int artistId, string message = null, bool isRequestSuccess = false)
         {
+            IsRequestSentSuccess = isRequestSuccess;
+            Message = message;
             if(artistId != null)
             {
                 var artist = await _userRepository.GetUserProfile(artistId);
 				ArtistName = artist.Name;
+                ArtistEmail = artist.Email;
                 CommissionRequestDTO.SenderId = User.GetUserId();
                 CommissionRequestDTO.ReceiverId = artistId;
                 Genres = await _genreRepository.GetAll();
@@ -53,6 +59,7 @@ namespace Presentation.Pages.Audience
 
         public async Task<IActionResult> OnPostAsync()
         {
+            IsRequestSentSuccess = false;
             Genres = await _genreRepository.GetAll();
             if (!ModelState.IsValid) return Page();
             try
@@ -62,13 +69,18 @@ namespace Presentation.Pages.Audience
                     throw new Exception("Price must be greater than 0");
                 }
                 await _commissionRepository.AddCommissionRequest(_mapper.Map<CommissionRequest>(CommissionRequestDTO));
-                Message = "Your request has been sent to the artist. Please wait for the artist to reply";
+                IsRequestSentSuccess = true;
             }
             catch(Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
+                return Page();
             }
-            return Page();
+            return RedirectToPage("/audience/requestcommission", new {
+                artistId = CommissionRequestDTO.ReceiverId, 
+                message = "Your request has been sent to the artist. Please wait for the artist to reply",
+                isRequestSuccess = IsRequestSentSuccess
+            });
         }
     }
 }

@@ -57,7 +57,22 @@
                             <a class="nav-link text-dark" href="/audience/commissionrequesthistory">Your commission request history</a>
                         </li>
                     }
+                    <li>
+                        <div class="btn-group dropend">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa-regular fa-bell"></i>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </li>
                 </ul>
+                <div class="mr-2">
+                    <partial name="_LoginStatusPartial" />
+                </div>
 
                 <nav class="nav-footer">
                     <p class="nav-footer-social-buttons">
@@ -81,22 +96,33 @@
             @RenderBody()
         </main>
     </div> *@
+    @if(Context.User.IsInRole("Artist"))
+    {
+        <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:9999;">
+            <div id="artistLiveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style=" width: 400px; height:200px;">
+                <div class="toast-header">
+                    <strong class="me-auto fs-2">Notification</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body fs-3" id="toastContent">
+                </div>
+            </div>
+        </div>
+    }
     <main class="" id="main-collapse">
         <div class="row">
             @RenderBody()
         </div>
     </main>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - ArtWorkSharing - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/datatables/datatables.min.js"></script>
+    <script src="https://kit.fontawesome.com/a43552ec4c.js" crossorigin="anonymous"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+    <script src="~/lib/websignalr/presence.js"></script> 
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
             masonryBuild();

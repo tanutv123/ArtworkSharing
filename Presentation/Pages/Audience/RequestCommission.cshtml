@@ -15,6 +15,7 @@
 	<form method="post">
 		<div class="text-danger" asp-validation-summary="All"></div>
 		<input type="hidden" asp-for="ArtistName"/>
+		<input type="hidden" asp-for="ArtistEmail"/>
 		<input type="hidden" asp-for="CommissionRequestDTO.SenderId"/>
 		<input type="hidden" asp-for="CommissionRequestDTO.ReceiverId"/>
 		<div class="mb-3">
@@ -43,7 +44,24 @@
 			<span class="text-danger" asp-validation-for="CommissionRequestDTO.MaxPrice"></span>
 		</div>
 		<div class="mb-3">
-			<button type="submit" class="btn btn-success">Send this request</button>
+			<button type="submit" id="submitButton" class="btn btn-success">Send this request</button>
 		</div>
 	</form>
 </div>
+
+@section Scripts {
+	<script>
+		var isSuccessForm = @Html.Raw(Json.Serialize(Model.IsRequestSentSuccess));
+		
+		if(isSuccessForm) {
+			var commissionConnection = new signalR.HubConnectionBuilder().withUrl("/commissionhub").build();
+			commissionConnection.start().then(function () {
+				commissionConnection.invoke("CommissionReceived", @Html.Raw(Json.Serialize(Model.ArtistEmail))).catch(function (err) {
+					return console.error(err.toString());
+				});
+			}).catch(function (err) {
+				return console.error(err.toString());
+			});
+		}
+	</script>
+}
