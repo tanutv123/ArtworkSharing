@@ -49,5 +49,17 @@ namespace Repository
         {
             return await _artworkManagement.LikeArtworkAsync(userid, artworkid);
         }
+        public async Task<IEnumerable<Artwork>> GetArtworksByUserId(int artistid)
+        {
+            return await _artworkManagement.GetArtworkListByArtistId(artistid);
+        }
+        public async Task AddArtwork(Artwork artwork)
+        {
+            await _artworkManagement.AddArtwork(artwork);
+        }
+        public async Task AddArtworkImage(ArtworkImage artworkImage)
+        {
+            await _artworkManagement.AddArtworkImage(artworkImage);
+        }
     }
 }

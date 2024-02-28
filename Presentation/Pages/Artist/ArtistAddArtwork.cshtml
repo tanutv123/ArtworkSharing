@@ -1,0 +1,117 @@
+﻿@page
+@model Presentation.Pages.Artist.ArtistAddArtworkModel
+@{
+}
+<div class="container">
+	<div class="row mb-3">
+		<form method="post" asp-page-handler="AddImage">
+
+			<div>
+				@* <input type="hidden" asp-for="@Model.AppUser.Id" /> *@
+				@* <input type="hidden" asp-for="CommissionRequestDTO.SenderId" />
+				<input type="hidden" asp-for="CommissionRequestDTO.ReceiverId" /> *@
+				<div class="mb-3">
+					<label for="title" class="form-label">Your Title for this Artwork: </label>
+					<input type="text" class="form-control" id="title" asp-for="addArtworkDTO.Title">
+					<span class="text-danger" asp-validation-for="addArtworkDTO.Title"></span>
+				</div>
+				<div class="mb-3">
+					<label for="genre" class="form-label">Genre: </label>
+					<select asp-for="addArtworkDTO.GenreId" class="form-control">
+						@foreach (var genre in Model.Genres)
+						{
+							<option value="@genre.Id">@genre.Name</option>
+						}
+					</select>
+					<span class="text-danger" asp-validation-for="addArtworkDTO.Description"></span>
+				</div>
+				<div class="mb-3">
+					<label for="description" class="form-label">Your description for this artword: </label>
+					<input type="text" class="form-control" id="description" asp-for="addArtworkDTO.Description">
+					<span class="text-danger" asp-validation-for="addArtworkDTO.Description"></span>
+				</div>
+				<div class="mb-3">
+					<label for="price" class="form-label">Price: </label>
+					<input type="number" class="form-control" id="minPrice" asp-for="addArtworkDTO.Price">
+					<span class="text-danger" asp-validation-for="addArtworkDTO.Price"></span>
+				</div>
+
+				<div class="text text-danger" asp-validation-summary="All"></div>
+				@* <div class="mb-3">
+				<label for="artworkId" class="form-label">ArtworkId: </label>
+				<input type="text" class="form-control" id="artworkId" asp-for="addArtworkImageDTO.artworkId" readonly>
+				<span class="text-danger" asp-validation-for="addArtworkImageDTO.artworkId"></span>
+				</div> *@
+				<div class="mb-3">
+					<label for="artworkImageUpload" class="form-label">Upload Artwork Image</label>
+					<input type="file" class="form-control" id="artworkImageUpload">
+					<img src="" id="artworkImageDisplay" style="display:none;width:300px;" />
+				</div>
+				<div class="mb-3">
+					<label for="publicId" class="form-label">Public Id</label>
+					<input type="text" readonly class="form-control" id="publicId" asp-for="addArtworkImageDTO.PublicId">
+					<img src="" id="artworkImageDisplay" style="display:none;width:300px;" />
+				</div>
+				<div class="mb-3">
+					<label for="artworkImage" class="form-label">Artwork Image Url</label>
+					<input type="text" class="form-control" id="artworkImage" asp-for="addArtworkImageDTO.Url" readonly>
+					<span class="text-danger" asp-validation-for="addArtworkImageDTO.Url"></span>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+				<button type="submit" class="btn btn-primary">Add</button>
+			</div>
+		</form>
+
+		@* <form method="post" asp-page-handler="Done">
+		<div class="modal-body">
+		<div class="text text-danger" asp-validation-summary="All"></div>
+		<div class="mb-3">
+		<label for="artworkId" class="form-label">ArtworkId: </label>
+		<input type="text" class="form-control" id="artworkId" asp-for="addArtworkImageDTO.artworkId" readonly>
+		<span class="text-danger" asp-validation-for="addArtworkImageDTO.artworkId"></span>
+		</div>
+
+		</div>
+		<div class="modal-footer">
+		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+		<button type="submit" class="btn btn-primary">Yes</button>
+		</div>
+		</form> *@
+	</div>
+</div>
+			</div>
+		</div>
+	</div>
+
+
+@section Scripts {
+	<script>
+		const artworkImageUpload = document.getElementById('artworkImageUpload');
+		const artworkImage = document.getElementById('artworkImage');
+		const artworkImageDisplay = document.getElementById('artworkImageDisplay');
+		const publicId = document.getElementById('publicId');
+		async function uploadArtworkImage(e) {
+
+			let data = new FormData();
+			data.append('file', e.target.files[0]);
+
+			await fetch('/api/image', {
+				method: 'POST',
+				header: {
+					'Accept': '*/*',
+
+				},
+				body: data
+			}).then(response => response.json())
+				.then(result => {
+					artworkImage.value = result.link;
+					artworkImageDisplay.style.display = 'block';
+					artworkImageDisplay.src = result.link;
+					publicId.value = result.publicId;
+				});
+		}
+		artworkImageUpload.addEventListener('change', uploadArtworkImage)
+	</script>
+}

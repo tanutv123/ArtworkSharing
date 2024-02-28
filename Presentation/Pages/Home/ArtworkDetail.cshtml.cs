@@ -20,7 +20,7 @@ namespace Presentation.Pages.Home
         [BindProperty]
         public AddCommentDTO AddComment { get; set; }
 
-        public IEnumerable<ArtworkComment> ArtworkComment{ get; set; }
+        public IEnumerable<ArtworkComment> ArtworkComment { get; set; }
 
         public async Task OnGetAsync(int id)
         {
