@@ -32,7 +32,7 @@ namespace Presentation.Pages.Home
 
         }
 
-        public async Task<IActionResult> OnPostIndex(string title)
+        public async Task<IActionResult> OnIndex(string title)
         {
             if (String.IsNullOrEmpty(title))
             {
