@@ -3,6 +3,20 @@
 @{
     ViewData["Title"] = "Home page";
 }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+<!-- Add additional stylesheets or scripts here -->
+<style>
+    /* Custom CSS styles */
+    .user-detail {
+        margin-bottom: 50px; /* Tăng khoảng cách giữa Phần Detail User và Phần Gallery */
+    }
+
+    .artwork-image {
+        width: 100%; /* Set the width to 100% */
+        height: auto; /* Automatically calculate the height to maintain aspect ratio */
+        max-width: 1000px; /* Set a maximum width for the images */
+    }
+</style>
 
 <h1>Artworks</h1>
 <form method="post" asp-page="/Home/Index" asp-page-handler="Index"  id="searchForm">
@@ -53,7 +67,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h6>Title: @artwork.Title</h6>
-                    <img src="@artwork.ArtworkImage.Url" alt="@artwork.Title" class="img-fluid" />
+                    <img src="@artwork.ArtworkImage.Url" alt="@artwork.Title" class="card-img-top artwork-image" />
                     <li>Genre: @artwork.Genre.Name</li>
                     <li>Price: @artwork.Price</li>
                     <li>ArtistId: @artwork.AppUserId</li>

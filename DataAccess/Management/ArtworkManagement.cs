@@ -1,4 +1,7 @@
-﻿using BusinessObject.Entities;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using BusinessObject.DTOs;
+using BusinessObject.Entities;
 using DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -13,10 +16,12 @@ namespace DataAccess.Management
     public class ArtworkManagement
     {
         private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;
 
-        public ArtworkManagement(DataContext context)
+        public ArtworkManagement(DataContext context, IMapper mapper)
         {
             _dataContext = context;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Artwork>> GetArtworksAsync()
@@ -129,5 +134,67 @@ namespace DataAccess.Management
 
                 return artworks;
             }
+        public async Task<IEnumerable<Artwork>> GetArtworkListByArtistId(int artistid)
+        {
+            IList<Artwork> artworks = new List<Artwork>();
+            if (_dataContext != null && _dataContext.Artworks != null)
+            {
+                artworks = await _dataContext.Artworks
+                    .Include(a => a.ArtworkImage)
+                    .Include(a => a.Genre)
+                    .Include(a => a.AppUser).Where(a => a.AppUserId == artistid)
+                    .ToListAsync();
+            }
+            return artworks;
+        }
+        public async Task AddArtwork(Artwork artwork)
+        {
+            try
+            {
+                artwork.Status = 1;
+                artwork.CreatedDate = DateTime.UtcNow;
+                await _dataContext.Artworks.AddAsync(artwork);
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public async Task<AddArtworkImageDTO> GetSingleAddArtworkImage(int id)
+        {
+            AddArtworkImageDTO result = null;
+
+            try
+            {
+                result = await _dataContext.Artworks.Where(x => x.Id == id).ProjectTo<AddArtworkImageDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return result;
+        }
+        public async Task AddArtworkImage(ArtworkImage artworkImage)
+        {
+            try
+            {
+                var art = await _dataContext.Artworks.SingleOrDefaultAsync(x => x.Id == artworkImage.ArtworkId);
+                if (art != null)
+                {
+                    art.Status = 1;
+                    _dataContext.ArtworkImages.Add(artworkImage);
+                    await _dataContext.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception("Artwork not found!");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
