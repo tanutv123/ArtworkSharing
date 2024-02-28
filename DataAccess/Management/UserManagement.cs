@@ -13,6 +13,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace DataAccess.Management
 {
@@ -214,6 +215,23 @@ namespace DataAccess.Management
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task<UserDetailDTO> getUserDetail(AppUser user)
+        {
+            UserDetailDTO userDetailDto = new UserDetailDTO();
+            try
+            {
+                var user2 = await _userManager.Users.Include(u => u.UserImage)
+                    .FirstOrDefaultAsync(u => u.Email == user.Email);
+                userDetailDto = _mapper.Map<UserDetailDTO>(user);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return userDetailDto;
         }
     }
 }

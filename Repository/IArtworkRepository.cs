@@ -15,6 +15,7 @@ namespace Repository
         Task<Artwork> GetArtworkById(int artworkid);
         Task<IEnumerable<ArtworkComment>> GetArtworkComments(int artworkid);
         Task AddArtworkComment(int artworkid, int  commentid, string content, DateTime createdDate);
+        Task<IEnumerable<Artwork>> GetArtworkByTitle(string title);
     }
 
 }

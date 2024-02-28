@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -79,6 +80,10 @@ namespace Repository
         public async Task AddUser(AppUser appUser, string password)
         {
             await _userManagement.AddUser(appUser, password);
+        }
+        public async Task<UserDetailDTO> getUserDetail(AppUser user)
+        {
+            return await _userManagement.getUserDetail(user);
         }
     }
 }

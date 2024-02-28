@@ -3,6 +3,7 @@ using BusinessObject.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Presentation.Extensions;
 using Repository;
 
@@ -28,6 +29,20 @@ namespace Presentation.Pages.Home
         public async Task OnGetAsync()
         {
             Artworks = await _artworkRepository.GetArtworks();
+
+        }
+
+        public async Task<IActionResult> Index(string title)
+        {
+            if (String.IsNullOrEmpty(title))
+            {
+                Artworks = await _artworkRepository.GetArtworks();
+            }
+            else
+            {
+                Artworks = await _artworkRepository.GetArtworkByTitle(title);
+            }
+            return Page();
 
         }
 
