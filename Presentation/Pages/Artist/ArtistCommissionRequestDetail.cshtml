@@ -144,12 +144,15 @@ else
 	</div>
 }
 
+
+
 @section Scripts {
 	<script>
 		const progressImageUpload = document.getElementById('progressImageUpload');
 		const progressImage = document.getElementById('progressImage');
 		const progressImageDisplay = document.getElementById('progressImageDisplay');
 		const publicId = document.getElementById('publicId');
+		const toast = document.getElementById('toastDisplay');
 		async function uploadProgressImage(e) {
 
 			let data = new FormData();

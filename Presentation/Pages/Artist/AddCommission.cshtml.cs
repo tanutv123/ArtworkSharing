@@ -1,5 +1,6 @@
 using AutoMapper;
 using BusinessObject.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.Extensions;
@@ -7,6 +8,7 @@ using Repository;
 
 namespace Presentation.Pages.Artist
 {
+    [Authorize(Policy = "Artist")]
     public class AddCommissionModel : PageModel
     {
 		private readonly ICommissionRepository _commissionRepository;

@@ -32,18 +32,19 @@ namespace Presentation.Pages.Home
 
         }
 
-        public async Task<IActionResult> Index(string title)
+        public async Task<IActionResult> OnPostIndex(string title)
         {
             if (String.IsNullOrEmpty(title))
             {
                 Artworks = await _artworkRepository.GetArtworks();
+                return Page();
+
             }
             else
             {
                 Artworks = await _artworkRepository.GetArtworkByTitle(title);
+                return Page();
             }
-            return Page();
-
         }
 
         public async Task<IActionResult> OnPostLike()

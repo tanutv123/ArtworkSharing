@@ -5,7 +5,7 @@
 }
 
 <h1>Artworks</h1>
-<form method="get" asp-page-handler ="Index">
+<form method="post" asp-page="/Home/Index" asp-page-handler="Index"  id="searchForm">
     <div class="search">
         <span id="search-icon" class="material-symbols-outlined">search</span>
         <input name="title" id="search-title" class="search-input" type="search" placeholder="Search a title"/>
@@ -75,13 +75,13 @@
 
     }
 </div>
-
+    
     @section Scripts
     {
         <script>
             $(function() {
                 $("#search-icon").click(function() {
-                    $("form").submit(); // Submit the form
+                    $("#searchForm").submit(); // Submit the form
                 });
             });
         </script>
