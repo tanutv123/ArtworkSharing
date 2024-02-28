@@ -35,6 +35,7 @@ namespace DataAccess.Data
 			foreach (var user in users)
 			{
 				user.UserName = user.Email;
+				user.EmailConfirmed = true;
 				var result = await userManager.CreateAsync(user, "Pa$$w0rd");
 				await userManager.AddToRoleAsync(user, "Audience");
 			}
@@ -70,6 +71,7 @@ namespace DataAccess.Data
 				PhoneNumber = "0123456789",
 				Description = "I am the most known world artist",
 				Status = 1,
+				EmailConfirmed = true,
 				UserImage = new UserImage
 				{
 					Url = "https://images.pexels.com/photos/11098559/pexels-photo-11098559.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
