@@ -53,15 +53,19 @@
                 }
             </tbody>
         </table>
+        <p>
+            <a asp-page="UserAdd">Create New</a>
+        </p>
     </div>
 }
 else
 {
     <h3>No user to display</h3>
+    <p>
+        <a asp-page="UserAdd">Create New</a>
+    </p>
 }
-<p>
-    <a asp-page="UserAdd">Create New</a>
-</p>
+
 @section Scripts {
     <script>
         let table = new DataTable('#userTable', {

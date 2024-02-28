@@ -27,25 +27,30 @@ namespace Presentation.Pages.Admin.User
 
         [BindProperty]
         [Required]
-        [StringLength(100)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [EmailAddress]
         public string Email { get; set; }
 
         [BindProperty]
         [Required]
-        [Phone]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be 10 digits")]
         public string PhoneNumber { get; set; }
 
         [BindProperty]
         [Required]
-        [StringLength(100)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         public string Name { get; set; }
 
         [BindProperty]
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [BindProperty]
         public int SelectedRoleId { get; set; }
+        [TempData]
+        public string StatusMessage { get; set; }
 
         // OnGetAsync method
         public async Task<IActionResult> OnGetAsync()
@@ -58,46 +63,52 @@ namespace Presentation.Pages.Admin.User
         // OnPostAsync method
         public async Task<IActionResult> OnPostAsync()
         {
-            // Check if AppUser is null and initialize if necessary
-            if (AppUser == null)
+            if (!ModelState.IsValid)
             {
-                AppUser = new AppUser();
+                ViewData["Id"] = new SelectList(_roleManager.Roles.ToList(), "Id", "Name");
+                return Page();
+            }
+            try
+            {
+                AppUser.Email = Email;
+                AppUser.PhoneNumber = PhoneNumber;
+                AppUser.Name = Name;
+                Debug.WriteLine($"Email:{AppUser.Email}, Phone: {AppUser.PhoneNumber}, Name: {AppUser.Name}");
+
+                var user = new AppUser
+                {
+                    Email = AppUser.Email,
+                    PhoneNumber = AppUser.PhoneNumber,
+                    Name = AppUser.Name,
+                    UserName = AppUser.Name.ToLower(),
+                    Status = 1,
+                    UserImage = new UserImage
+                    {
+                        Url = "https://media.istockphoto.com/id/1341046662/vector/picture-profile-icon-human-or-people-sign-and-symbol-for-template-design.jpg?s=612x612&w=0&k=20&c=A7z3OK0fElK3tFntKObma-3a7PyO8_2xxW0jtmjzT78=",
+                        isMain = true
+                    }
+                };
+
+                await _userRepository.AddUser(user, Password);
+
+                user.UserRoles = new List<AppUserRole>
+                {
+                    new AppUserRole
+                    {
+                        UserId = user.Id, 
+                        RoleId = SelectedRoleId
+                    }
+                };
+                await _userRepository.UpdateUser(user);
+                return RedirectToPage("/Admin/User/UserManagement");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                ViewData["Id"] = new SelectList(_roleManager.Roles.ToList(), "Id", "Name");
+                return Page();
             }
 
-            // Assign values to AppUser properties
-            AppUser.Email = Email;
-            AppUser.PhoneNumber = PhoneNumber;
-            AppUser.Name = Name;
-            Debug.WriteLine($"Email:{AppUser.Email}, Phone: {AppUser.PhoneNumber}, Name: {AppUser.Name}");
-
-            // Create a new user object
-            var user = new AppUser
-            {
-                Email = AppUser.Email,
-                PhoneNumber = AppUser.PhoneNumber,
-                Name = AppUser.Name,
-                UserName = AppUser.Name.ToLower(),
-                Status = 1,
-                UserRoles = new List<AppUserRole>
-            {
-                new AppUserRole
-                {
-                    UserId = AppUser.Id,
-                    RoleId = SelectedRoleId
-                }
-            },
-                UserImage = new UserImage
-                {
-                    Url = "https://media.istockphoto.com/id/1341046662/vector/picture-profile-icon-human-or-people-sign-and-symbol-for-template-design.jpg?s=612x612&w=0&k=20&c=A7z3OK0fElK3tFntKObma-3a7PyO8_2xxW0jtmjzT78=",
-                    isMain = true
-                }
-            };
-
-            // Add the user
-            await _userRepository.AddUser(user, Password);
-
-            // Redirect to user management page
-            return RedirectToPage("/Admin/User/UserManagement");
         }
     }
 }

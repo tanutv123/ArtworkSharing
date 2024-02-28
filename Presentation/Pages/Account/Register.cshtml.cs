@@ -8,6 +8,7 @@ using Repository;
 using System.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace Presentation.Pages.Account
 {
@@ -19,6 +20,25 @@ namespace Presentation.Pages.Account
         [BindProperty]
         public AppUser AppUser { get; set; }
         [BindProperty]
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [BindProperty]
+        [Required]
+        [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be 10 digits")]
+        public string PhoneNumber { get; set; }
+
+        [BindProperty]
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        public string Name { get; set; }
+
+        [BindProperty]
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
         [TempData]
         public string StatusMessage { get; set; }
@@ -36,8 +56,12 @@ namespace Presentation.Pages.Account
         {
             if (!ModelState.IsValid)
             {
-
+                return Page();
             }
+
+            AppUser.Name = Name;
+            AppUser.Email = Email;
+            AppUser.PhoneNumber = PhoneNumber;
 
             var user = new AppUser
             {
