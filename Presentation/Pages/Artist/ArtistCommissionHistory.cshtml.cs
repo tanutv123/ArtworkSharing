@@ -19,10 +19,20 @@ namespace Presentation.Pages.Artist
         public int CommissionId { get; set; }
 		[BindProperty]
 		public string NotAcceptedReason { get; set; }
-        public async Task OnGet(string statusFilter = "", string message = "")
+		public bool IsAcceptSuccess { get; set; } = false;
+		public bool IsNotAcceptSuccess { get; set; } = false;
+		public bool IsDoneSuccess { get; set; } = false;
+        public async Task OnGet(int commissionId = 0, string statusFilter = "", string message = "", bool isAcceptSuccess = false, bool isNotAcceptSuccess = false, bool isDoneSuccess = false)
         {
             CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), statusFilter);
 			TempData["Message"] = message;
+			IsNotAcceptSuccess = isNotAcceptSuccess;
+			IsAcceptSuccess = isAcceptSuccess;
+			IsDoneSuccess = isDoneSuccess;
+			if(commissionId != 0)
+			{
+				CommissionId = commissionId;
+			}
 		}
 
         public async Task<IActionResult> OnPostAccept()
@@ -36,14 +46,19 @@ namespace Presentation.Pages.Artist
             try
             {
                 await _commissionRepository.AcceptCommissionRequest(CommissionId);
-                TempData["Message"] = "Commission Accepted";
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
+				return Page();
             }
 			CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), "");
-			return Page();
+			return RedirectToPage("/artist/artistcommissionhistory", new
+			{
+				message = "Commission Accepted",
+				isAcceptSuccess = true,
+				commissionId = CommissionId
+			});
         }
 
 		public async Task<IActionResult> OnPostNotAccept()
@@ -57,14 +72,18 @@ namespace Presentation.Pages.Artist
 			try
 			{
 				await _commissionRepository.NotAcceptCommissionRequest(CommissionId, NotAcceptedReason);
-				TempData["Message"] = "Commission Denied";
 			}
 			catch (Exception ex)
 			{
 				ModelState.AddModelError(string.Empty, ex.Message);
 			}
 			CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), "");
-			return Page();
+			return RedirectToPage("/artist/artistcommissionhistory", new
+			{
+				message = "Commission Denied",
+				isNotAcceptSuccess = true,
+				commissionId = CommissionId
+			});
 		}
 	}
 }
