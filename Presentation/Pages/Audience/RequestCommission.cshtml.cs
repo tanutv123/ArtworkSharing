@@ -68,6 +68,10 @@ namespace Presentation.Pages.Audience
                 {
                     throw new Exception("Price must be greater than 0");
                 }
+                else if(CommissionRequestDTO.MinPrice > CommissionRequestDTO.MaxPrice)
+                {
+                    throw new Exception("Max Price must be greater than Min price");
+                }
                 await _commissionRepository.AddCommissionRequest(_mapper.Map<CommissionRequest>(CommissionRequestDTO));
                 IsRequestSentSuccess = true;
             }

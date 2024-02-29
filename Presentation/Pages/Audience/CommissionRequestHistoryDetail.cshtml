@@ -55,3 +55,37 @@ else
 {
 	<h3>Commission Not Found</h3>
 }
+
+@section Scripts {
+	@if(Model.IsRequestSentSuccess)
+	{
+		<script>
+			var commissionConnection = new signalR.HubConnectionBuilder().withUrl("/commissionhub").build();
+			commissionConnection.start().then(function () {
+				commissionConnection.invoke("RequestProgressImage", @Html.Raw(Json.Serialize(Model.CommissionId))).catch(function (err) {
+					return console.error(err.toString());
+				});
+			}).catch(function (err) {
+				return console.error(err.toString());
+			});
+		</script>
+	}
+	@* <script>
+		var isSuccessForm = @Html.Raw(Json.Serialize(Model.IsRequestSentSuccess));
+
+		if (isSuccessForm) {
+			var commissionConnection = new signalR.HubConnectionBuilder().withUrl("/commissionhub").build();
+			commissionConnection.start().then(function () {
+				commissionConnection.invoke("RequestProgressImage", @Html.Raw(Json.Serialize(Model.CommissionRequestHistoryDTO))).catch(function (err) {
+					return console.error(err.toString());
+				});
+			}).catch(function (err) {
+				return console.error(err.toString());
+			});
+		}
+		@if(Model.IsRequestSentSuccess)
+		{
+			
+		}
+	</script> *@
+}
