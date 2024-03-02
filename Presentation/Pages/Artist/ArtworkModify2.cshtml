@@ -32,13 +32,23 @@
 					<input type="number" class="form-control" id="minPrice" asp-for="addArtworkDTO.Price">
 					<span class="text-danger" asp-validation-for="addArtworkDTO.Price"></span>
 				</div>
+				<div class="mb-3">
+					<label hidden for="artworkid" class="form-label">Id: </label>
+					<input hidden type="number" class="form-control" id="artworkid" asp-for="addArtworkDTO.Id">
+					<span hidden class="text-danger" asp-validation-for="addArtworkDTO.Id"></span>
+				</div>
+				<div class="mb-3">
+					<label hidden for="artworkimageid" class="form-label">Image Id: </label>
+					<input hidden type="number" class="form-control" id="artworkid" asp-for="addArtworkDTO.Id">
+					<span hidden class="text-danger" asp-validation-for="addArtworkDTO.Id"></span>
+				</div>
 
 				<div class="text text-danger" asp-validation-summary="All"></div>
 
 				<div class="mb-3">
 					<label for="artworkImageUpload" class="form-label">Upload Artwork Image</label>
 					<input type="file" class="form-control" id="artworkImageUpload">
-					<img src="" id="artworkImageDisplay" style="display:none;width:300px;" />
+					<img src="@Model.addArtworkImageDTO.Url" id="artworkImageDisplay" style="display:block;width:300px;" />
 				</div>
 				<div class="mb-3">
 					<label for="publicId" class="form-label">Public Id</label>
@@ -53,7 +63,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-				<button type="submit" class="btn btn-primary">Add</button>
+				<button type="submit" class="btn btn-primary">Update</button>
 			</div>
 		</form>
 	</div>
