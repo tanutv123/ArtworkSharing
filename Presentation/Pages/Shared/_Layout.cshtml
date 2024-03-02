@@ -42,9 +42,19 @@
                         <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                     </li>
                     @if(User.Identity.IsAuthenticated){
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-route-userId="@Context.Session.GetInt32("Id")" asp-page="/User/Detail">Profile</a>
-                        </li>
+                        @if (User.IsInRole("Artist"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-route-userId="@Context.Session.GetInt32("Id")" asp-page="/Audience/ArtistPage">Profile</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Audience"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-route-userId="@Context.Session.GetInt32("Id")" asp-page="/User/Detail">Profile</a>
+                            </li>
+                        }
+                       
                     }
                     
                     
