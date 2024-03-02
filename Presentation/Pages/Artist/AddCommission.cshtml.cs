@@ -8,7 +8,8 @@ using Repository;
 
 namespace Presentation.Pages.Artist
 {
-    [Authorize(Policy = "Artist")]
+    
+    [Authorize(Policy = "RequireArtistRole")]
     public class AddCommissionModel : PageModel
     {
 		private readonly ICommissionRepository _commissionRepository;

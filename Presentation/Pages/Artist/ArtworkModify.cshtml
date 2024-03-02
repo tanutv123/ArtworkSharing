@@ -1,0 +1,44 @@
+﻿@page
+@model Presentation.Pages.Artist.ArtworkModifyModel
+@{
+}
+@if (Model.Artwork != null)
+{
+    <h1>@Model.Artwork.Title</h1>
+    <form method="post" asp-page-handler="DeleteArtwork">
+    <div>
+        <img src="@Model.Artwork.ArtworkImage.Url" alt="@Model.Artwork.Title" class="img-fluid" />
+        <p><strong>Description:</strong> @Model.Artwork.Description</p>
+        <p><strong>Genre:</strong> @Model.Artwork.Genre.Name</p>
+        <p><strong>Price:</strong> @Model.Artwork.Price</p>
+        <p><strong>Artist:</strong> @Model.Artwork.AppUser.Name</p>
+            <label hidden for="publicId" class="form-label">Public Id</label>
+            <input type="hidden" readonly class="form-control" id="publicId" name="publicId" asp-for="Artwork.ArtworkImage.PublicId">
+            <label hidden for="artworkId" class="form-label">Artwork Id</label>
+            <input type="hidden" readonly class="form-control" id="artworkId" name="artworkId" asp-for="Artwork.Id">
+    </div>
+    
+        <input type="hidden" asp-for="Artwork.Id" />
+        <button type="submit" class="btn btn-danger" onclick="DeleteImage('@Model.addArtworkImageDTO.PublicId')">Delete</button>
+    </form>
+}
+
+
+@section Scripts {
+    <script>
+        const publicId = document.getElementById('publicId');
+        async function deleteArtworkImage(e) {
+
+            let data = new FormData();
+            data.append('file', e.target.files[0]);
+
+            await fetch('/api/image', {
+                method: 'DELETE',
+                header: {
+                    'Accept': '*/*',
+
+                }
+        }
+        artworkImageUpload.addEventListener('change', uploadArtworkImage)
+    </script>
+}

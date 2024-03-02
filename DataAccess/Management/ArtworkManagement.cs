@@ -33,6 +33,7 @@ namespace DataAccess.Management
                     .Include(a => a.ArtworkImage)
                     .Include(a => a.Genre)
                     .Include(a => a.AppUser)
+                    .Where(a => a.Status == 1)
                     .ToListAsync();
             }
             return artworks;
@@ -88,7 +89,7 @@ namespace DataAccess.Management
             Artwork artwork = new Artwork();
             if (_dataContext != null && _dataContext.Artworks != null)
             {
-                artwork = await _dataContext.Artworks.Include(a => a.Genre).Include(a => a.ArtworkImage).FirstOrDefaultAsync(a => a.Id == artworkid);
+                artwork = await _dataContext.Artworks.Include(a => a.Genre).Include(a => a.ArtworkImage).Include(a => a.AppUser).FirstOrDefaultAsync(a => a.Id == artworkid);
             }
             return artwork;
         }
@@ -196,5 +197,72 @@ namespace DataAccess.Management
                 throw new Exception(ex.Message);
             }
         }
-    }
+
+		public async Task UpdateArtwork(Artwork artwork)
+		{
+			try
+			{
+				var dbArtwork = await _dataContext.Artworks.FindAsync(artwork.Id);
+				dbArtwork.Description = artwork.Description;
+                dbArtwork.GenreId = artwork.GenreId;
+                dbArtwork.Price = artwork.Price;
+
+				await _dataContext.SaveChangesAsync();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		public async Task DeleteArtwork(int artworkid)
+		{
+			try
+			{
+				var dbArtwork = await _dataContext.Artworks.FindAsync(artworkid);
+				dbArtwork.Status = 0;
+				await _dataContext.SaveChangesAsync();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		public async Task DeleteArtworkImage(ArtworkImage artworkImage)
+		{
+			try
+			{
+				//Nothing Here
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		public async Task UpdateArtworkImage(ArtworkImage artworkImage)
+		{
+			try
+			{
+				var art = await _dataContext.Artworks.SingleOrDefaultAsync(x => x.Id == artworkImage.ArtworkId);
+                var artimg = await _dataContext.ArtworkImages.SingleOrDefaultAsync(x => x.Id == artworkImage.Id);
+				if (art != null && artimg != null)
+				{
+					artworkImage.Url = artimg.Url;
+                    artworkImage.PublicId = artimg.PublicId;
+
+					await _dataContext.SaveChangesAsync();
+				}
+				else
+				{
+					throw new Exception("Artwork not found!");
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+	}
 }

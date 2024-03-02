@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repository;
 
-namespace Presentation.Pages.Artist
+namespace Presentation.Pages.Audience
 {
     public class ArtistPageModel : PageModel
     {

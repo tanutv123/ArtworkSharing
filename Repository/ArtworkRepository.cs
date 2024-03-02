@@ -61,5 +61,9 @@ namespace Repository
         {
             await _artworkManagement.AddArtworkImage(artworkImage);
         }
+        public async Task DeleteArtwork(int artworkid)
+        {
+            await _artworkManagement.DeleteArtwork(artworkid);
+        }
     }
 }
