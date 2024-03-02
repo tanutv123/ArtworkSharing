@@ -20,36 +20,37 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="mt-5">Profile</h1>
-        <div class="row">
-            <div class="col-md-8">
-                <h3>User Information</h3>
-                <p>Username: @Model.appUser.Name</p>
-                <p>Phone: @Model.appUser.PhoneNumber</p>
-                <p>About You: @Model.appUser.Description</p>
-                <p>Email: @Model.appUser.Email</p>
-                <!-- Add additional user information as needed -->
-            </div>
-            <br />
-
-            <div class="row user-detail">
-                <div class="col-md-12">
-                    <h3>Gallery</h3>
-                    <div class="row">
-                        @foreach (var artwork in Model.artworks)
-                        {
-                            <div class="col-md-4 mb-3">
-                                <div class="card">
-                                    <img src="@artwork.ArtworkImage.Url" alt="@artwork.Title" class="card-img-top artwork-image">
-                                    <p>@artwork.Title</p>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                    <!-- Add pagination or infinite scroll for larger galleries -->
-                </div>
-            </div>
-            <!-- Add more sections such as activity feed, comments, etc. -->
+<div class="container">
+    <h1 class="mt-5">Profile</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <h3>User Information</h3>
+            <p>Username: @Model.appUser.Name</p>
+            <p>Phone: @Model.appUser.PhoneNumber</p>
+            <p>About You: @Model.appUser.Description</p>
+            <p>Email: @Model.appUser.Email</p>
+            <!-- Add additional user information as needed -->
         </div>
+        <br />
+
+        <div class="row user-detail">
+            <div class="col-md-12">
+                <h3>Gallery</h3>
+                <div class="row">
+                    @foreach (var artwork in Model.artworks)
+                    {
+                        <div class="col-md-4 mb-3">
+                            <div class="card">
+                                <img src="@artwork.ArtworkImage.Url" alt="@artwork.Title" class="card-img-top artwork-image">
+                                <p>@artwork.Title</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!-- Add pagination or infinite scroll for larger galleries -->
+            </div>
+        </div>
+        <!-- Add more sections such as activity feed, comments, etc. -->
+    </div>
+</div>
 </body>
