@@ -59,7 +59,7 @@ namespace Presentation.Pages.Artist
 
 		}
 
-		public async Task<IActionResult> OnPostUpdateArtwork()
+		public async Task<IActionResult> OnPostDeleteArtwork()
 		{
 			Genres = await _genreRepository.GetAll();
 			addArtworkDTO.AppUserId = User.GetUserId();

@@ -28,22 +28,33 @@ namespace Presentation.Pages.Artist
             _genreRepository = genreRepository;
         }
 
-        public IEnumerable<Artwork> Artworks { get; set; } = default;
+        public Artwork Artwork { get; set; } = default;
         public IList<ArtworkImage> artworkImage { get; set; }
 
         [BindProperty]
-        public AddArtworkDTO addArtworkDTO { get; set; } = new AddArtworkDTO();
+        public AddArtworkDTO addArtworkDTO { get; set; } 
         [BindProperty]
         public AddArtworkImageDTO addArtworkImageDTO { get; set; } = new AddArtworkImageDTO();
 
         public IEnumerable<Genre> Genres { get; set; }
-        public async Task OnGetAsync(int artistid)
+        public async Task OnGetAsync(int artworkid)
         {
-            if (artistid != null)
+            if (artworkid != null)
             {
-                if (_userRepository != null)
+                if (_artworkRepository != null)
                 {
-                    var artist = await _userRepository.GetUserById(artistid);
+                    Artwork = await _artworkRepository.GetArtworkById(artworkid);
+                    addArtworkDTO = new AddArtworkDTO();
+                    addArtworkDTO.Title = Artwork.Title;
+                    addArtworkDTO.Price = Artwork.Price;
+                    addArtworkDTO.CreatedDate = Artwork.CreatedDate;
+                    addArtworkDTO.Description = Artwork.Description;
+                    addArtworkDTO.AppUserId = Artwork.AppUserId;
+                    addArtworkDTO.Id = artworkid;
+                    addArtworkImageDTO.ArtworkId = artworkid.ToString();
+                    addArtworkImageDTO.Url = Artwork.ArtworkImage.Url;
+                    addArtworkImageDTO.PublicId = Artwork.ArtworkImage.PublicId;
+                    
                 }
 
                 Genres = await _genreRepository.GetAll();
@@ -51,10 +62,11 @@ namespace Presentation.Pages.Artist
 
         }
 
-        public async Task<IActionResult> OnPostAddImage()
+        public async Task<IActionResult> OnPostUpdateImage()
         {
             Genres = await _genreRepository.GetAll();
             addArtworkDTO.AppUserId = User.GetUserId();
+            addArtworkImageDTO.ArtworkId = addArtworkDTO.Id.ToString();
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -65,7 +77,8 @@ namespace Presentation.Pages.Artist
                 var artwork = _mapper.Map<Artwork>(addArtworkDTO);
                 addArtworkImageDTO.isMain = true;
                 artwork.ArtworkImage = _mapper.Map<ArtworkImage>(addArtworkImageDTO);
-                await _artworkRepository.AddArtwork(artwork);
+                await _artworkRepository.UpdateArtwork(artwork);
+                //await _artworkRepository.UpdateArtworkImage(addArtworkImageDTO);
             }
             catch (Exception ex)
             {

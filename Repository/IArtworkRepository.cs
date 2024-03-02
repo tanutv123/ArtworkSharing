@@ -1,4 +1,5 @@
-﻿using BusinessObject.Entities;
+﻿using BusinessObject.DTOs;
+using BusinessObject.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace Repository
         Task AddArtwork(Artwork artwork);
         Task AddArtworkImage(ArtworkImage artworkImage);
         Task DeleteArtwork(int artworkid);
+        Task UpdateArtwork(Artwork artwork);
+        Task UpdateArtworkImage(ArtworkImage image);
 
     }
 
