@@ -1,4 +1,5 @@
-﻿using BusinessObject.Entities;
+﻿using BusinessObject.DTOs;
+using BusinessObject.Entities;
 using DataAccess.Management;
 using System;
 using System.Collections.Generic;
@@ -64,6 +65,14 @@ namespace Repository
         public async Task DeleteArtwork(int artworkid)
         {
             await _artworkManagement.DeleteArtwork(artworkid);
+        }
+        public async Task UpdateArtwork(Artwork artwork)
+        {
+            await _artworkManagement.UpdateArtwork(artwork);
+        }
+        public async Task UpdateArtworkImage(ArtworkImage image)
+        {
+            await _artworkManagement.UpdateArtworkImage(image);
         }
     }
 }
