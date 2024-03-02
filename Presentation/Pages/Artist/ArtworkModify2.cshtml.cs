@@ -34,7 +34,7 @@ namespace Presentation.Pages.Artist
         [BindProperty]
         public AddArtworkDTO addArtworkDTO { get; set; } 
         [BindProperty]
-        public AddArtworkImageDTO addArtworkImageDTO { get; set; } = new AddArtworkImageDTO();
+        public UpdateArtworkImageDTO addArtworkImageDTO { get; set; } = new UpdateArtworkImageDTO();
 
         public IEnumerable<Genre> Genres { get; set; }
         public async Task OnGetAsync(int artworkid)
@@ -54,6 +54,7 @@ namespace Presentation.Pages.Artist
                     addArtworkImageDTO.ArtworkId = artworkid.ToString();
                     addArtworkImageDTO.Url = Artwork.ArtworkImage.Url;
                     addArtworkImageDTO.PublicId = Artwork.ArtworkImage.PublicId;
+                    addArtworkImageDTO.Id = Artwork.ArtworkImage.Id;
                     
                 }
 
@@ -76,9 +77,9 @@ namespace Presentation.Pages.Artist
                 addArtworkDTO.CreatedDate = DateTime.UtcNow;
                 var artwork = _mapper.Map<Artwork>(addArtworkDTO);
                 addArtworkImageDTO.isMain = true;
-                artwork.ArtworkImage = _mapper.Map<ArtworkImage>(addArtworkImageDTO);
+                var artworkimg = _mapper.Map<ArtworkImage>(addArtworkImageDTO);
                 await _artworkRepository.UpdateArtwork(artwork);
-                //await _artworkRepository.UpdateArtworkImage(addArtworkImageDTO);
+                await _artworkRepository.UpdateArtworkImage(artworkimg);
             }
             catch (Exception ex)
             {
