@@ -4,31 +4,36 @@ using BusinessObject.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.Extensions;
+using Presentation.Services;
 using Repository;
 
 namespace Presentation.Pages.Artist
 {
-	public class ArtistAddArtworkModel : PageModel
-	{
+    public class ArtworkModifyModel : PageModel
+    {
 		private readonly IArtworkRepository _artworkRepository;
 		private readonly IGenreRepository _genreRepository;
 		private readonly IUserRepository _userRepository;
-		private readonly IMapper _mapper;
+        private readonly IImageService _imageService;
+        private readonly IMapper _mapper;
 
-		public ArtistAddArtworkModel(
+
+		public ArtworkModifyModel(
 			IArtworkRepository artworkRepository,
 			IMapper mapper,
 			IUserRepository userRepository,
+			IImageService imageService,
 			IGenreRepository genreRepository
 			)
 		{
 			_artworkRepository = artworkRepository;
 			_mapper = mapper;
 			_userRepository = userRepository;
-			_genreRepository = genreRepository;
+            _imageService = imageService;
+            _genreRepository = genreRepository;
 		}
 
-		public IEnumerable<Artwork> Artworks { get; set; } = default;
+		public Artwork Artwork { get; set; } = default;
 		public IList<ArtworkImage> artworkImage { get; set; }
 
 		[BindProperty]
@@ -37,13 +42,16 @@ namespace Presentation.Pages.Artist
 		public AddArtworkImageDTO addArtworkImageDTO { get; set; } = new AddArtworkImageDTO();
 
 		public IEnumerable<Genre> Genres { get; set; }
-		public async Task OnGetAsync(int artistid)
+		public async Task OnGetAsync(int artworkid)
 		{
-			if (artistid != null)
+			Artwork = await _artworkRepository.GetArtworkById(artworkid);
+            
+            addArtworkDTO.Id = artworkid;
+            if (Artwork != null)
 			{
-				if (_userRepository != null)
+                if (_userRepository != null)
 				{
-					var artist = await _userRepository.GetUserById(artistid);
+					var artist = await _userRepository.GetUserById(User.GetUserId());
 				}
 
 				Genres = await _genreRepository.GetAll();
@@ -51,21 +59,19 @@ namespace Presentation.Pages.Artist
 
 		}
 
-		public async Task<IActionResult> OnPostAddImage()
+		public async Task<IActionResult> OnPostUpdateArtwork()
 		{
 			Genres = await _genreRepository.GetAll();
 			addArtworkDTO.AppUserId = User.GetUserId();
-			if (!ModelState.IsValid)
+            int artworkid = int.Parse(Request.Form["artworkId"]);
+            string publicId = Request.Form["publicId"];
+
+            try
 			{
-				return Page();
-			}
-			try
-			{
-				addArtworkDTO.CreatedDate = DateTime.UtcNow;
 				var artwork = _mapper.Map<Artwork>(addArtworkDTO);
-				addArtworkImageDTO.isMain = true;
-				artwork.ArtworkImage = _mapper.Map<ArtworkImage>(addArtworkImageDTO);
-				await _artworkRepository.AddArtwork(artwork);
+                await _artworkRepository.DeleteArtwork(artworkid);
+                await _imageService.DeletePhotoAsync(publicId);
+				
 			}
 			catch (Exception ex)
 			{
@@ -76,3 +82,4 @@ namespace Presentation.Pages.Artist
 		}
 	}
 }
+

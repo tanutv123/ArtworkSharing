@@ -19,6 +19,8 @@ namespace Repository
         Task<IEnumerable<Artwork>> GetArtworksByUserId(int artistid);
         Task AddArtwork(Artwork artwork);
         Task AddArtworkImage(ArtworkImage artworkImage);
+        Task DeleteArtwork(int artworkid);
+
     }
 
 }

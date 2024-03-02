@@ -58,7 +58,7 @@
       color: rgba(0, 0, 0, 0.5);
     }
 </style>
-<div class="container">
+@* <div class="container">
     @if (Model.Artworks != null)
     {
         @foreach (var artwork in Model.Artworks)
@@ -88,6 +88,42 @@
         }
 
     }
+</div> *@
+
+<div class="hero-full-wrapper">
+    <div class="grid" style="position: relative; height: 1870.52px;">
+        <div class="gutter-sizer"></div>
+        <div class="grid-sizer"></div>
+    @if (Model.Artworks != null)
+    {
+        @foreach (var artwork in Model.Artworks)
+        {
+            <br />
+                <div class="grid-item" style="position: absolute; left: 0px; top: 0px;">
+                <div class="col-md-12">
+                    <h6>Title: @artwork.Title</h6>
+                        <img src="@artwork.ArtworkImage.Url" alt="@artwork.Title" class="img-responsive" />
+                    <li>Genre: @artwork.Genre.Name</li>
+                    <li>Price: @artwork.Price</li>
+                    <li>ArtistId: @artwork.AppUser.Name</li>
+                    <p>Description: @artwork.Description</p>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <form method="post">
+                            <div class="text text-danger" asp-validation-summary="All"></div>
+                            <input type="hidden" asp-for="AddLikeDTO.ArtworkId" value="@artwork.Id" />
+                            <button type="submit" class="btn btn-primary" asp-page-handler="Like">Like</button>
+                            <input type="hidden" asp-for="AddFollowDTO.TargetUserId" value="@artwork.AppUserId" />
+                            <button type="submit" class="btn btn-secondary" asp-page-handler="Follow">Follow</button>
+                            <button class="btn btn-secondary"><a asp-page="./ArtworkDetail" asp-route-id="@artwork.Id">Details</a></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <br />
+        }
+
+    }
+    </div>
 </div>
 
 

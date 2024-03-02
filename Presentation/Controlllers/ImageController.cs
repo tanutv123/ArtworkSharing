@@ -26,5 +26,16 @@ namespace Presentation.Controlllers
 			return Json(new { link = result.SecureUri.AbsoluteUri, publicId = result.PublicId });
 
 		}
-	}
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync(string publicId)
+        {
+            var result = await _imageService.DeletePhotoAsync(publicId);
+            if (result == null)
+            {
+                ModelState.AddModelError("Delete image", "Something went wrong during deleting the image");
+                return Problem("Something went wrong", null, (int)HttpStatusCode.InternalServerError);
+            }
+            return Ok(new { message = "Image successfully deleted.", deletedPublicId = publicId });
+        }
+    }
 }
