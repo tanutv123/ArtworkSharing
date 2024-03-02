@@ -38,8 +38,8 @@ namespace Presentation.Pages.Admin.User
 
         [BindProperty]
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-        public string Name { get; set; }
+        [RegularExpression(@"^[a-zA-Z0-9 ]*$", ErrorMessage = "Username can only contain letters, digits, and spaces.")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)] public string Name { get; set; }
 
         [BindProperty]
         [Required]
