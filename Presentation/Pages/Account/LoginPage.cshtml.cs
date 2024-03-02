@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repository;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -17,8 +18,13 @@ namespace Presentation.Pages.Account
 
         [BindProperty]
         public AppUser AppUser { get; set; }
+        [BindProperty]
+        [Required]
+        [EmailAddress]
+        public string EmailAddress {  get; set; }
 
         [BindProperty]
+        [Required]
         public string Password { get; set; }
 
         public LoginPageModel(IUserRepository userRepository, UserManager<AppUser> userManager)
@@ -38,6 +44,7 @@ namespace Presentation.Pages.Account
             {
 
             }
+            AppUser.Email = EmailAddress;
             string email = AppUser.Email;
             Debug.WriteLine($"EmailAddress = {email}, Password = {Password}");
             var result = await _userRepository.LoginAsync(email, Password);

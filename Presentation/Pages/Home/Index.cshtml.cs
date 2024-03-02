@@ -21,7 +21,7 @@ namespace Presentation.Pages.Home
             _artworkRepository = artworkRepository;
         }
 
-        public IEnumerable<Artwork> Artworks { get; set; } = default;
+        public IEnumerable<Artwork> Artworks { get; set; } 
         [BindProperty]
         public AddLikeDTO AddLikeDTO { get; set; }
         [BindProperty]

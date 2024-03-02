@@ -23,11 +23,13 @@ namespace Presentation.Pages.Artist
         public List<CommissionImage> CommissionImages{ get; set; }
         [BindProperty]
         public AddCommissionImageDTO AddCommissionImageDTO{ get; set; } = new AddCommissionImageDTO();
-        public async Task OnGet(int id)
+		public bool IsAddImageSuccess { get; set; } = false;
+        public async Task OnGet(int id, bool isAddImageSuccess = false)
         {
             var commission = await _commissionRepository.GetSingleCommissionRequestHistory(id);
             CommissionImages = commission.CommissionImages;
             AddCommissionImageDTO.CommissionRequestId = id;
+			IsAddImageSuccess = isAddImageSuccess;
         }
 
         public async Task<IActionResult> OnPostAddImage()
@@ -53,11 +55,16 @@ namespace Presentation.Pages.Artist
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+				var commission = await _commissionRepository.GetSingleCommissionRequestHistory(AddCommissionImageDTO.CommissionRequestId);
+				CommissionImages = commission.CommissionImages;
+				ModelState.AddModelError(string.Empty, ex.Message);
+				return Page();
             }
-			var commission = await _commissionRepository.GetSingleCommissionRequestHistory(AddCommissionImageDTO.CommissionRequestId);
-			CommissionImages = commission.CommissionImages;
-			return Page();
+			
+			return RedirectToPage("/artist/artistcommissionrequestdetail", new {
+				id = AddCommissionImageDTO.CommissionRequestId,
+				isAddImageSuccess = true
+			});
         }
 
 		public async Task<IActionResult> OnPostDone()
@@ -83,7 +90,14 @@ namespace Presentation.Pages.Artist
 				CommissionImages = commission.CommissionImages;
 				return Page();
 			}
-			return RedirectToPage("/artist/artistcommissionhistory", new {message = "You have succesfully confirmed that the commission is done" });
+			return RedirectToPage("/artist/artistcommissionhistory", 
+				new 
+				{
+					message = "You have succesfully confirmed that the commission is done", 
+					isDoneSuccess = true,
+					commissionId = AddCommissionImageDTO.CommissionRequestId
+				}
+				);
 		}
 	}
 }

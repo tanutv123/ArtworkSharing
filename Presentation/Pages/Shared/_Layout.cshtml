@@ -42,9 +42,19 @@
                         <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                     </li>
                     @if(User.Identity.IsAuthenticated){
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-route-userId="@Context.Session.GetInt32("Id")" asp-page="/User/Detail">Profile</a>
-                        </li>
+                        @if (User.IsInRole("Artist"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-route-userId="@Context.Session.GetInt32("Id")" asp-page="/Audience/ArtistPage">Profile</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Audience"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-route-userId="@Context.Session.GetInt32("Id")" asp-page="/User/Detail">Profile</a>
+                            </li>
+                        }
+                       
                     }
                     
                     
@@ -99,19 +109,17 @@
             @RenderBody()
         </main>
     </div> *@
-    @if(Context.User.IsInRole("Artist"))
-    {
-        <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:9999;">
-            <div id="artistLiveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style=" width: 400px; height:200px;">
-                <div class="toast-header">
-                    <strong class="me-auto fs-2">Notification</strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                </div>
-                <div class="toast-body fs-3" id="toastContent">
-                </div>
-            </div>
-        </div>
-    }
+	<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:9999;">
+		<div id="artistLiveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" style=" width: 400px; height:200px;">
+			<div class="toast-header">
+				<strong class="me-auto fs-2">Notification</strong>
+				<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+			</div>
+			<div class="toast-body fs-3" id="toastContent">
+			</div>
+		</div>
+	</div>
+    
     <main class="" id="main-collapse">
         <div class="row">
             

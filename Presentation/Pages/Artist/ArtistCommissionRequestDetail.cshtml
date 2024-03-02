@@ -175,4 +175,17 @@ else
 		}
 		progressImageUpload.addEventListener('change', uploadProgressImage)
 	</script>
+	@if(Model.IsAddImageSuccess)
+	{
+		<script>
+			var commissionConnection = new signalR.HubConnectionBuilder().withUrl("/commissionhub").build();
+			commissionConnection.start().then(function () {
+				commissionConnection.invoke("AddProgressImage", @Html.Raw(Json.Serialize(Model.AddCommissionImageDTO.CommissionRequestId))).catch(function (err) {
+					return console.error(err.toString());
+				});
+			}).catch(function (err) {
+				return console.error(err.toString());
+			});
+		</script>
+	}
 }

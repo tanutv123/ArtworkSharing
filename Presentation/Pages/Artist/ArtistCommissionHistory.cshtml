@@ -132,4 +132,44 @@ else
 			responsive: true
 		});
 	</script>
+	@if(Model.IsNotAcceptSuccess)
+	{
+		<script>
+			var commissionConnection = new signalR.HubConnectionBuilder().withUrl("/commissionhub").build();
+			commissionConnection.start().then(function () {
+				commissionConnection.invoke("NotAcceptCommission", @Html.Raw(Json.Serialize(Model.CommissionId))).catch(function (err) {
+					return console.error(err.toString());
+				});
+			}).catch(function (err) {
+				return console.error(err.toString());
+			});
+		</script>
+	}
+	@if (Model.IsAcceptSuccess)
+	{
+		<script>
+			var commissionConnection = new signalR.HubConnectionBuilder().withUrl("/commissionhub").build();
+			commissionConnection.start().then(function () {
+				commissionConnection.invoke("AcceptCommission", @Html.Raw(Json.Serialize(Model.CommissionId))).catch(function (err) {
+					return console.error(err.toString());
+				});
+			}).catch(function (err) {
+				return console.error(err.toString());
+			});
+		</script>
+	}
+
+	@if (Model.IsDoneSuccess)
+	{
+		<script>
+			var commissionConnection = new signalR.HubConnectionBuilder().withUrl("/commissionhub").build();
+			commissionConnection.start().then(function () {
+				commissionConnection.invoke("DoneCommission", @Html.Raw(Json.Serialize(Model.CommissionId))).catch(function (err) {
+					return console.error(err.toString());
+				});
+			}).catch(function (err) {
+				return console.error(err.toString());
+			});
+		</script>
+	}
 }
