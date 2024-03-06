@@ -45,7 +45,7 @@
                         @if (User.IsInRole("Artist"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-route-userId="@Context.Session.GetInt32("Id")" asp-page="/Audience/ArtistPage">Profile</a>
+                                <a class="nav-link text-dark" asp-route-userId="@Context.Session.GetInt32("Id")" asp-page="/Audience/ArtistPage">Manage Artwork</a>
                             </li>
                         }
                         @if (User.IsInRole("Audience"))

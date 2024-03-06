@@ -44,7 +44,13 @@
                                 <img src="@artwork.ArtworkImage.Url" alt="@artwork.Title" class="card-img-top artwork-image">
                                 <p>@artwork.Title</p>
                             </div>
+                            <div class="col-md-5 d-flex justify-content-start" >
+                                <a class="btn btn-danger" asp-page="/Artist/ArtworkModify" asp-route-artworkid="@artwork.Id">Delete</a>
+                                <a class="btn btn-primary" asp-page="/Artist/ArtworkModify2" asp-route-artworkid="@artwork.Id">Edit</a>
+                            </div>
+                            
                         </div>
+                        
                     }
                 </div>
                     <button class="btn btn-success"><a a asp-page="/Artist/ArtistAddArtwork" asp-route-id="@Model.appUser.Id">Create New Artwork</a></button>
