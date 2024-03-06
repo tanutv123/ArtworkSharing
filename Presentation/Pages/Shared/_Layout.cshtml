@@ -67,7 +67,7 @@
                             <a class="nav-link text-dark" href="/artist/artistcommissionhistory">Commission History</a>
                         </li>
                     }
-                    @if (User.IsInRole("Audience"))
+                    @if (User.IsInRole("Audience") || User.IsInRole("Artist"))
                     {
                         <li class="nav-item">
                             <a class="nav-link text-dark" href="/audience/commissionrequesthistory">Your commission request history</a>
