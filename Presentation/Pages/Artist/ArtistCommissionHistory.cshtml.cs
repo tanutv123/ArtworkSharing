@@ -18,7 +18,9 @@ namespace Presentation.Pages.Artist
         [BindProperty]
         public int CommissionId { get; set; }
 		[BindProperty]
-		public string NotAcceptedReason { get; set; }
+		public string? NotAcceptedReason { get; set; }
+		[BindProperty]
+		public int? ActualPrice { get; set; }
 		public bool IsAcceptSuccess { get; set; } = false;
 		public bool IsNotAcceptSuccess { get; set; } = false;
 		public bool IsDoneSuccess { get; set; } = false;
@@ -37,15 +39,22 @@ namespace Presentation.Pages.Artist
 
         public async Task<IActionResult> OnPostAccept()
         {
-
-			if (CommissionId == 0)
+			if(!ModelState.IsValid)
 			{
 				CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), "");
 				return Page();
 			}
+			if (ActualPrice <= 0)
+			{
+				CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), "");
+				ModelState.AddModelError(string.Empty, "Invalid actual price");
+				return Page();
+			}
+
+
             try
             {
-                await _commissionRepository.AcceptCommissionRequest(CommissionId);
+                await _commissionRepository.AcceptCommissionRequest(CommissionId, ActualPrice.Value);
             }
             catch (Exception ex)
             {
@@ -67,6 +76,11 @@ namespace Presentation.Pages.Artist
 			if (!ModelState.IsValid)
 			{
 				CommissionRequestHistoryDTOs = await _commissionRepository.GetCommissionRequestHistoryForArtist(User.GetUserId(), "");
+				return Page();
+			}
+			if(string.IsNullOrEmpty(NotAcceptedReason))
+			{
+				ModelState.AddModelError(string.Empty, "You must fill out the reject reason");
 				return Page();
 			}
 			try

@@ -76,8 +76,8 @@
 								<form method="post">
 									<div class="text text-danger" asp-validation-summary="All"></div>
 									<input type="hidden" asp-for="CommissionId" value="@request.Id"/>
-									<button type="submit" class="btn btn-primary" asp-page-handler="Accept">Accept</button>
-									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal">Not Accept</button>
+									<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#acceptModal">Accept</button>
+									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal">Reject</button>
 								</form>
 								<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div class="modal-dialog" role="document">
@@ -91,15 +91,39 @@
 											<form method="post" asp-page-handler="NotAccept">
 												<div class="modal-body">
 													<div class="text text-danger" asp-validation-summary="All"></div>
-													<div class="mb-3">
-														<label for="commissionId" class="form-label">CommissionId: </label>
-														<input type="text" class="form-control" id="commissionId" asp-for="CommissionId" value="@request.Id" readonly>
-														<span class="text-danger" asp-validation-for="CommissionId"></span>
-													</div>
+													<input type="hidden" class="form-control" id="commissionId" asp-for="CommissionId" value="@request.Id" readonly>
+													
 													<div class="mb-3">
 														<label for="reason" class="form-label">Reason: </label>
 														<input type="text" class="form-control" id="reason" asp-for="NotAcceptedReason">
 														<span class="text-danger" asp-validation-for="NotAcceptedReason"></span>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+													<button type="submit" class="btn btn-primary">Submit</button>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+								<div class="modal fade" id="acceptModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">Do you readly want to accept this commission?</h5>
+												<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<form method="post" asp-page-handler="Accept">
+												<div class="modal-body">
+													<div class="text text-danger" asp-validation-summary="All"></div>
+													<input type="hidden" class="form-control" id="commissionId" asp-for="CommissionId" value="@request.Id" readonly>
+													<div class="mb-3">
+														<label for="actualPrice" class="form-label">Actual Price: </label>
+														<input type="number" class="form-control" id="actualPrice" asp-for="ActualPrice">
+														<span class="text-danger" asp-validation-for="ActualPrice"></span>
 													</div>
 												</div>
 												<div class="modal-footer">
