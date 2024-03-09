@@ -111,6 +111,7 @@ try
 	await Seed.SeedUser(userManager, roleManager);
 	await Seed.SeedArtwork(context);
 	await Seed.SeedCommissionStatus(context);
+	await Seed.SeedPurchaseData(context);
 }
 catch (Exception ex)
 {

@@ -133,5 +133,23 @@ namespace DataAccess.Data
 			}
 			await context.SaveChangesAsync();
 		}
+        
+        
+        public static async Task SeedPurchaseData(DataContext context)
+        {
+            if (await context.Purchases.AnyAsync()) { return; }
+    
+            var purchaseData = await File.ReadAllTextAsync("../DataAccess/Data/PurchaseSeed.json");
+            var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var purchases = JsonSerializer.Deserialize<List<Purchase>>(purchaseData, jsonOptions);
+    
+            foreach (var purchase in purchases)
+            {
+                await context.Purchases.AddAsync(purchase); // Await this operation
+            }
+
+            await context.SaveChangesAsync();
+        }
+
 	}
 }
