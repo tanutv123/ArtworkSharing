@@ -19,13 +19,22 @@ namespace Presentation.Pages.Home
         public Artwork Artwork { get; set; } = default;
         [BindProperty]
         public AddCommentDTO AddComment { get; set; }
-
+        [BindProperty]
+        public AddLikeDTO AddLikeDTO { get; set; }
+        [BindProperty]
+        public AddFollowDTO AddFollowDTO { get; set; }
         public IEnumerable<ArtworkComment> ArtworkComment { get; set; }
+        public bool Likes { get; set; }
+
 
         public async Task OnGetAsync(int id)
         {
             Artwork = await _artworkRepository.GetArtworkById(id);
             ArtworkComment = await _artworkRepository.GetArtworkComments(id);
+            if (Artwork != null)
+            {
+                Likes = await _artworkRepository.HasUserLikedArtwork(User.GetUserId(), id);
+            }
         }
 
         public async Task<IActionResult> OnPostComment()
@@ -48,6 +57,47 @@ namespace Presentation.Pages.Home
 
             Artwork = await _artworkRepository.GetArtworkById(AddComment.Artworkid);
             ArtworkComment = await _artworkRepository.GetArtworkComments(AddComment.Artworkid);
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostLike()
+        {
+            Artwork = await _artworkRepository.GetArtworkById(AddLikeDTO.ArtworkId);
+            ArtworkComment = await _artworkRepository.GetArtworkComments(AddLikeDTO.ArtworkId);
+            if (Artwork != null)
+            {
+                Likes = await _artworkRepository.HasUserLikedArtwork(User.GetUserId(), AddLikeDTO.ArtworkId);
+            }
+            AddLikeDTO.AppUserId = User.GetUserId();
+            if (!ModelState.IsValid) return Page();
+            try
+            {
+                await _artworkRepository.LikeArtwork(AddLikeDTO.AppUserId, AddLikeDTO.ArtworkId);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostFollow()
+        {
+            Artwork = await _artworkRepository.GetArtworkById(Artwork.Id);
+            if (AddFollowDTO != null)
+            {
+                AddFollowDTO.AppUserId = User.GetUserId();
+            } //When Debug reach here. TargetUserId was 0 and AppUserId was 13.
+              //I was expecting TargerUserId to be 4 but no its 0
+            if (!ModelState.IsValid) return Page();
+            try
+            {
+                await _artworkRepository.FollowArtist(AddFollowDTO.TargetUserId, AddFollowDTO.AppUserId);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
             return Page();
         }
     }

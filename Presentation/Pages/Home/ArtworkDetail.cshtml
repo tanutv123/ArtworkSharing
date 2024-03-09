@@ -13,6 +13,27 @@
         <p><strong>Price:</strong> @Model.Artwork.Price</p>
         <p><strong>Artist:</strong> @Model.Artwork.AppUser.Name</p>
     </div>
+    <form method="post"> 
+                            <div class="text text-danger" asp-validation-summary="All"></div> 
+                             <input type="hidden" asp-for="AddLikeDTO.ArtworkId" value="@Model.Artwork.Id" />
+        @if (Model != null && Model.Artwork != null && Model.Likes != null)
+        {
+            <button type="submit" class="btn btn-primary like-state" data-artwork-id="@Model.Artwork.Id"
+            data-like-state="@Model.Likes"
+            asp-page-handler="Like">
+                @if (Model.Likes)
+                {
+                    <text> Liked </text>
+                }
+                else
+                {
+                    <text> Like </text>
+                }
+            </button>
+        }
+        <input type="hidden" asp-for="AddFollowDTO.TargetUserId" value="@Model.Artwork.AppUserId" /> 
+                             <button type="submit" class="btn btn-secondary" asp-page-handler="Follow">Follow</button> 
+                         </form>
     <br />
     <br />
     <div id="comment-section">

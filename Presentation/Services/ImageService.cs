@@ -25,7 +25,7 @@ namespace Presentation.Services
 				{
 					File = new FileDescription(file.FileName, file.OpenReadStream()),
 					DisplayName = file.FileName,
-					Folder = "asp-net7"
+					Folder = "ArtworkUpload"
 				}
 				);
 			if (result != null && result.StatusCode == System.Net.HttpStatusCode.OK)
