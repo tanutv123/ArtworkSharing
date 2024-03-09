@@ -23,7 +23,10 @@ namespace Repository
         Task DeleteArtwork(int artworkid);
         Task UpdateArtwork(Artwork artwork);
         Task UpdateArtworkImage(ArtworkImage image);
-
+        Task<IEnumerable<Artwork>> GetPaginatedResult(int currentPage, int pageSize = 10);
+        Task<int> GetCount();
+        Task<Artwork> GetArtworksAsyncWithLike(int userId, int artworkId);
+        Task<bool> HasUserLikedArtwork(int userId, int artworkId);
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using BusinessObject.DTOs;
+﻿using AutoMapper.Configuration.Conventions;
+using BusinessObject.DTOs;
 using BusinessObject.Entities;
 using DataAccess.Management;
 using System;
@@ -11,68 +12,83 @@ namespace Repository
 {
     public class ArtworkRepository : IArtworkRepository
     {
-        private readonly ArtworkManagement _artworkManagement;
-
-        public ArtworkRepository(ArtworkManagement artworkManagement)
-        {
-            _artworkManagement = artworkManagement;
-        }
-
         public async Task AddArtworkComment(int artworkid, int commentid, string content, DateTime createdDate)
         {
-            await _artworkManagement.ArtworkCommentAsync(artworkid, commentid, content, createdDate);
+            await ArtworkManagement.Instance.ArtworkCommentAsync(artworkid, commentid, content, createdDate);
         }
 
         public async Task<IEnumerable<Artwork>> GetArtworkByTitle(string title)
-            => await _artworkManagement.GetArtworkBySearchString(title);
+            => await ArtworkManagement.Instance.GetArtworkBySearchString(title);
 
         public async Task<bool> FollowArtist(int sourceid, int followerid)
         {
-            return await _artworkManagement.FollowUserAsync(sourceid, followerid);
+            return await ArtworkManagement.Instance.FollowUserAsync(sourceid, followerid);
         }
 
         public async Task<Artwork> GetArtworkById(int artworkid)
         {
-            return await _artworkManagement.GetArtworkAsync(artworkid);
+            return await ArtworkManagement.Instance.GetArtworkAsync(artworkid);
         }
 
         public async Task<IEnumerable<ArtworkComment>> GetArtworkComments(int artworkid)
         {
-            return await _artworkManagement.GetCommentsByArtworkId(artworkid);
+            return await ArtworkManagement.Instance.GetCommentsByArtworkId(artworkid);
         }
 
         public async Task<IEnumerable<Artwork>> GetArtworks()
         {
-            return await _artworkManagement.GetArtworksAsync();
+            return await ArtworkManagement.Instance.GetArtworksAsync();
         }
 
         public async Task<bool> LikeArtwork(int userid, int artworkid)
         {
-            return await _artworkManagement.LikeArtworkAsync(userid, artworkid);
+            return await ArtworkManagement.Instance.LikeArtworkAsync(userid, artworkid);
         }
         public async Task<IEnumerable<Artwork>> GetArtworksByUserId(int artistid)
         {
-            return await _artworkManagement.GetArtworkListByArtistId(artistid);
+            return await ArtworkManagement.Instance.GetArtworkListByArtistId(artistid);
         }
         public async Task AddArtwork(Artwork artwork)
         {
-            await _artworkManagement.AddArtwork(artwork);
+            await ArtworkManagement.Instance.AddArtwork(artwork);
         }
         public async Task AddArtworkImage(ArtworkImage artworkImage)
         {
-            await _artworkManagement.AddArtworkImage(artworkImage);
+            await ArtworkManagement.Instance.AddArtworkImage(artworkImage);
         }
         public async Task DeleteArtwork(int artworkid)
         {
-            await _artworkManagement.DeleteArtwork(artworkid);
+            await ArtworkManagement.Instance.DeleteArtwork(artworkid);
         }
         public async Task UpdateArtwork(Artwork artwork)
         {
-            await _artworkManagement.UpdateArtwork(artwork);
+            await ArtworkManagement.Instance.UpdateArtwork(artwork);
         }
         public async Task UpdateArtworkImage(ArtworkImage image)
         {
-            await _artworkManagement.UpdateArtworkImage(image);
+            await ArtworkManagement.Instance.UpdateArtworkImage(image);
+        }
+        public async Task<IEnumerable<Artwork>> GetPaginatedResult(int currentPage, int pageSize = 10)
+        {
+            var data = await ArtworkManagement.Instance.GetArtworksAsync();
+            return data.OrderBy(d => d.Id).Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+        }
+
+        public async Task<int> GetCount()
+        {
+            var data = await ArtworkManagement.Instance.GetArtworksAsync();
+            return data.Count();
+        }
+
+        public async Task<Artwork> GetArtworksAsyncWithLike(int userId, int artworkId)
+        {
+            var artwork = await ArtworkManagement.Instance.GetArtworkAsync(artworkId);
+            return artwork;
+        }
+
+        public async Task<bool> HasUserLikedArtwork(int userId, int artworkId)
+        {
+            return await ArtworkManagement.Instance.HasUserLikedArtwork(userId, artworkId);    
         }
     }
 }
