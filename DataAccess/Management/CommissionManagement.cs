@@ -173,7 +173,7 @@ namespace DataAccess.Management
 			return commissions;
 		}
     
-		public async Task ChangeCommissionRequestStatusToAccept(int id)
+		public async Task ChangeCommissionRequestStatusToAccept(int id, int actualPrice)
 		{
 			try
 			{
@@ -184,7 +184,12 @@ namespace DataAccess.Management
 					if(currentStatus.Description == "Pending")
 					{
 						var acceptStatus = await _context.CommissionStatus.AsNoTracking().SingleOrDefaultAsync(x => x.Description == "Accepted");
+						if (commission.ActualPrice > commission.MaxPrice)
+						{
+							throw new Exception("Your price exceeds the audience's budget");
+						}
 						commission.CommissionStatusId = acceptStatus.Id;
+						commission.ActualPrice = actualPrice;
 						await _context.SaveChangesAsync();
 					}
 					else
@@ -242,7 +247,8 @@ namespace DataAccess.Management
 				if (commission != null)
 				{
 					var currentStatus = await _context.CommissionStatus.AsNoTracking().SingleOrDefaultAsync(x => x.Id == commission.CommissionStatusId);
-					if (currentStatus.Description == "In Progress")
+					var checkImages = await _context.CommissionImages.AnyAsync(x => x.CommissionRequestId == id);
+					if (currentStatus.Description == "In Progress" && checkImages)
 					{
 						var doneStatus = await _context.CommissionStatus.AsNoTracking().SingleOrDefaultAsync(x => x.Description == "Done");
 						commission.CommissionStatusId = doneStatus.Id;

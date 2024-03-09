@@ -30,7 +30,7 @@
 		</div>
 		<div class="mb-3">
 			<label for="description" class="form-label">Your description for this commission: </label>
-			<input type="text" class="form-control" id="description" asp-for="CommissionRequestDTO.RequestDescription">
+			<textarea class="form-control" id="description" rows="3" asp-for="CommissionRequestDTO.RequestDescription"></textarea>
 			<span class="text-danger" asp-validation-for="CommissionRequestDTO.RequestDescription"></span>
 		</div>
 		<div class="mb-3">

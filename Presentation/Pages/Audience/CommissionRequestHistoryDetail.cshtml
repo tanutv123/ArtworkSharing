@@ -28,6 +28,13 @@
 					</div>
 				}
 			</div>
+			<form method="post">
+				<input type="hidden" asp-for="CommissionId" />
+				<div class="text text-danger" asp-asp-validation-summary="All"></div>
+				<div class="mb-3">
+					<button type="submit" class="btn btn-primary">Request progress image</button>
+				</div>
+			</form>
 		}
 		else
 		{
@@ -39,16 +46,16 @@
 			else
 			{
 				<h3>The artist have not added any progress image yet.</h3>
+				<form method="post">
+					<input type="hidden" asp-for="CommissionId" />
+					<div class="text text-danger" asp-asp-validation-summary="All"></div>
+					<div class="mb-3">
+						<button type="submit" class="btn btn-primary">Request progress image</button>
+					</div>
+				</form>
 			}
 		}
 
-		<form method="post">
-			<input type="hidden" asp-for="CommissionId"/>
-			<div class="text text-danger" asp-asp-validation-summary="All"></div>
-			<div class="mb-3">
-				<button type="submit" class="btn btn-primary">Request progress image</button>
-			</div>
-		</form>
 	</div>
 }
 else

@@ -23,11 +23,15 @@ namespace Presentation.Pages.Artist
         public List<CommissionImage> CommissionImages{ get; set; }
         [BindProperty]
         public AddCommissionImageDTO AddCommissionImageDTO{ get; set; } = new AddCommissionImageDTO();
-		public bool IsAddImageSuccess { get; set; } = false;
+        public DateTime CommissionStartDate { get; set; }
+        public DateTime CommissionEndDate { get; set; }
+        public bool IsAddImageSuccess { get; set; } = false;
         public async Task OnGet(int id, bool isAddImageSuccess = false)
         {
             var commission = await _commissionRepository.GetSingleCommissionRequestHistory(id);
-            CommissionImages = commission.CommissionImages;
+			CommissionStartDate = commission.RequestDate;
+			CommissionEndDate = commission.RequestDate.AddDays(30);
+			CommissionImages = commission.CommissionImages.OrderBy(x => x.CreatedDate).ToList();
             AddCommissionImageDTO.CommissionRequestId = id;
 			IsAddImageSuccess = isAddImageSuccess;
         }
@@ -40,6 +44,8 @@ namespace Presentation.Pages.Artist
                 if(commission1 != null)
                 {
 					CommissionImages = commission1.CommissionImages;
+					CommissionStartDate = commission1.RequestDate;
+					CommissionEndDate = commission1.RequestDate.AddDays(30);
 				}
 				return Page();
             }

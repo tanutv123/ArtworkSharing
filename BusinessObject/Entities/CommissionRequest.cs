@@ -8,6 +8,7 @@ namespace BusinessObject.Entities
         public int Id { get; set; }
         public decimal MinPrice { get; set; }
         public decimal MaxPrice { get; set; }
+        public decimal? ActualPrice { get; set; }
         public string RequestDescription { get; set; }
         public string? NotAcceptedReason { get; set; }
         public DateTime RequestDate{ get; set; }

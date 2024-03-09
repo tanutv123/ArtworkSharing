@@ -12,7 +12,7 @@ namespace Repository
 
         Task<CommissionRequestHistoryDTO> GetSingleCommissionRequestHistory(int requestId);
 		Task<bool> CheckArtistRegisterCommission(int id);
-		Task AcceptCommissionRequest(int id);
+		Task AcceptCommissionRequest(int id, int actualPrice);
 		Task NotAcceptCommissionRequest(int id, string notAcceptReason);
 		Task DoneCommissionRequest(int id);
 		Task RequestProgressImage(int id);

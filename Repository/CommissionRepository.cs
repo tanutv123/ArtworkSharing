@@ -18,9 +18,9 @@ namespace Repository
 			_commissionManagement = commissionManagement;
 		}
 
-		public async Task AcceptCommissionRequest(int id)
+		public async Task AcceptCommissionRequest(int id, int actualPrice)
 		{
-			await _commissionManagement.ChangeCommissionRequestStatusToAccept(id);
+			await _commissionManagement.ChangeCommissionRequestStatusToAccept(id, actualPrice);
 		}
 
 		public async Task AddCommission(Commission commission)
