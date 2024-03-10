@@ -3,6 +3,8 @@ using BusinessObject.DTOs;
 using BusinessObject.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Presentation.Extensions;
+using Presentation.Services;
 using Repository;
 
 namespace Presentation.Pages.Artist
@@ -10,16 +12,20 @@ namespace Presentation.Pages.Artist
     public class ArtistCommissionRequestDetailModel : PageModel
     {
 		private readonly ICommissionRepository _commissionRepository;
+		private readonly IImageService _imageService;
 		private readonly IMapper _mapper;
 
 		public ArtistCommissionRequestDetailModel(
             ICommissionRepository commissionRepository,
+			IImageService imageService,
             IMapper mapper
             )
         {
 			_commissionRepository = commissionRepository;
+			_imageService = imageService;
 			_mapper = mapper;
 		}
+		public bool IsInvalidAccess { get; set; } = true;
         public List<CommissionImage> CommissionImages{ get; set; }
         [BindProperty]
         public AddCommissionImageDTO AddCommissionImageDTO{ get; set; } = new AddCommissionImageDTO();
@@ -29,17 +35,26 @@ namespace Presentation.Pages.Artist
         public async Task OnGet(int id, bool isAddImageSuccess = false)
         {
             var commission = await _commissionRepository.GetSingleCommissionRequestHistory(id);
-			CommissionStartDate = commission.RequestDate;
-			CommissionEndDate = commission.RequestDate.AddDays(30);
-			CommissionImages = commission.CommissionImages.OrderBy(x => x.CreatedDate).ToList();
-            AddCommissionImageDTO.CommissionRequestId = id;
-			IsAddImageSuccess = isAddImageSuccess;
+			if(commission.ReceiverEmail == User.GetEmailAddress())
+			{
+				IsInvalidAccess = false;
+				CommissionStartDate = commission.RequestDate;
+				CommissionEndDate = commission.DueDate;
+				CommissionImages = commission.CommissionImages.OrderBy(x => x.CreatedDate).ToList();
+				AddCommissionImageDTO.CommissionRequestId = id;
+				IsAddImageSuccess = isAddImageSuccess;
+			}
+			else
+			{
+				IsInvalidAccess = true;
+			}
         }
 
         public async Task<IActionResult> OnPostAddImage()
         {
             if (!ModelState.IsValid)
             {
+				IsInvalidAccess = false;
 				var commission1 = await _commissionRepository.GetSingleCommissionRequestHistory(AddCommissionImageDTO.CommissionRequestId);
                 if(commission1 != null)
                 {
@@ -51,7 +66,8 @@ namespace Presentation.Pages.Artist
             }
             try
             {
-                var commissionImage = _mapper.Map<CommissionImage>(AddCommissionImageDTO);
+				AddCommissionImageDTO.DownloadUrl = _imageService.GetImageUploadUrl(AddCommissionImageDTO.PublicId);
+				var commissionImage = _mapper.Map<CommissionImage>(AddCommissionImageDTO);
                 if (commissionImage != null)
                 {
                     commissionImage.isMain = true;

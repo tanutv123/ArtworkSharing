@@ -6,5 +6,6 @@ namespace Presentation.Services
 	{
 		Task<ImageUploadResult> UploadAsync(IFormFile file);
 		Task<DeletionResult> DeletePhotoAsync(string publicId);
+		string GetImageUploadUrl(string url);
 	}
 }

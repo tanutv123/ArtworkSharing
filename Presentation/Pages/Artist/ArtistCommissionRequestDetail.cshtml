@@ -2,7 +2,10 @@
 @model Presentation.Pages.Artist.ArtistCommissionRequestDetailModel
 @{
 }
-@if(Model.CommissionImages != null && Model.CommissionImages.Count != 0)
+@if(Model.IsInvalidAccess)
+{
+	<h2>Invalid access</h2>
+}else if(Model.CommissionImages != null && Model.CommissionImages.Count != 0)
 {
 	<div class="container">
 		<div class="row mb-3">
@@ -14,10 +17,11 @@
 			<div class="row mb-3">
 
 				<div class="col-md-4 mb-3">
-					<div class="card" style="width: 18rem">
+					<div class="card" style="width: 25rem; height:30rem">
 						<img src="@image.Url" class="card-img-top" alt="progress image">
 						<div class="card-body">
-							<p class="card-text">@image.CreatedDate.ToShortDateString()</p>
+							<h4 class="card-text">@image.CreatedDate.ToShortDateString()</h4>
+							<p class="card-text">@image.Description</p>
 						</div>
 					</div>
 				</div>
@@ -44,10 +48,12 @@
 						<form method="post" asp-page-handler="AddImage">
 							<div class="modal-body">
 								<div class="text text-danger" asp-validation-summary="All"></div>
+								<input type="text" class="form-control" id="commissionId" asp-for="AddCommissionImageDTO.CommissionRequestId" readonly>
+									
 								<div class="mb-3">
-									<label for="commissionId" class="form-label">CommissionId: </label>
-									<input type="text" class="form-control" id="commissionId" asp-for="AddCommissionImageDTO.CommissionRequestId" readonly>
-									<span class="text-danger" asp-validation-for="AddCommissionImageDTO.CommissionRequestId"></span>
+									<label for="description" class="form-label">Description: </label>
+									<textarea class="form-control" id="description" asp-for="AddCommissionImageDTO.Description" required></textarea>
+									<span class="text-danger" asp-validation-for="AddCommissionImageDTO.Description"></span>
 								</div>
 								<div class="mb-3">
 									<label for="progressImageUpload" class="form-label">Upload Progress Image</label>
@@ -61,13 +67,13 @@
 								</div>
 								<div class="mb-3">
 									<label for="progressImage" class="form-label">Progress Image Url</label>
-									<input type="text" class="form-control" id="progressImage" asp-for="AddCommissionImageDTO.Url" readonly>
+									<input type="text" class="form-control" id="progressImage" asp-for="AddCommissionImageDTO.Url">
 									<span class="text-danger" asp-validation-for="AddCommissionImageDTO.Url"></span>
 								</div>
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-								<button type="submit" class="btn btn-primary">Add</button>
+								<button type="submit" class="btn btn-primary" id="addImage">Add</button>
 							</div>
 						</form>
 					</div>
@@ -123,10 +129,11 @@ else
 				<form method="post" asp-page-handler="AddImage">
 					<div class="modal-body">
 						<div class="text text-danger" asp-validation-summary="All"></div>
+						<input type="hidden" class="form-control" id="commissionId" asp-for="AddCommissionImageDTO.CommissionRequestId" readonly>
 						<div class="mb-3">
-							<label for="commissionId" class="form-label">CommissionId: </label>
-							<input type="text" class="form-control" id="commissionId" asp-for="AddCommissionImageDTO.CommissionRequestId" readonly>
-							<span class="text-danger" asp-validation-for="AddCommissionImageDTO.CommissionRequestId"></span>
+							<label for="description" class="form-label">Description: </label>
+							<textarea class="form-control" id="description" asp-for="AddCommissionImageDTO.Description" required></textarea>
+							<span class="text-danger" asp-validation-for="AddCommissionImageDTO.Description"></span>
 						</div>
 						<div class="mb-3">
 							<label for="progressImageUpload" class="form-label">Upload Progress Image</label>
@@ -146,7 +153,7 @@ else
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-						<button type="submit" class="btn btn-primary">Add</button>
+						<button type="submit" class="btn btn-primary" id="addImage">Add</button>
 					</div>
 				</form>
 			</div>
@@ -163,8 +170,9 @@ else
 		const progressImageDisplay = document.getElementById('progressImageDisplay');
 		const publicId = document.getElementById('publicId');
 		const toast = document.getElementById('toastDisplay');
+		const addImageButton = document.getElementById('addImage');
 		async function uploadProgressImage(e) {
-
+			addImageButton.disabled = true;
 			let data = new FormData();
 			data.append('file', e.target.files[0]);
 
@@ -181,6 +189,7 @@ else
 					progressImageDisplay.style.display = 'block';
 					progressImageDisplay.src = result.link;
 					publicId.value = result.publicId;
+					addImageButton.disabled = false;
 				});
 		}
 		progressImageUpload.addEventListener('change', uploadProgressImage)
