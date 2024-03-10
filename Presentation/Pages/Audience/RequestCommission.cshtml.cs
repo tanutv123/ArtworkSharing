@@ -62,9 +62,15 @@ namespace Presentation.Pages.Audience
             IsRequestSentSuccess = false;
             Genres = await _genreRepository.GetAll();
             if (!ModelState.IsValid) return Page();
+            
             try
             {
-                if(CommissionRequestDTO.MinPrice <= 0 && CommissionRequestDTO.MaxPrice <= 0)  
+                if (CommissionRequestDTO.DueDate.Date == DateTime.UtcNow.Date)
+                {
+					throw new Exception("Due Date must be ahead from current date");
+				}
+
+				if (CommissionRequestDTO.MinPrice <= 0 && CommissionRequestDTO.MaxPrice <= 0)  
                 {
                     throw new Exception("Price must be greater than 0");
                 }

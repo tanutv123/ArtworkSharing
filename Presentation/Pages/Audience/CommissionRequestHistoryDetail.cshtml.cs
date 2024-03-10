@@ -1,6 +1,7 @@
 using BusinessObject.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Presentation.Extensions;
 using Repository;
 
 namespace Presentation.Pages.Audience
@@ -17,12 +18,22 @@ namespace Presentation.Pages.Audience
         [BindProperty]
         public int CommissionId { get; set; }
         public bool IsRequestSentSuccess { get; set; } = false;
+        public bool IsInvalidAccess { get; set; } = true;
         public async Task OnGet(int id, string message = null, bool isRequestSuccess = false)
         {
-            TempData["Message"] = message;
-            IsRequestSentSuccess = isRequestSuccess;
-            CommissionId = id;
-            CommissionRequestHistoryDTO = await _commissionRepository.GetSingleCommissionRequestHistory(id);
+            var commission = await _commissionRepository.GetSingleCommissionRequestHistory(id);
+            if (commission != null && commission.SenderEmail != User.GetEmailAddress()) 
+            {
+                IsInvalidAccess = true;
+            }
+            else
+            {
+                IsInvalidAccess = false;
+				TempData["Message"] = message;
+				IsRequestSentSuccess = isRequestSuccess;
+				CommissionId = id;
+				CommissionRequestHistoryDTO = await _commissionRepository.GetSingleCommissionRequestHistory(id);
+			}
         }
 
         public async Task<IActionResult> OnPost()

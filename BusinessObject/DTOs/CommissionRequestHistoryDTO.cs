@@ -18,6 +18,7 @@ namespace BusinessObject.DTOs
 		public string CommissionStatusDescription { get; set; }
 		public string GenreName { get; set; }
 		public DateTime RequestDate { get; set; }
+		public DateTime DueDate { get; set; }
         public List<CommissionImage>? CommissionImages{ get; set; }
     }
 }

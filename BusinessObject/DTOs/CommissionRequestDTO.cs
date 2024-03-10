@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.VisualBasic;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BusinessObject.DTOs
 {
@@ -17,5 +19,8 @@ namespace BusinessObject.DTOs
         public int CommissionStatusId { get; set; }
         [Required]
         public int GenreId { get; set; }
+        [Required]
+        public DateTime DueDate { get; set; } = DateTime.UtcNow;
+
     }
 }

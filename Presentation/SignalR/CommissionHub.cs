@@ -33,7 +33,7 @@ namespace Presentation.SignalR
 				var connections = await PresenceTracker.GetConnectionsForUser(commission.ReceiverEmail);
 				if (connections != null)
 				{
-					await _presenceHub.Clients.Clients(connections).SendAsync("ProgressImageRequest", commission.ReceiverEmail, commissionId);
+					await _presenceHub.Clients.Clients(connections).SendAsync("ProgressImageRequest", commissionId);
 				}
 			}
 		}
