@@ -16,6 +16,10 @@
 		@if (Model.CommissionRequestHistoryDTO.CommissionImages != null && Model.CommissionRequestHistoryDTO.CommissionImages.Count != 0)
 		{
 			<div class="row mb-3">
+				<div class="row mb-3">
+					<h3 class="text text-success"><strong>Start Date</strong></h3>
+					<h4><strong>@Model.CommissionRequestHistoryDTO.RequestDate</strong></h4>
+				</div>
 				@foreach (var image in Model.CommissionRequestHistoryDTO.CommissionImages)
 				{
 					<div class="col-md-4 mb-3">
@@ -32,6 +36,10 @@
 						</div>
 					</div>
 				}
+				<div class="row mb-3">
+					<h3 class="text text-danger"><strong>Deadline</strong></h3>
+					<h4><strong>@Model.CommissionRequestHistoryDTO.DueDate</strong></h4>
+				</div>
 			</div>
 			<form method="post">
 				<input type="hidden" asp-for="CommissionId" />
@@ -47,6 +55,50 @@
 			{
 				<h3>Your commission is denied by the artist</h3>
 				<p>The reason: @Model.CommissionRequestHistoryDTO.NotAcceptedReason</p>
+				<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Resend this request.</button>
+				<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">Add Progress Image</h5>
+								<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<form method="post" asp-page-handler="ResendCommission">
+								<div class="modal-body">
+									<div class="text text-danger" asp-validation-summary="All"></div>
+									<input type="text" class="form-control" id="commissionId" asp-for="CommissionResend.Id" readonly>
+
+									<div class="mb-3">
+										<label for="description" class="form-label">Description: </label>
+										<textarea class="form-control" id="description" asp-for="CommissionResend.RequestDescription" required></textarea>
+										<span class="text-danger" asp-validation-for="CommissionResend.RequestDescription"></span>
+									</div>
+									<div class="mb-3">
+										<label for="minprice" class="form-label">Min Price: </label>
+										<input type="text" class="form-control" id="minprice" asp-for="CommissionResend.MinPrice">
+										<span class="text-danger" asp-validation-for="CommissionResend.MinPrice"></span>
+									</div>
+									<div class="mb-3">
+										<label for="maxprice" class="form-label">Max Price: </label>
+										<input type="text" class="form-control" id="maxprice" asp-for="CommissionResend.MaxPrice">
+										<span class="text-danger" asp-validation-for="CommissionResend.MaxPrice"></span>
+									</div>
+									<div class="mb-3">
+										<label for="dueDate" class="form-label">Due date: </label>
+										<input type="text" class="form-control" id="dueDate" asp-for="CommissionResend.DueDate">
+										<span class="text-danger" asp-validation-for="CommissionResend.DueDate"></span>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+									<button type="submit" class="btn btn-primary" id="addImage">Resend</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
 			}
 			else
 			{

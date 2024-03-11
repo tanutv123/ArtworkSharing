@@ -19,7 +19,7 @@ connection.on("CommissionReceived", function (requestUser) {
 });
 connection.on("ProgressImageRequest", function (id) {
     //toastContent.innerHTML = '<strong>' + requestUser + '</strong>' + ' requested a progress image for <a href="/artist/artistcommissionrequestdetail?id="' + requestId + '">this commission</a>';
-    var commissionLink = '<a href="/artist/artistcommissionrequesthistorydetail?id=' + id + '">Check the commission</a>';
+    var commissionLink = '<a href="/artist/artistcommissionrequestdetail?id=' + id + '">Check the commission</a>';
     toastContent.innerHTML = 'You have a new progress image request.' + commissionLink;
     toastBootstrap.show();
 });

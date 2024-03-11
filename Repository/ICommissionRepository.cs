@@ -19,5 +19,6 @@ namespace Repository
 		Task AddCommission(Commission commission);
 		Task AddCommissionRequest(CommissionRequest commissionRequest);
 		Task AddCommissionImage(CommissionImage commissionImage);
+		Task ResendCommission(CommissionResendDTO resend);
 	}
 }

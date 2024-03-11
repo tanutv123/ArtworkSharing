@@ -324,5 +324,29 @@ namespace DataAccess.Management
 			}
 		}
 
+		public async Task ResendCommissionRequest(CommissionResendDTO commissionResendDTO)
+		{
+			try
+			{
+				var commission = await _context.CommissionRequests.FindAsync(commissionResendDTO.Id);
+				if(commission != null)
+				{
+					commission.RequestDescription = commissionResendDTO.RequestDescription;
+					commission.MinPrice = commissionResendDTO.MinPrice;
+					commission.MaxPrice = commissionResendDTO.MaxPrice;
+					commission.ActualPrice = 0;
+					commission.DueDate = commissionResendDTO.DueDate;
+					commission.NotAcceptedReason = string.Empty;
+					var pendingStatus = await _context.CommissionStatus.SingleOrDefaultAsync(x => x.Description == "Pending");
+					commission.CommissionStatusId = pendingStatus.Id;
+					await _context.SaveChangesAsync();
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
 	}
 }
