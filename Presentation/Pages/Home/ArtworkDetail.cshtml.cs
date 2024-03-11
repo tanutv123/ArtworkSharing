@@ -25,6 +25,7 @@ namespace Presentation.Pages.Home
         public AddFollowDTO AddFollowDTO { get; set; }
         public IEnumerable<ArtworkComment> ArtworkComment { get; set; }
         public bool Likes { get; set; }
+        public int UserId { get; set; }
 
 
         public async Task OnGetAsync(int id)
@@ -35,6 +36,7 @@ namespace Presentation.Pages.Home
             {
                 Likes = await _artworkRepository.HasUserLikedArtwork(User.GetUserId(), id);
             }
+            UserId = User.GetUserId();
         }
 
         public async Task<IActionResult> OnPostComment()
@@ -89,6 +91,25 @@ namespace Presentation.Pages.Home
                 AddFollowDTO.AppUserId = User.GetUserId();
             } //When Debug reach here. TargetUserId was 0 and AppUserId was 13.
               //I was expecting TargerUserId to be 4 but no its 0
+            if (!ModelState.IsValid) return Page();
+            try
+            {
+                await _artworkRepository.FollowArtist(AddFollowDTO.TargetUserId, AddFollowDTO.AppUserId);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+            return Page();
+        }
+        //Do it Later
+        public async Task<IActionResult> OnPostBuy()
+        {
+            Artwork = await _artworkRepository.GetArtworkById(Artwork.Id);
+            if (AddFollowDTO != null)
+            {
+                AddFollowDTO.AppUserId = User.GetUserId();
+            } 
             if (!ModelState.IsValid) return Page();
             try
             {

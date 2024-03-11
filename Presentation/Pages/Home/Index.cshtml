@@ -68,9 +68,9 @@
         @foreach (var artwork in Model.Artworks)
         {
             <br />
-            
+                        
             <div class="grid-item" style="position: absolute; left: 0px; top: 0px;">
-                <img style="border-radius: 10px" class="img-responsive" alt="@artwork.Title" src="@artwork.ArtworkImage.Url">
+                    <img style="border-radius: 10px" class="img-responsive" alt="@artwork.Title" src="@artwork.ArtworkImage.Url">
                 <a asp-page="./ArtworkDetail" asp-route-id="@artwork.Id"class="project-description">
                     <div class="project-text-holder">
                         <div class="project-text-inner">
@@ -81,28 +81,20 @@
                 </a>
             </div>
 
-            @* <div class="grid-item" style="position: absolute; left: 0px; top: 0px;"> *@
-            @*     <div class="col-md-12"> *@
-            @*         <h2>Title: @artwork.Title</h2> *@
-            @*             <img src="@artwork.ArtworkImage.Url" alt="@artwork.Title" class="img-responsive" /> *@
-            @*         <li>Genre: @artwork.Genre.Name</li> *@
-            @*         <li>Price: @artwork.Price</li> *@
-            @*         <li>Artist: @artwork.AppUser.Name</li> *@
-            @*         <div class="btn-group" role="group" aria-label="Basic example"> *@
-            @*             <form method="post"> *@
-            @*                 <div class="text text-danger" asp-validation-summary="All"></div> *@
-            @*                 <input type="hidden" asp-for="AddLikeDTO.ArtworkId" value="@artwork.Id" /> *@
-            @*                 <button type="submit" class="btn btn-primary" asp-page-handler="Like">Like</button> *@
-            @*                 <input type="hidden" asp-for="AddFollowDTO.TargetUserId" value="@artwork.AppUserId" /> *@
-            @*                 <button type="submit" class="btn btn-secondary" asp-page-handler="Follow">Follow</button> *@
-            @*                 <button class="btn btn-secondary"><a asp-page="./ArtworkDetail" asp-route-id="@artwork.Id">Details</a></button> *@
-            @*             </form> *@
-            @*         </div> *@
-            @*     </div> *@
-            @* </div> *@
+            
             <br />
         }
-
+            @* <div class="grid-item" style="position: absolute; left: 0px; top: 0px;">
+                <img style="border-radius: 10px" class="img-responsive" alt="@artwork.Title" src="@artwork.ArtworkImage.Url">
+                <a asp-page="./ArtworkDetail" asp-route-id="11" class="project-description">
+                    <div class="project-text-holder">
+                        <div class="project-text-inner">
+                            <h3>@artwork.Title</h3>
+                            <p asp-page="./ArtworkDetail" asp-route-id="@artwork.Id">Discover more</p>
+                        </div>
+                    </div>
+                </a>
+            </div> *@
     }
     </div>
 </div>
