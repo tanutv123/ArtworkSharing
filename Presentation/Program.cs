@@ -71,6 +71,8 @@ builder.Services.AddScoped<IArtworkRepository, ArtworkRepository>();
 builder.Services.AddScoped<GenreManagement>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddSingleton<PresenceTracker>();
+builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+builder.Services.AddScoped<PurchaseManagement>();
 
 builder.Services.AddOptions();
 var mailsettings = builder.Configuration.GetSection("MailSettings");

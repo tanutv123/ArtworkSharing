@@ -1,0 +1,76 @@
+@page
+@using Presentation.Pages.Shared
+@using BusinessObject.Entities
+@model Presentation.Pages.Admin.Purchase.PurchaseList
+
+@{
+    ViewData["Title"] = "Purchase List";
+}
+
+<h1>Purchases Management</h1>
+<hr/>
+<h3>Total income: @Model.totalIncome.ToString("C", System.Globalization.CultureInfo.GetCultureInfoByIetfLanguageTag("en-US")) </h3> 
+<hr/>
+<h3>Purchase List</h3>
+@if (Model.Purchases == null && Model.Purchases.Count < 0)
+{
+    <h3>No purchase to display !</h3>
+}
+else
+{
+    <div class="container">
+         <table id="purchaseTable">
+                <thead>
+                <tr>
+                    <td>Audience Name</td>
+                    <td>Audience Email</td>
+                    <td>Artwork Id</td>
+                    <td>Artwork Title</td>
+                    <td>Buy Date</td>
+                    <td>Buy Price</td>
+                    <td>Action</td>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.Purchases)
+    {
+        
+        <tr>
+            <td>
+                @item.AppUser.Name
+            <td>
+                @item.AppUser.UserName
+            </td>
+            <td>
+                @item.Artwork.Id
+            </td>
+            <td>
+                @item.Artwork.Title
+            </td>
+            <td>
+                @item.BuyDate
+            </td>
+            <td>
+                @item.BuyPrice.ToString("C", System.Globalization.CultureInfo.GetCultureInfoByIetfLanguageTag("en-US"))
+            </td>
+            <td>
+                <a href="#">Details</a>
+            </td>
+        </tr>
+    }
+    
+                </tbody>
+            </table>
+    </div>
+   
+}
+
+@section Scripts {
+    <script>
+        let table = new DataTable('#purchaseTable', {
+            responsive: true
+        });
+     
+    </script>
+}
+

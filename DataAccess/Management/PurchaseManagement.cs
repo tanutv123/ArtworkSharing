@@ -18,7 +18,7 @@ namespace DataAccess.Management
             _dataContext = context;
             _mapper = mapper;
         }
-        
+
 
         public void AddPurchase(Purchase purchase)
         {
@@ -29,7 +29,6 @@ namespace DataAccess.Management
                     _dataContext.Purchases.Add(purchase);
                     _dataContext.SaveChanges();
                 }
-
             }
             catch (Exception exception)
             {
@@ -39,7 +38,7 @@ namespace DataAccess.Management
 
         public List<Purchase> GetPurchases()
         {
-            List<Purchase> purchases = new List<Purchase>();
+            var purchases = new List<Purchase>();
             try
             {
                 if (_dataContext != null && _dataContext.Purchases != null)
