@@ -90,5 +90,10 @@ namespace Repository
         {
             return await ArtworkManagement.Instance.HasUserLikedArtwork(userId, artworkId);    
         }
+
+        public async Task<IList<Artwork>> GetArtworkAdmin()
+        {
+            return await ArtworkManagement.Instance.GetAllArtworkAdmin();
+        }
     }
 }

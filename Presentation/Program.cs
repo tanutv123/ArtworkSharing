@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Presentation.SignalR;
 using Repository;
 using System.Configuration;
+using System.Transactions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,6 +74,8 @@ builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddSingleton<PresenceTracker>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 builder.Services.AddScoped<PurchaseManagement>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<TransactionManagement>();
 
 builder.Services.AddOptions();
 var mailsettings = builder.Configuration.GetSection("MailSettings");

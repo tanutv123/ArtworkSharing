@@ -4,5 +4,5 @@ namespace Repository;
 
 public interface ITransactionRepository
 {
-    public IList<Transaction> GetTransactions();
+    public Task<IList<Transaction>> GetTransactions();
 }

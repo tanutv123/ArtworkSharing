@@ -1,5 +1,3 @@
-using BusinessObject.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repository;
@@ -8,25 +6,22 @@ namespace Presentation.Pages.Admin.Transaction;
 
 public class TransactionList : PageModel
 {
-    [Authorize(Policy = "RequireAdminRole")]
-    public class TransactionListModel : PageModel
+    private readonly ITransactionRepository _transactionRepository;
+
+    public TransactionList(ITransactionRepository transactionRepository)
     {
-        private readonly ICommissionRepository _commissionRepository;
+        _transactionRepository = transactionRepository;
+    }
+    
+    [BindProperty]
+    public IList<BusinessObject.Entities.Transaction> Transactions { get; set; }
 
-        public TransactionListModel(ICommissionRepository commissionRepository)
+    public async Task OnGetAsync()
+    {
+        var transactions =  _transactionRepository.GetTransactions();
+        if (transactions != null)
         {
-            _commissionRepository = commissionRepository;
-        }
-
-        [BindProperty] public List<CommissionRequestHistoryDTO> CommissionRequestHistoryDTOs { get; set; }
-
-        public async Task OnGetAsync()
-        {
-            var history = await _commissionRepository.GetAllCommissionRequestHistory();
-            if (history != null)
-            {
-                CommissionRequestHistoryDTOs = history.ToList();
-            }
+            Transactions = await transactions;
         }
     }
 }

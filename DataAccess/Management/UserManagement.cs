@@ -233,5 +233,6 @@ namespace DataAccess.Management
 
             return userDetailDto;
         }
+        
     }
 }

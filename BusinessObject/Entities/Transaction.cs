@@ -2,6 +2,7 @@
 
 namespace BusinessObject.Entities
 {
+	
 	public class Transaction
 	{
         public int Id { get; set; }

@@ -26,9 +26,9 @@ else
                     <td>Audience Email</td>
                     <td>Artwork Id</td>
                     <td>Artwork Title</td>
+                    <td>Author</td>
                     <td>Buy Date</td>
                     <td>Buy Price</td>
-                    <td>Action</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -48,14 +48,15 @@ else
                 @item.Artwork.Title
             </td>
             <td>
+                @item.Artwork.AppUser.Name
+            </td>
+            <td>
                 @item.BuyDate
             </td>
             <td>
                 @item.BuyPrice.ToString("C", System.Globalization.CultureInfo.GetCultureInfoByIetfLanguageTag("en-US"))
             </td>
-            <td>
-                <a href="#">Details</a>
-            </td>
+            
         </tr>
     }
     

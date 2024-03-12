@@ -46,6 +46,7 @@ namespace DataAccess.Management
                     purchases = _dataContext.Purchases
                         .Include(p => p.AppUser)
                         .Include(p => p.Artwork)
+                        .ThenInclude(a => a.AppUser)
                         .ToList();
                     return purchases;
                 }
