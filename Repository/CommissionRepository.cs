@@ -82,5 +82,10 @@ namespace Repository
 		{
 			await _commissionManagement.RequestProgressImage(id);
 		}
+
+		public async Task ResendCommission(CommissionResendDTO resend)
+		{
+			await _commissionManagement.ResendCommissionRequest(resend);
+		}
 	}
 }

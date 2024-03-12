@@ -12,6 +12,7 @@ namespace BusinessObject.Entities
         public string RequestDescription { get; set; }
         public string? NotAcceptedReason { get; set; }
         public DateTime RequestDate{ get; set; }
+        public DateTime DueDate { get; set; }
         public byte Status { get; set; }
         public int SenderId { get; set; }
         public AppUser Sender { get; set; }

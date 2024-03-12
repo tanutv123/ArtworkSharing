@@ -8,11 +8,14 @@ namespace BusinessObject.DTOs
 	{
 		[Required]
 		public string Url { get; set; }
+		public string DownloadUrl { get; set; }
 		public bool isMain { get; set; }
 		[Required]
 		public string PublicId { get; set; }
 		public DateTime CreatedDate { get; set; }
 		[Required]
 		public int CommissionRequestId { get; set; }
-	}
+        [Required]
+        public string Description { get; set; }
+    }
 }

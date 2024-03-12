@@ -25,7 +25,7 @@ namespace Presentation.Services
 				{
 					File = new FileDescription(file.FileName, file.OpenReadStream()),
 					DisplayName = file.FileName,
-					Folder = "ArtworkUpload"
+					Folder = "asp-net7"
 				}
 				);
 			if (result != null && result.StatusCode == System.Net.HttpStatusCode.OK)
@@ -39,6 +39,11 @@ namespace Presentation.Services
 		{
 			var deleteParams = new DeletionParams(publicId);
 			return await _cloudinary.DestroyAsync(deleteParams);
+		}
+		public string GetImageUploadUrl(string publicId)
+		{
+			var result = _cloudinary.Api.UrlImgUp.Secure(true).Transform(new Transformation().Flags("attachment")).BuildUrl() + "/" + publicId;
+			return result;
 		}
 	}
 }

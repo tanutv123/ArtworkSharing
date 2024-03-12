@@ -1,6 +1,7 @@
 using BusinessObject.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Presentation.Extensions;
 using Repository;
 
 namespace Presentation.Pages.Audience
@@ -16,20 +17,38 @@ namespace Presentation.Pages.Audience
         public CommissionRequestHistoryDTO CommissionRequestHistoryDTO{ get; set; }
         [BindProperty]
         public int CommissionId { get; set; }
+        [BindProperty]
+        public CommissionResendDTO CommissionResend { get; set; }= new CommissionResendDTO();
         public bool IsRequestSentSuccess { get; set; } = false;
+        public bool IsInvalidAccess { get; set; } = true;
         public async Task OnGet(int id, string message = null, bool isRequestSuccess = false)
         {
-            TempData["Message"] = message;
-            IsRequestSentSuccess = isRequestSuccess;
-            CommissionId = id;
-            CommissionRequestHistoryDTO = await _commissionRepository.GetSingleCommissionRequestHistory(id);
+            var commission = await _commissionRepository.GetSingleCommissionRequestHistory(id);
+            if (commission != null && commission.SenderEmail != User.GetEmailAddress()) 
+            {
+                IsInvalidAccess = true;
+            }
+            else
+            {
+                IsInvalidAccess = false;
+				TempData["Message"] = message;
+				IsRequestSentSuccess = isRequestSuccess;
+				CommissionId = id;
+				CommissionRequestHistoryDTO = await _commissionRepository.GetSingleCommissionRequestHistory(id);
+                CommissionResend.Id = CommissionRequestHistoryDTO.Id;
+                CommissionResend.RequestDescription = CommissionRequestHistoryDTO.RequestDescription;
+                CommissionResend.MinPrice = CommissionRequestHistoryDTO.MinPrice;
+                CommissionResend.MaxPrice = CommissionRequestHistoryDTO.MaxPrice;
+                CommissionResend.DueDate = CommissionRequestHistoryDTO.DueDate;
+                
+			}
         }
 
         public async Task<IActionResult> OnPost()
         {
             IsRequestSentSuccess = false;
 			CommissionRequestHistoryDTO = await _commissionRepository.GetSingleCommissionRequestHistory(CommissionId);
-			if (!ModelState.IsValid) return Page();
+			if (CommissionId <= 0) return Page();
 
             try
             {
@@ -49,5 +68,27 @@ namespace Presentation.Pages.Audience
                 isRequestSuccess = IsRequestSentSuccess
             });
         }
+
+        public async Task<IActionResult> OnPostResendCommission()
+        {
+			IsRequestSentSuccess = false;
+			CommissionRequestHistoryDTO = await _commissionRepository.GetSingleCommissionRequestHistory(CommissionId);
+			if (!ModelState.IsValid) return Page();
+
+            try
+            {
+                await _commissionRepository.ResendCommission(CommissionResend);
+            }
+            catch(Exception ex)
+            {
+				ModelState.AddModelError(string.Empty, ex.Message);
+				return Page();
+			}
+
+			return RedirectToPage("/audience/commissionrequesthistory", new
+			{
+				message = "Request successfully!"
+			});
+		}
 	}
 }

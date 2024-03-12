@@ -32,8 +32,12 @@
             </button>
         }
         <input type="hidden" asp-for="AddFollowDTO.TargetUserId" value="@Model.Artwork.AppUserId" /> 
-                             <button type="submit" class="btn btn-secondary" asp-page-handler="Follow">Follow</button> 
-                         </form>
+        @if (Model.Artwork.AppUserId == Model.UserId)
+        {
+            <button type="submit" class="btn btn-secondary" asp-page-handler="Follow">Follow</button>
+            <button type="submit" class="btn btn-secondary" asp-page-handler="Buy">Buy Artwork</button>
+        }
+    </form>
     <br />
     <br />
     <div id="comment-section">

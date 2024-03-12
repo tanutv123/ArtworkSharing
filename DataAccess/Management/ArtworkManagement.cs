@@ -373,5 +373,19 @@ namespace DataAccess.Management
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task BuyArtwork (Purchase purchase, Transaction transaction)
+        {
+            try
+            {
+                var _context = new DataContext();
+                _context.Purchases.AddAsync(purchase);
+                await _context.SaveChangesAsync();
+                _context.Transactions.AddAsync(transaction);
+            } catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }
