@@ -16,7 +16,9 @@ namespace DataAccess.Helpers
             CreateMap<Artwork, AddArtworkDTO>().ReverseMap();
             CreateMap<ArtworkImage, AddArtworkImageDTO>().ReverseMap();
 			CreateMap<ArtworkImage, UpdateArtworkImageDTO>().ReverseMap();
-			CreateMap<AppUser, AppUserProfileDTO>()
+            CreateMap<Purchase, AddPurchaseDTO>().ReverseMap();
+            CreateMap<Transaction, AddTransationDTO>().ReverseMap();
+            CreateMap<AppUser, AppUserProfileDTO>()
 				.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.UserImage.Url))
 				.ReverseMap();
 			CreateMap<CommissionRequest, CommissionRequestHistoryDTO>()

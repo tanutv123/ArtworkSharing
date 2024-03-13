@@ -1,4 +1,5 @@
-﻿using AutoMapper.Configuration.Conventions;
+﻿using AutoMapper;
+using AutoMapper.Configuration.Conventions;
 using BusinessObject.DTOs;
 using BusinessObject.Entities;
 using DataAccess.Management;
@@ -12,6 +13,12 @@ namespace Repository
 {
     public class ArtworkRepository : IArtworkRepository
     {
+        private readonly IMapper _mapper;
+        public ArtworkRepository(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task AddArtworkComment(int artworkid, int commentid, string content, DateTime createdDate)
         {
             await ArtworkManagement.Instance.ArtworkCommentAsync(artworkid, commentid, content, createdDate);
@@ -89,6 +96,17 @@ namespace Repository
         public async Task<bool> HasUserLikedArtwork(int userId, int artworkId)
         {
             return await ArtworkManagement.Instance.HasUserLikedArtwork(userId, artworkId);    
+        }
+        public async Task<bool> HasUserFollowed(int sourceId, int targetId)
+        {
+            return await ArtworkManagement.Instance.HasUserFollowed(sourceId, targetId);
+        }
+        public async Task BuyArtwork(AddPurchaseDTO addPurchase, AddTransationDTO addTransationDTO)
+        {
+            var purchase = _mapper.Map<Purchase>(addPurchase);
+            var trans = _mapper.Map<Transaction>(addTransationDTO);
+            await ArtworkManagement.Instance.BuyArtwork(purchase, trans);
+
         }
     }
 }

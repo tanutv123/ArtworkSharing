@@ -354,10 +354,28 @@ namespace DataAccess.Management
             try
             {
                 var _context = new DataContext();
-                _context.Purchases.AddAsync(purchase);
-                await _context.SaveChangesAsync();
-                _context.Transactions.AddAsync(transaction);
+                var isPurchase = await _context.Purchases.AnyAsync(x => x.ArtworkId == purchase.ArtworkId && x.AppUserId == purchase.AppUserId);
+                if (!isPurchase)
+                {
+                    await _context.Purchases.AddAsync(purchase);
+                    await _context.SaveChangesAsync();
+                    await _context.Transactions.AddAsync(transaction);
+                    await _context.SaveChangesAsync();
+                }
+                
             } catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public async Task<bool> HasUserFollowed(int sourceId, int targetId)
+        {
+            try
+            {
+                var _context = new DataContext();
+                return await _context.UserFollows.AnyAsync(a => a.SourceUserId == sourceId && a.TargetUserId == targetId);
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

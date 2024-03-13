@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessObject.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,10 @@ namespace BusinessObject.DTOs
 {
     public class AddTransationDTO
     {
-        public int AppUserId{ get; set; }
-        public decimal TotalPrice { get; set; }
-        public DateTime Created { get; set; }
+        public decimal Money { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int SenderId { get; set; }
+        public int ReceiverId { get; set; }
 
     }
 }
