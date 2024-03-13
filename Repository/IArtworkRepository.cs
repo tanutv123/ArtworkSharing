@@ -27,7 +27,12 @@ namespace Repository
         Task<int> GetCount();
         Task<Artwork> GetArtworksAsyncWithLike(int userId, int artworkId);
         Task<bool> HasUserLikedArtwork(int userId, int artworkId);
+
+        Task BuyArtwork(AddPurchaseDTO addPurchase, AddTransationDTO addTransationDTO);
+        Task<bool> HasUserFollowed(int sourceId, int targetId);
+
         Task<IList<Artwork>> GetArtworkAdmin();
+
     }
 
 }
