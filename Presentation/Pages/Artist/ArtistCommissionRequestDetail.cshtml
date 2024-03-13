@@ -33,7 +33,7 @@
 			<h4><strong>@Model.CommissionEndDate</strong></h4>
 		</div>
 		<div class="row mb-3">
-			<p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add progress image</button></p>
+			<p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="openAddImageButton">Add progress image</button></p>
 			<p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">Done</button></p>
 
 			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -164,6 +164,7 @@ else
 
 
 @section Scripts {
+	
 	<script>
 		const progressImageUpload = document.getElementById('progressImageUpload');
 		const progressImage = document.getElementById('progressImage');
@@ -171,6 +172,7 @@ else
 		const publicId = document.getElementById('publicId');
 		const toast = document.getElementById('toastDisplay');
 		const addImageButton = document.getElementById('addImage');
+		const modalButton = document.getElementById("openAddImageButton");
 		async function uploadProgressImage(e) {
 			addImageButton.disabled = true;
 			let data = new FormData();
@@ -194,6 +196,12 @@ else
 		}
 		progressImageUpload.addEventListener('change', uploadProgressImage)
 	</script>
+	@if (Model.IsInvalidInput)
+	{
+		<script>
+			modalButton.click();
+		</script>
+	}
 	@if(Model.IsAddImageSuccess)
 	{
 		<script>
