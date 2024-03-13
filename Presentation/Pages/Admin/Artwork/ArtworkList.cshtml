@@ -1,0 +1,92 @@
+@page
+@model Presentation.Pages.Admin.Artwork.ArtworkList
+
+@{
+    ViewData["Title"] = "Artwork Management";
+}
+
+<h1>Artwork Management</h1>
+<hr/>
+@* <h3>Total income: @Model.totalIncome.ToString("C", System.Globalization.CultureInfo.GetCultureInfoByIetfLanguageTag("en-US")) </h3>  *@
+<hr/>
+<h3>Artwork List</h3>
+@if (Model.Artworks == null && Model.Artworks.Count < 0)
+{
+    <h3>No artwork to display !</h3>
+}
+else
+{
+    <div class="container">
+         <table id="artworkTable">
+                <thead>
+                <tr>
+                    <td>Artwork Id</td>
+                    <td>Artwork Title</td>
+                    <td>Author</td>
+                    <td>Genre</td>
+                    <td>Price</td>
+                    <td>Create Date</td>
+                    <td>Status</td>
+                    <td>Like Number</td>
+                    <td>Comment Number</td>
+                    
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.Artworks)
+    {
+        
+        <tr>
+            <td>
+                @item.Id
+            <td>
+                @item.Title
+            </td>
+            <td>
+                @item.AppUser.UserName
+            </td>
+            <td>
+                @item.Genre.Name
+            </td>
+            <td>
+                @item.Price.ToString("C", System.Globalization.CultureInfo.GetCultureInfoByIetfLanguageTag("en-US"))
+            </td>
+            <td>
+                @item.CreatedDate
+            </td>
+            <td>
+                @if (item.Status == 1)
+                {
+                    <Text>Active</Text>
+                }
+                else
+                {
+                    <Text>Inactivate</Text>
+                }
+            </td>
+            <td>
+                @item.Likes.Count
+            </td>
+            <td>
+                @item.Comments.Count
+            </td>
+            
+            
+        </tr>
+    }
+    
+                </tbody>
+            </table>
+    </div>
+   
+}
+
+@section Scripts {
+    <script>
+        let table = new DataTable('#artworkTable', {
+            responsive: true
+        });
+     
+    </script>
+}
+

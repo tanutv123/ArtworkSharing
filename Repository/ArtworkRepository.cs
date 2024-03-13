@@ -97,6 +97,7 @@ namespace Repository
         {
             return await ArtworkManagement.Instance.HasUserLikedArtwork(userId, artworkId);    
         }
+
         public async Task<bool> HasUserFollowed(int sourceId, int targetId)
         {
             return await ArtworkManagement.Instance.HasUserFollowed(sourceId, targetId);
@@ -106,7 +107,11 @@ namespace Repository
             var purchase = _mapper.Map<Purchase>(addPurchase);
             var trans = _mapper.Map<Transaction>(addTransationDTO);
             await ArtworkManagement.Instance.BuyArtwork(purchase, trans);
+        }
 
+        public async Task<IList<Artwork>> GetArtworkAdmin()
+        {
+            return await ArtworkManagement.Instance.GetAllArtworkAdmin();
         }
     }
 }

@@ -1,0 +1,39 @@
+@page
+@model Presentation.Pages.Admin.Transaction.TransactionList
+@{
+	ViewData["Title"] = "Transaction List";
+}
+
+@if(Model.Transactions != null && Model.Transactions.Count != 0)
+{
+	<div class="container">
+		<table class="table" class="row">
+			<thead>
+				<tr>
+					<td>User</td>
+					<td>Sender Email</td>
+					<td>Receiver Email</td>
+					<td>Created Date</td>
+					<td>Money</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var request in Model.Transactions)
+				{
+					<tr>
+						<td>@request.Id</td>
+						<td>@request.Sender.UserName</td>
+						<td>@request.Receiver.UserName</td>
+						<td>@request.CreatedDate</td>
+						<td>@request.Money</td>
+						
+					</tr>
+				}
+		</table>
+	</div>
+}
+else
+{
+	<h3>There is no transactions !</h3>
+}

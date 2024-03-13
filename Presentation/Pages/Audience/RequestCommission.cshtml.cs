@@ -53,6 +53,7 @@ namespace Presentation.Pages.Audience
             }
             else
             {
+                
                 Message = "Something went wrong";
             }
         }
@@ -65,19 +66,18 @@ namespace Presentation.Pages.Audience
             
             try
             {
-                if (CommissionRequestDTO.DueDate.Date == DateTime.UtcNow.Date)
+				if (CommissionRequestDTO.MinPrice <= 0 && CommissionRequestDTO.MaxPrice <= 0)
+				{
+					throw new Exception("Price must be greater than 0");
+				}
+				else if (CommissionRequestDTO.MaxPrice == CommissionRequestDTO.MinPrice || CommissionRequestDTO.MinPrice > CommissionRequestDTO.MaxPrice)
+				{
+					throw new Exception("Max Price must be greater than Min price");
+				}
+				if (CommissionRequestDTO.DueDate.Date == DateTime.UtcNow.Date)
                 {
 					throw new Exception("Due Date must be ahead from current date");
 				}
-
-				if (CommissionRequestDTO.MinPrice <= 0 && CommissionRequestDTO.MaxPrice <= 0)  
-                {
-                    throw new Exception("Price must be greater than 0");
-                }
-                else if(CommissionRequestDTO.MinPrice > CommissionRequestDTO.MaxPrice)
-                {
-                    throw new Exception("Max Price must be greater than Min price");
-                }
                 await _commissionRepository.AddCommissionRequest(_mapper.Map<CommissionRequest>(CommissionRequestDTO));
                 IsRequestSentSuccess = true;
             }

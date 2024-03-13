@@ -25,7 +25,8 @@ namespace Presentation.Pages.Artist
 			_imageService = imageService;
 			_mapper = mapper;
 		}
-		public bool IsInvalidAccess { get; set; } = true;
+		public bool IsInvalidAccess { get; set; } = false;
+		public bool IsInvalidInput { get; set; } = false;
         public List<CommissionImage> CommissionImages{ get; set; }
         [BindProperty]
         public AddCommissionImageDTO AddCommissionImageDTO{ get; set; } = new AddCommissionImageDTO();
@@ -55,6 +56,7 @@ namespace Presentation.Pages.Artist
             if (!ModelState.IsValid)
             {
 				IsInvalidAccess = false;
+				IsInvalidInput = true;
 				var commission1 = await _commissionRepository.GetSingleCommissionRequestHistory(AddCommissionImageDTO.CommissionRequestId);
                 if(commission1 != null)
                 {
@@ -80,6 +82,7 @@ namespace Presentation.Pages.Artist
 				var commission = await _commissionRepository.GetSingleCommissionRequestHistory(AddCommissionImageDTO.CommissionRequestId);
 				CommissionImages = commission.CommissionImages;
 				ModelState.AddModelError(string.Empty, ex.Message);
+				IsInvalidInput = true;
 				return Page();
             }
 			

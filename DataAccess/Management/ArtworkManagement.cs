@@ -181,7 +181,10 @@ namespace DataAccess.Management
                     artworks = await _dataContext.Artworks
                         .Include(a => a.Genre)
                         .Include(a => a.AppUser)
-                        .Include(a => a.ArtworkImage).Where(a => a.Title.Contains(title))
+                        .Include(a => a.ArtworkImage)
+                        .Where(a => a.Title.Contains(title)
+                                    || a.Description.Contains(title)
+                                    && a.Status == 1)
                         .ToListAsync();
 
                     return artworks;
@@ -349,6 +352,28 @@ namespace DataAccess.Management
                 throw new Exception(ex.Message);
             }
         }
+
+
+        public async Task<IList<Artwork>> GetAllArtworkAdmin()
+        {
+            var _context = new DataContext();
+            try
+            {
+                var list = _context.Artworks
+                    .Include(a => a.Genre)
+                    .Include(a => a.Purchases)
+                    .Include(a => a.Comments)
+                    .Include(a => a.Likes)
+                    .Include(a => a.AppUser)
+                    .ToListAsync();
+                return await list;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task BuyArtwork (Purchase purchase, Transaction transaction)
         {
             try
