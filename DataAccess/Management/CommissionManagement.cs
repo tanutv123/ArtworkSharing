@@ -151,7 +151,7 @@ namespace DataAccess.Management
 
 			try
 			{
-				result = await _context.CommissionRequests.Where(x => x.Id == id).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+				result = await _context.CommissionRequests.Where(x => x.Id == id).Include(c => c.CommissionImages).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
 			}
 			catch(Exception ex)
 			{
@@ -159,13 +159,27 @@ namespace DataAccess.Management
 			}
 			return result;
 		}
+        public async Task<CommissionRequestHistoryAdminDTO> GetSingleCommissionRequestAdmin(int id)
+        {
+            CommissionRequestHistoryAdminDTO result = null;
 
-		public async Task<List<CommissionRequestHistoryDTO>> GetAllCommissionRequestHistory()
+            try
+            {
+                result = await _context.CommissionRequests.Where(x => x.Id == id).Include(c => c.CommissionImages).ProjectTo<CommissionRequestHistoryAdminDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            return result;
+        }
+
+        public async Task<List<CommissionRequestHistoryAdminDTO>> GetAllCommissionRequestHistory()
 		{
-			List<CommissionRequestHistoryDTO> commissions = null;
+			List<CommissionRequestHistoryAdminDTO> commissions = null;
 			try
 			{
-				commissions = await _context.CommissionRequests.ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
+				commissions = await _context.CommissionRequests.Include(c => c.CommissionImages).ProjectTo<CommissionRequestHistoryAdminDTO>(_mapper.ConfigurationProvider).ToListAsync();
 			}catch(Exception ex)
 			{
 				throw new Exception(ex.Message);
