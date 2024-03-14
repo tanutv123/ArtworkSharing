@@ -73,12 +73,8 @@
 						<td>
 							@if (request.CommissionStatusDescription == "Pending")
 							{
-								<form method="post">
-									<div class="text text-danger" asp-validation-summary="All"></div>
-									<input type="hidden" asp-for="CommissionId" value="@request.Id"/>
-									<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#acceptModal">Accept</button>
-									<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal">Reject</button>
-								</form>
+								<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#acceptModal" id="openAcceptModal">Accept</button>
+								<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal" id="openRejectModal">Reject</button>
 								<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div class="modal-dialog" role="document">
 										<div class="modal-content">
@@ -152,10 +148,24 @@ else
 }
 @section Scripts {
 	<script>
+		const accept = document.getElementById('openAcceptModal');
+		const reject = document.getElementById('openRejectModal');
 		let table = new DataTable('#commissionTable', {
 			responsive: true
 		});
 	</script>
+	@if(Model.IsInvalidAccept)
+	{
+		<script>
+			accept.click();
+		</script>
+	}
+	@if (Model.IsInvalidReject)
+	{
+		<script>
+			reject.click();
+		</script>
+	}
 	@if(Model.IsNotAcceptSuccess)
 	{
 		<script>

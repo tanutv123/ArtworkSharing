@@ -1,4 +1,5 @@
 ﻿
+using BusinessObject.Entities;
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 using Microsoft.Extensions.Options;
@@ -45,5 +46,11 @@ namespace Presentation.Services
 			var result = _cloudinary.Api.UrlImgUp.Secure(true).Transform(new Transformation().Flags("attachment")).BuildUrl() + "/" + publicId;
 			return result;
 		}
-	}
+        public string GetImageUploadUrl2(string publicId)
+        {
+            Transformation transformation = new Transformation().Width(300).Height(300).Crop("fill");
+            string imageUrl = _cloudinary.Api.UrlImgUp.Transform(transformation).BuildUrl(publicId);
+            return imageUrl;
+        }
+    }
 }
