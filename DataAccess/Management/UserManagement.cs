@@ -233,6 +233,31 @@ namespace DataAccess.Management
 
             return userDetailDto;
         }
+
+        public async Task<bool> SignAsArtist(int userId)
+        {
+            try
+            {
+                var exitedUser = await _userManager.Users
+                    .Include(u => u.UserRoles)
+                    .FirstOrDefaultAsync(a => a.Id == userId);
+                if (exitedUser != null)
+                {
+                    exitedUser.UserRoles.Clear();
+                    await _userManager.AddToRoleAsync(exitedUser, "Artist");
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         
     }
 }

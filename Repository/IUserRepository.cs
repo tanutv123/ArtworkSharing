@@ -25,5 +25,6 @@ namespace Repository
         Task changeUserPassword(AppUser appUser, string currentPassword, string newPassword);
 /*        Task<IEnumerable<AppUserDTO>> GetAllUser();*/
         Task<UserDetailDTO> getUserDetail(AppUser user);
+        Task<bool> SignAsArtist(int userId);
     }
 }
