@@ -43,7 +43,7 @@ namespace Repository
 			return await _commissionManagement.CheckArtistRegisterCommission(id);
 		}
 
-        public async Task<List<CommissionRequestHistoryDTO>> GetAllCommissionRequestHistory()
+        public async Task<List<CommissionRequestHistoryAdminDTO>> GetAllCommissionRequestHistory()
         {
             return await _commissionManagement.GetAllCommissionRequestHistory();
         }
@@ -87,5 +87,10 @@ namespace Repository
 		{
 			await _commissionManagement.ResendCommissionRequest(resend);
 		}
-	}
+		public async Task<CommissionRequestHistoryAdminDTO> GetSingleCommissionRequestHistoryAdmin(int id)
+		{
+			return await _commissionManagement.GetSingleCommissionRequestAdmin(id);
+		}
+
+    }
 }

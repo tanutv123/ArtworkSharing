@@ -40,14 +40,11 @@ namespace Presentation.Pages.Admin.User
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (ModelState.IsValid)
-            {
-                var user = _mapper.Map<BusinessObject.Entities.AppUser>(AppUserDTO);
-                Debug.WriteLine($"Email: {user.Email}");
-                await _userRepository.DeleteUser(user);
-                return RedirectToPage("./UserManagement");
-            }
-            return Page();
+            var user = _mapper.Map<BusinessObject.Entities.AppUser>(AppUserDTO);
+            Debug.WriteLine($"Email: {user.Email}");
+            await _userRepository.DeleteUser(user);
+            return RedirectToPage("./UserManagement");
+
         }
     }
 }

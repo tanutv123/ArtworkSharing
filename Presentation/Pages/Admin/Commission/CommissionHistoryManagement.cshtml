@@ -12,8 +12,7 @@
                     <td>Sender Email</td>
                     <td>Receiver Email</td>
                     <td>Description</td>
-                    <td>Min Price</td>
-                    <td>Max Price</td>
+                    <td>Actual Price</td>
                     <td>Request Date</td>
                     <td>Status</td>
                     <td></td>
@@ -33,10 +32,7 @@
                             @Html.DisplayFor(modelItem => item.RequestDescription)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.MinPrice)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.MaxPrice)
+                            @Html.DisplayFor(modelItem => item.ActualPrice)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.RequestDate)
@@ -45,16 +41,7 @@
                             @Html.DisplayFor(modelItem => item.CommissionStatusDescription)
                         </td>
                         <td>
-                            @if (item.CommissionStatusDescription == "Pending")
-                            {
-                                <form method="post">
-                                    <button type="button" class="btn btn-primary">Accept</button>
-                                </form>
-                            }
-                            else
-                            {
-                                <a href="#">View Detail</a>
-                            }
+                            <a asp-page="./CommissionHistoryDetail" asp-route-id="@item.Id">Details</a>
                         </td>
                     </tr>
                 }

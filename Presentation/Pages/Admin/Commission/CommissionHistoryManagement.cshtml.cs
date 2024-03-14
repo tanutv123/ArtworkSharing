@@ -16,7 +16,7 @@ namespace Presentation.Pages.Admin.Commission
             _commissionRepository = commissionRepository;
         }
         [BindProperty]
-        public List<CommissionRequestHistoryDTO> CommissionRequestHistoryDTOs { get; set; }
+        public List<CommissionRequestHistoryAdminDTO> CommissionRequestHistoryDTOs { get; set; }
         public async Task OnGetAsync()
         {
             var history = await _commissionRepository.GetAllCommissionRequestHistory();
