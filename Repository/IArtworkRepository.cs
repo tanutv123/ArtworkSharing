@@ -32,6 +32,7 @@ namespace Repository
         Task<bool> HasUserFollowed(int sourceId, int targetId);
 
         Task<IList<Artwork>> GetArtworkAdmin();
+        Task<bool> ChangeArtworkStatusAdmin(int artworkId);
 
     }
 

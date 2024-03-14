@@ -113,5 +113,10 @@ namespace Repository
         {
             return await ArtworkManagement.Instance.GetAllArtworkAdmin();
         }
+
+        public async Task<bool> ChangeArtworkStatusAdmin(int artworkId)
+        {
+            return await ArtworkManagement.Instance.ChangeArtworkStatusAdmin(artworkId);
+        }
     }
 }
