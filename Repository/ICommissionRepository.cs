@@ -21,6 +21,9 @@ namespace Repository
 		Task AddCommissionImage(CommissionImage commissionImage);
 		Task ResendCommission(CommissionResendDTO resend);
 		Task<CommissionRequestHistoryAdminDTO> GetSingleCommissionRequestHistoryAdmin(int id);
+		Task EditCommissionImage(CommissionImage image);
+		Task Delete(CommissionImage image);
+		Task<CommissionImage> GetCommissionImage(int imageId, int userId);
 
     }
 }

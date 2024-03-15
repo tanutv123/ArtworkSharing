@@ -23,7 +23,7 @@
 				@foreach (var image in Model.CommissionRequestHistoryDTO.CommissionImages)
 				{
 					<div class="col-md-4 mb-3">
-						<div class="card" style="width: 18rem">
+						<div class="card">
 							<img src="@image.Url" class="card-img-top" alt="progress image">
 							<div class="card-body">
 								<h4 class="card-text">@image.CreatedDate.ToShortDateString()</h4>

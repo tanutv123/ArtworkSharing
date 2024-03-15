@@ -11,9 +11,10 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace Presentation.Pages.User;
 
+[Authorize]
 public class ChangeEmail : PageModel
 {
-    [Authorize]
+   
     private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IEmailSender _emailSender;

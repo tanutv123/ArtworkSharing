@@ -1,96 +1,164 @@
-﻿using BusinessObject.DTOs;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using BusinessObject.DTOs;
 using BusinessObject.Entities;
 using DataAccess.Management;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Repository
 {
-    public class CommissionRepository : ICommissionRepository
+	public class CommissionRepository : ICommissionRepository
 	{
-		private readonly CommissionManagement _commissionManagement;
+		private readonly IMapper _mapper;
 
-		public CommissionRepository(CommissionManagement commissionManagement)
+		public CommissionRepository(CommissionManagement commissionManagement, IMapper _mapper)
         {
-			_commissionManagement = commissionManagement;
+			this._mapper = _mapper;
 		}
 
 		public async Task AcceptCommissionRequest(int id, int actualPrice)
 		{
-			await _commissionManagement.ChangeCommissionRequestStatusToAccept(id, actualPrice);
+			await CommissionManagement.Instance.ChangeCommissionRequestStatusToAccept(id, actualPrice);
 		}
 
 		public async Task AddCommission(Commission commission)
 		{
-			await _commissionManagement.Add(commission);
+			await CommissionManagement.Instance.Add(commission);
 		}
 
 		public async Task AddCommissionImage(CommissionImage commissionImage)
 		{
-			await _commissionManagement.AddCommissionImage(commissionImage);
+			await CommissionManagement.Instance.AddCommissionImage(commissionImage);
 		}
 
 		public async Task AddCommissionRequest(CommissionRequest commissionRequest)
 		{
-			await _commissionManagement.AddCommissionRequest(commissionRequest);
+			await CommissionManagement.Instance.AddCommissionRequest(commissionRequest);
 		}
 
 		public async Task<bool> CheckArtistRegisterCommission(int id)
 		{
-			return await _commissionManagement.CheckArtistRegisterCommission(id);
+			return await CommissionManagement.Instance.CheckArtistRegisterCommission(id);
 		}
 
         public async Task<List<CommissionRequestHistoryAdminDTO>> GetAllCommissionRequestHistory()
         {
-            return await _commissionManagement.GetAllCommissionRequestHistory();
+			List<CommissionRequestHistoryAdminDTO> result;
+			try
+			{
+				result = await CommissionManagement.Instance.GetAllCommissionsAsQueryable().Include(c => c.CommissionImages).ProjectTo<CommissionRequestHistoryAdminDTO>(_mapper.ConfigurationProvider).ToListAsync();
+			}
+			catch (Exception e)
+			{
+				throw new Exception(e.Message);
+			}
+			return result;
         }
 
 		public async Task DoneCommissionRequest(int id)
 		{
-			await _commissionManagement.ChangeCommissionRequestStatusToDone(id);
+			await CommissionManagement.Instance.ChangeCommissionRequestStatusToDone(id);
 		}
 
 		public async Task<Commission> GetArtistCommission(int id)
 		{
-			return await _commissionManagement.GetArtistCommissionAsync(id);
+			return await CommissionManagement.Instance.GetArtistCommissionAsync(id);
 		}
 
 		public async Task<List<CommissionRequestHistoryDTO>> GetCommissionRequestHistory(int audienceId)
 		{
-			return await _commissionManagement.GetCommissionRequestHistory(audienceId);
+			var query = CommissionManagement.Instance.GetAllCommissionsAsQueryable();
+			List<CommissionRequestHistoryDTO> result;
+			try
+			{
+				result = await query.Where(x => x.SenderId == audienceId).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception();
+			}
+			return result;
 		}
 
 		public async Task<List<CommissionRequestHistoryDTO>> GetCommissionRequestHistoryForArtist(int artistId, string statusFilter)
 		{
-			return await _commissionManagement.GetCommissionRequestHistoryForArtist(artistId, statusFilter);
+			List<CommissionRequestHistoryDTO> result;
+			result = await CommissionManagement.Instance.GetAllCommissionsAsQueryable().Where(x => x.ReceiverId == artistId).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
+			try
+			{
+				if (string.IsNullOrEmpty(statusFilter))
+				{
+					result = await CommissionManagement.Instance.GetAllCommissionsAsQueryable().Where(x => x.ReceiverId == artistId).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
+				}
+				else
+				{
+					var statusToBeFiltered = await CommissionManagement.Instance.GetAllCommissionStatusAsQueryable().Where(x => x.Description == statusFilter).SingleOrDefaultAsync();
+					result = await CommissionManagement.Instance.GetAllCommissionsAsQueryable().Where(x => x.ReceiverId == artistId && x.CommissionStatusId == statusToBeFiltered.Id).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+			return result;
 		}
 
 		public async Task<CommissionRequestHistoryDTO> GetSingleCommissionRequestHistory(int requestId)
         {
-			return await _commissionManagement.GetSingleCommissionRequest(requestId);
+			CommissionRequestHistoryDTO result = null;
+
+			try
+			{
+				result = await CommissionManagement.Instance.GetAllCommissionsAsQueryable().Where(x => x.Id == requestId).Include(c => c.CommissionImages).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+			return result;
         }
 
 		public async Task NotAcceptCommissionRequest(int id, string notAcceptReason)
 		{
-			await _commissionManagement.ChangeCommissionRequestStatusToNotAccept(id, notAcceptReason);
+			await CommissionManagement.Instance.ChangeCommissionRequestStatusToNotAccept(id, notAcceptReason);
 		}
 
 		public async Task RequestProgressImage(int id)
 		{
-			await _commissionManagement.RequestProgressImage(id);
+			await CommissionManagement.Instance.RequestProgressImage(id);
 		}
 
 		public async Task ResendCommission(CommissionResendDTO resend)
 		{
-			await _commissionManagement.ResendCommissionRequest(resend);
+			await CommissionManagement.Instance.ResendCommissionRequest(resend);
 		}
 		public async Task<CommissionRequestHistoryAdminDTO> GetSingleCommissionRequestHistoryAdmin(int id)
 		{
-			return await _commissionManagement.GetSingleCommissionRequestAdmin(id);
+			CommissionRequestHistoryAdminDTO result;
+			try
+			{
+				result = await CommissionManagement.Instance.GetAllCommissionsAsQueryable().Where(x => x.Id == id).Include(c => c.CommissionImages).ProjectTo<CommissionRequestHistoryAdminDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+			}
+			catch(Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+			return result;
 		}
 
-    }
+		public async Task EditCommissionImage(CommissionImage image)
+		{
+			await CommissionManagement.Instance.EditCommissionImage(image);
+		}
+
+		public async Task<CommissionImage> GetCommissionImage(int imageId, int userId)
+		{
+			return await CommissionManagement.Instance.GetCommissionImage(imageId, userId);
+		}
+
+		public async Task Delete(CommissionImage image)
+		{
+			await CommissionManagement.Instance.Delete(image);
+		}
+	}
 }
