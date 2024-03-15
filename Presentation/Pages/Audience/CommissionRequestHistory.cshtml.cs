@@ -1,4 +1,5 @@
 using BusinessObject.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.Extensions;
@@ -6,6 +7,7 @@ using Repository;
 
 namespace Presentation.Pages.Audience
 {
+    [Authorize]
     public class CommissionRequestHistoryModel : PageModel
     {
 		private readonly ICommissionRepository _commissionRepository;
