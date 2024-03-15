@@ -80,6 +80,7 @@ namespace Presentation.Pages.Admin.User
 
                 var user = new AppUser
                 {
+                    EmailConfirmed = true,
                     Email = AppUser.Email,
                     PhoneNumber = AppUser.PhoneNumber,
                     Name = AppUser.Name,

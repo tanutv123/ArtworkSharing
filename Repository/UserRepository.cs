@@ -118,6 +118,10 @@ namespace Repository
                 var user = await _userManager.FindByEmailAsync(appUser.Email);
                 if (user == null)
                 {
+                    if (await IsPhoneExistAsync(appUser.PhoneNumber))
+                    {
+                        throw new Exception("Phone is exist");
+                    }
                     await _userManager.CreateAsync(appUser, password);
                     await _userManager.SetUserNameAsync(appUser, appUser.Email);
                 }
@@ -135,6 +139,10 @@ namespace Repository
                 var user = await _userManager.FindByEmailAsync(appUser.Email);
                 if (user != null)
                 {
+                    if (user.PhoneNumber != user.PhoneNumber && await IsPhoneExistAsync(appUser.PhoneNumber))
+                    {
+                        throw new Exception("Phone is exist");
+                    }
                     user.Name = appUser.Name;
                     user.PhoneNumber = appUser.PhoneNumber;
                     user.Email = appUser.Email;
