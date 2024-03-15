@@ -335,9 +335,11 @@ namespace DataAccess.Management
 			try
 			{
 				var _context = new DataContext();
+				var images = await _context.CommissionImages.Where(x => x.CommissionRequestId == image.CommissionRequestId).OrderBy(x => x.CreatedDate).ToListAsync();
 				var _image = await _context.CommissionImages.FindAsync(image.Id);
 				if (_image == null) throw new Exception("Image not found");
 				_context.CommissionImages.Remove(_image);
+				images.Last().isMain = true;
 				await _context.SaveChangesAsync();
 			}
 			catch (Exception ex)

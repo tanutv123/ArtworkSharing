@@ -23,6 +23,10 @@ namespace Presentation.Pages.Artist
         public async Task<IActionResult> OnPostEdit()
         {
             if (!ModelState.IsValid) return Page();
+            if(string.IsNullOrEmpty(CommissionImage.Description))
+            {
+                ModelState.AddModelError(string.Empty, "Please enter description");
+            }
             try
             {
                 await _commissionRepository.EditCommissionImage(CommissionImage);

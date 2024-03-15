@@ -100,7 +100,7 @@
 								</div>
 								<div class="mb-3">
 									<p>The result for this commission:</p>
-									<img src="@Model.CommissionImages.SingleOrDefault(x => x.isMain == true).Url" id="progressImageDisplay" style="width:300px;" />
+									<img src="@Model.CommissionImages.SingleOrDefault(x => x.isMain).Url" id="progressImageDisplay" style="width:300px;" />
 								</div>
 							</div>
 							<div class="modal-footer">
