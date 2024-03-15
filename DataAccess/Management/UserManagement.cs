@@ -19,12 +19,11 @@ namespace DataAccess.Management
 {
     public class UserManagement
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly DataContext _dataContext;
-        private readonly IMapper _mapper;
 
-        public UserManagement(
+        /*private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;*/
+
+        /*public UserManagement(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             DataContext dataContext,
@@ -34,7 +33,32 @@ namespace DataAccess.Management
             _signInManager = signInManager;
             _dataContext = dataContext;
             _mapper = mapper;
+        }*/
+
+
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
+        private static UserManagement instance = null;
+        private static readonly object instanceLock = new object();
+
+        private UserManagement(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
+
+        public static UserManagement GetInstance(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        {
+            lock (instanceLock)
+            {
+                if (instance == null)
+                {
+                    instance = new UserManagement(userManager, signInManager);
+                }
+                return instance;
+            }
+        }
+
 
         public async Task<IdentityResult> RegisterAsync(AppUser newUser, string password)
         {
@@ -51,7 +75,8 @@ namespace DataAccess.Management
                     await _userManager.AddToRoleAsync(newUser, "Audience");
                 }
                 return result;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
@@ -64,7 +89,7 @@ namespace DataAccess.Management
             {
                 return SignInResult.Failed;
             }
-            var result = await _signInManager.PasswordSignInAsync(email, password, false,lockoutOnFailure: false);
+            var result = await _signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
             return result;
         }
 
@@ -94,21 +119,22 @@ namespace DataAccess.Management
             return userDetailDto;
         }
 
-        public async Task<AppUserProfileDTO> GetUserProfile(int id)
+        public async Task<AppUser> GetUserProfile(int id)
         {
-            AppUserProfileDTO result = null;
+            AppUser result = null;
 
             try
             {
-				result = await _dataContext.Users.Where(x => x.Id == id).ProjectTo<AppUserProfileDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+                var _dataContext = new DataContext();
+                result = await _dataContext.Users.Where(x => x.Id == id).SingleOrDefaultAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
             return result;
         }
-        
+
         public async Task<bool> ChangeUserPassword(AppUser user, string currentPass, string newPass)
         {
             try
@@ -122,28 +148,31 @@ namespace DataAccess.Management
             }
         }
 
-        public async Task<List<AppUserDTO>> GetAllUser()
+        public async Task<List<AppUser>> GetAllUser()
         {
-            List<AppUserDTO> appUsers = null;
+            List<AppUser> appUsers = null;
             try
             {
+                var _dataContext = new DataContext();
                 appUsers = await _dataContext.Users
                     .Include(a => a.UserRoles)
-                    .ProjectTo<AppUserDTO>(_mapper.ConfigurationProvider).ToListAsync();
-            }catch(Exception ex)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
             return appUsers;
         }
 
-        public async Task<AppUserDTO> GetUserDetailAdmin(int id)
+        public async Task<AppUser> GetUserDetailAdmin(int id)
         {
-            AppUserDTO user = null;
+            AppUser user = null;
 
             try
             {
-                user = await _dataContext.Users.Where(x => x.Id == id).ProjectTo<AppUserDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+                var _dataContext = new DataContext();
+                user = await _dataContext.Users.Where(x => x.Id == id).SingleOrDefaultAsync();
             }
             catch (Exception ex)
             {
@@ -156,14 +185,15 @@ namespace DataAccess.Management
             try
             {
                 var user = await _userManager.FindByEmailAsync(appUser.Email);
-                if(user == null)
+                if (user == null)
                 {
                     await _userManager.CreateAsync(appUser, password);
                     await _userManager.SetUserNameAsync(appUser, appUser.Email);
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                throw new Exception(ex.Message);    
+                throw new Exception(ex.Message);
             }
         }
 
@@ -197,34 +227,29 @@ namespace DataAccess.Management
             try
             {
                 var user = await _userManager.FindByEmailAsync(appUser.Email);
-                if(user != null)
+                if (user != null)
                 {
-                    user.Status = 0; 
-
-/*                    if (user.Status == 0)
-                    {
-                        user.SecurityStamp = Guid.NewGuid().ToString();
-                    }*/
+                    user.Status = 0;
                     await _userManager.UpdateAsync(user);
                 }
                 else
                 {
                     throw new Exception("User does not exist");
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
 
-        public async Task<UserDetailDTO> getUserDetail(AppUser user)
+        public async Task<AppUser> getUserDetail(AppUser user)
         {
-            UserDetailDTO userDetailDto = new UserDetailDTO();
+            AppUser userDetailDto = null;
             try
             {
-                var user2 = await _userManager.Users.Include(u => u.UserImage)
+                userDetailDto = await _userManager.Users.Include(u => u.UserImage)
                     .FirstOrDefaultAsync(u => u.Email == user.Email);
-                userDetailDto = _mapper.Map<UserDetailDTO>(user);
             }
             catch (Exception ex)
             {
@@ -258,6 +283,6 @@ namespace DataAccess.Management
                 throw new Exception(ex.Message);
             }
         }
-        
+
     }
 }
