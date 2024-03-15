@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using BusinessObject.DTOs;
 using BusinessObject.Entities;
+using DataAccess.Data;
 using DataAccess.Management;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,11 +17,13 @@ public class Detail : PageModel
     private readonly IUserRepository _userRepository;
     private UserManager<AppUser> _userManager;
     private SignInManager<AppUser> _signInManager;
-    public Detail(IUserRepository userRepository, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    private DataContext _dataContext;
+    public Detail(IUserRepository userRepository, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, DataContext dataContext)
     {
         _userRepository = userRepository;
         _userManager = userManager;
         _signInManager = signInManager;
+        _dataContext = dataContext;
     }
 
     [BindProperty]
@@ -101,7 +104,7 @@ public class Detail : PageModel
         user.Description = Input.Description;
         await _userManager.UpdateAsync(user);
             
-         _signInManager.RefreshSignInAsync(user);
+        await _signInManager.RefreshSignInAsync(user);
         StatusMessage = "Your information have been updated!";
         return RedirectToPage();
     }
