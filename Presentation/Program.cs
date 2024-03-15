@@ -37,6 +37,7 @@ builder.Services.AddIdentityCore<AppUser>(opt =>
 	.AddRoleManager<RoleManager<AppRole>>()
 	.AddEntityFrameworkStores<DataContext>()
 	.AddSignInManager<SignInManager<AppUser>>()
+	.AddUserManager<UserManager<AppUser>>()
 	.AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
 {

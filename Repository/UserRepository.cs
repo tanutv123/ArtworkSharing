@@ -3,6 +3,7 @@ using BusinessObject.DTOs;
 using BusinessObject.Entities;
 using DataAccess.Management;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,19 +59,48 @@ namespace Repository
             }
         }
 
-        public async Task<SignInResult> LoginAsync(string email, string password)
-        {
-            return await UserManagement.GetInstance(_userManager, _signInManager).LoginAsync(email, password);
-        }
-
         public async Task<IdentityResult> RegisterAsync(AppUser newUser, string password)
         {
-            return await UserManagement.GetInstance(_userManager, _signInManager).RegisterAsync(newUser, password);
+            try
+            {
+                if (await IsPhoneExistAsync(newUser.PhoneNumber))
+                {
+                    throw new Exception("Phone number already exists.");
+                }
+                var result = await _userManager.CreateAsync(newUser, password);
+                if (result.Succeeded)
+                {
+                    await _userManager.SetUserNameAsync(newUser, newUser.Email);
+                    await _userManager.AddToRoleAsync(newUser, "Audience");
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<SignInResult> LoginAsync(string email, string password)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null || user.Status == 0 || user.EmailConfirmed == false)
+            {
+                return SignInResult.Failed;
+            }
+            var result = await _signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
+            return result;
         }
 
         public async Task SignOutAsync()
         {
-            await UserManagement.GetInstance(_userManager, _signInManager).SignOutAsync();
+            await _signInManager.SignOutAsync();
+        }
+
+        public async Task<bool> IsPhoneExistAsync(string phone)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phone);
+            return user != null;
         }
 
         public async Task UpdateUser(AppUser appUser)

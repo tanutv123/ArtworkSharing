@@ -41,7 +41,7 @@ namespace DataAccess.Management
         private static UserManagement instance = null;
         private static readonly object instanceLock = new object();
 
-        private UserManagement(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public UserManagement(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -156,6 +156,7 @@ namespace DataAccess.Management
                 var _dataContext = new DataContext();
                 appUsers = await _dataContext.Users
                     .Include(a => a.UserRoles)
+                    .ThenInclude(a => a.Role)
                     .ToListAsync();
             }
             catch (Exception ex)
@@ -172,7 +173,7 @@ namespace DataAccess.Management
             try
             {
                 var _dataContext = new DataContext();
-                user = await _dataContext.Users.Where(x => x.Id == id).SingleOrDefaultAsync();
+                user = await _dataContext.Users.Where(x => x.Id == id).Include(u => u.UserRoles).ThenInclude(u => u.Role).SingleOrDefaultAsync();
             }
             catch (Exception ex)
             {
@@ -184,11 +185,10 @@ namespace DataAccess.Management
         {
             try
             {
-                var user = await _userManager.FindByEmailAsync(appUser.Email);
+                var user = await GetUserDetailAdmin(appUser.Id);
                 if (user == null)
                 {
-                    await _userManager.CreateAsync(appUser, password);
-                    await _userManager.SetUserNameAsync(appUser, appUser.Email);
+                    
                 }
             }
             catch (Exception ex)
@@ -201,7 +201,7 @@ namespace DataAccess.Management
         {
             try
             {
-                var user = await _userManager.FindByEmailAsync(appUser.Email);
+                var user = await GetUserDetailAdmin(appUser.Id);
                 if (user != null)
                 {
                     user.Name = appUser.Name;
@@ -226,7 +226,7 @@ namespace DataAccess.Management
         {
             try
             {
-                var user = await _userManager.FindByEmailAsync(appUser.Email);
+                var user = await GetUserDetailAdmin(appUser.Id);
                 if (user != null)
                 {
                     user.Status = 0;
