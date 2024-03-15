@@ -3,13 +3,14 @@ using System.ComponentModel.DataAnnotations;
 using BusinessObject.DTOs;
 using BusinessObject.Entities;
 using DataAccess.Management;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repository;
 
 namespace Presentation.Pages.User;
-
+[Authorize]
 public class Detail : PageModel
 {
     private readonly IUserRepository _userRepository;

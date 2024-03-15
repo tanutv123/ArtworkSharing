@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repository;
 
 namespace Presentation.Pages.Admin.Artwork;
 
+[Authorize(Policy = "RequireAdminRole")]
 public class ArtworkList : PageModel
 {
     private readonly IArtworkRepository _artworkRepository;

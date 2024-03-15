@@ -1,4 +1,5 @@
 using BusinessObject.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repository;
@@ -6,6 +7,8 @@ using System.Diagnostics;
 
 namespace Presentation.Pages.Admin.Commission
 {
+    [Authorize(Policy = "RequireAdminRole")]
+
     public class CommissionHistoryDetailModel : PageModel
     {
         private readonly ICommissionRepository _commissionRepository;
