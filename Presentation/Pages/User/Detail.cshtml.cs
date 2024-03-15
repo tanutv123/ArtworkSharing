@@ -2,24 +2,28 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using BusinessObject.DTOs;
 using BusinessObject.Entities;
+using DataAccess.Data;
 using DataAccess.Management;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Repository;
 
 namespace Presentation.Pages.User;
-
+[Authorize]
 public class Detail : PageModel
 {
     private readonly IUserRepository _userRepository;
     private UserManager<AppUser> _userManager;
     private SignInManager<AppUser> _signInManager;
-    public Detail(IUserRepository userRepository, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    private DataContext _dataContext;
+    public Detail(IUserRepository userRepository, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, DataContext dataContext)
     {
         _userRepository = userRepository;
         _userManager = userManager;
         _signInManager = signInManager;
+        _dataContext = dataContext;
     }
 
     [BindProperty]
@@ -34,6 +38,7 @@ public class Detail : PageModel
     public string Username { get; set; }
     public class InputModel
     {
+        public string FullName { get; set; }
         public String ImageURL { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
@@ -47,16 +52,16 @@ public class Detail : PageModel
 
     private async Task LoadAsync(AppUser appUser)
     {
+        var userName = await _userRepository.GetUserDetailAdmin(appUser.Id);
         var userD = await _userRepository.getUserDetail(appUser);
         
-        var userName = await _userManager.GetUserNameAsync(appUser);
-        var userEmail = await _userManager.GetEmailAsync(appUser);
         var userPhone = await _userManager.GetPhoneNumberAsync(appUser);
-        Username = userName;
+        Username = userName.Email;
         Input = new InputModel
         {
+            FullName = userName.Name,
             ImageURL = userD.userImageUrl,
-            Name = userName,
+            Name = userName.Email,
             PhoneNumber = userPhone,
             Description = appUser.Description
         };
@@ -75,7 +80,7 @@ public class Detail : PageModel
         return Page();
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public async Task<IActionResult> OnPostUpdate()
      {
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
@@ -94,13 +99,41 @@ public class Detail : PageModel
             }
         }
         // user.UserImage = Input.UserImage;
-        user.Name = Input.Name;
+        user.Name = Input.FullName;
+        // user.UserName = Username;
         user.Description = Input.Description;
         await _userManager.UpdateAsync(user);
-
+            
         await _signInManager.RefreshSignInAsync(user);
         StatusMessage = "Your information have been updated!";
         return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostSign()
+    {
+        try
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null)
+            {
+                await _userRepository.SignAsArtist(user.Id);
+                await _signInManager.RefreshSignInAsync(user);
+                StatusMessage = "You has become an Artist! Be creative !";
+                return RedirectToPage();
+            }
+            else
+            {
+                {
+                    return NotFound($"Can not load user ID: ''{_userManager.GetUserId(User)}");
+                }
+            }
+           
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
+        
     }
 
     

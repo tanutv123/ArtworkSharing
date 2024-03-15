@@ -1,4 +1,5 @@
 using BusinessObject.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,6 +10,8 @@ using System.Diagnostics;
 
 namespace Presentation.Pages.Admin.User
 {
+    [Authorize(Policy = "RequireAdminRole")]
+
     public class UserAddModel : PageModel
     {
         private readonly IUserRepository _userRepository;
@@ -77,6 +80,7 @@ namespace Presentation.Pages.Admin.User
 
                 var user = new AppUser
                 {
+                    EmailConfirmed = true,
                     Email = AppUser.Email,
                     PhoneNumber = AppUser.PhoneNumber,
                     Name = AppUser.Name,

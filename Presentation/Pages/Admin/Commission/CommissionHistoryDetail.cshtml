@@ -1,0 +1,98 @@
+﻿@page
+@model Presentation.Pages.Admin.Commission.CommissionHistoryDetailModel
+@{
+    ViewData["Title"] = "Commission Detail";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Commission</h4>
+    <hr />
+    <div class="col-md-6">
+        <dl class="row">
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.commissionRequestHistoryDTO.MinPrice)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commissionRequestHistoryDTO.MinPrice)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.commissionRequestHistoryDTO.MaxPrice)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commissionRequestHistoryDTO.MaxPrice)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.commissionRequestHistoryDTO.ActualPrice)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commissionRequestHistoryDTO.ActualPrice)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.commissionRequestHistoryDTO.RequestDescription)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commissionRequestHistoryDTO.RequestDescription)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.commissionRequestHistoryDTO.NotAcceptedReason)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commissionRequestHistoryDTO.NotAcceptedReason)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.commissionRequestHistoryDTO.SenderEmail)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commissionRequestHistoryDTO.SenderEmail)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.commissionRequestHistoryDTO.ReceiverEmail)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commissionRequestHistoryDTO.ReceiverEmail)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.commissionRequestHistoryDTO.SenderEmail)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commissionRequestHistoryDTO.SenderEmail)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.commissionRequestHistoryDTO.GenreName)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commissionRequestHistoryDTO.GenreName)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.commissionRequestHistoryDTO.RequestDate)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commissionRequestHistoryDTO.RequestDate)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.commissionRequestHistoryDTO.DueDate)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commissionRequestHistoryDTO.DueDate)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.commissionRequestHistoryDTO.CommissionStatusDescription)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.commissionRequestHistoryDTO.CommissionStatusDescription)
+            </dd>
+        </dl>
+    </div>
+    <div class="col-md-6">
+        <h3>Commission Image</h3>
+        @foreach (var item in @Model.commissionRequestHistoryDTO.CommissionImages)
+        {
+            <img width="100" height="100" src="@item" />
+        }
+    </div>
+</div>
+<div>
+    <a asp-page="./CommissionHistoryManagement">Back to List</a>
+</div>

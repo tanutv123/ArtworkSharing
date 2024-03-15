@@ -65,7 +65,7 @@ namespace Presentation.Pages.Account
                 }
                 if (role.Equals("Admin") || role.Equals("Manager"))
                 {
-                    return RedirectToPage("/Admin/Index");
+                    return RedirectToPage("/Admin/Purchase/PurchaseList");
                 }
                 else
                 {

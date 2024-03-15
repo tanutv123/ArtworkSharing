@@ -15,7 +15,11 @@
                 @if(User.IsInRole("Admin")){
                     <li><a class="dropdown-item" asp-page="/Admin/User/UserManagement">User Mangement</a></li>
                     <li><a class="dropdown-item" asp-page="/Admin/Commission/CommissionHistoryManagement">Commission Mangement</a></li>
-                    <li><a class="dropdown-item" asp-page="/Account/Logout">Artwork Management</a></li>
+                    <li><a class="dropdown-item" asp-page="/Admin/Artwork/ArtworkList">Artwork Management</a></li>
+                    <li><a class="dropdown-item" asp-page="/Admin/Purchase/PurchaseList">Purchase Management</a></li>
+                    <li><a class="dropdown-item" asp-page="/Admin/Transaction/TransactionList">Transaction Management</a></li>
+
+
                 }
                 <li><a class="dropdown-item" asp-page="/Account/Logout">Logout</a></li>
             </ul>

@@ -17,15 +17,17 @@
 			<div class="row mb-3">
 
 				<div class="col-md-4 mb-3">
-					<div class="card" style="width: 25rem; height:30rem">
-						<img src="@image.Url" class="card-img-top" alt="progress image">
-						<div class="card-body">
+					<div class="card" >
+						<div style="height:60%">
+							<img src="@image.Url" class="card-img-top" style="width:100%; height: 100%" alt="progress image">
+						</div>
+						<div class="card-body" style="height: 40%">
 							<h4 class="card-text">@image.CreatedDate.ToShortDateString()</h4>
 							<p class="card-text">@image.Description</p>
+							<a class="btn btn-primary" href="/artist/editcommissionimage?id=@image.Id">Edit</a>
 						</div>
 					</div>
 				</div>
-
 			</div>
 		}
 		<div class="row mb-3">
@@ -33,7 +35,7 @@
 			<h4><strong>@Model.CommissionEndDate</strong></h4>
 		</div>
 		<div class="row mb-3">
-			<p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add progress image</button></p>
+			<p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" id="openAddImageButton">Add progress image</button></p>
 			<p><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">Done</button></p>
 
 			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -98,7 +100,7 @@
 								</div>
 								<div class="mb-3">
 									<p>The result for this commission:</p>
-									<img src="@Model.CommissionImages.SingleOrDefault(x => x.isMain == true).Url" id="progressImageDisplay" style="width:300px;" />
+									<img src="@Model.CommissionImages.SingleOrDefault(x => x.isMain).Url" id="progressImageDisplay" style="width:300px;" />
 								</div>
 							</div>
 							<div class="modal-footer">
@@ -164,6 +166,7 @@ else
 
 
 @section Scripts {
+	
 	<script>
 		const progressImageUpload = document.getElementById('progressImageUpload');
 		const progressImage = document.getElementById('progressImage');
@@ -171,6 +174,7 @@ else
 		const publicId = document.getElementById('publicId');
 		const toast = document.getElementById('toastDisplay');
 		const addImageButton = document.getElementById('addImage');
+		const modalButton = document.getElementById("openAddImageButton");
 		async function uploadProgressImage(e) {
 			addImageButton.disabled = true;
 			let data = new FormData();
@@ -194,6 +198,12 @@ else
 		}
 		progressImageUpload.addEventListener('change', uploadProgressImage)
 	</script>
+	@if (Model.IsInvalidInput)
+	{
+		<script>
+			modalButton.click();
+		</script>
+	}
 	@if(Model.IsAddImageSuccess)
 	{
 		<script>

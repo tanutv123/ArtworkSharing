@@ -1,12 +1,13 @@
 using System.Text;
 using BusinessObject.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 
 namespace Presentation.Pages.User;
-
+[Authorize]
 public class ConfirmEmail : PageModel
 {
     private readonly UserManager<AppUser> _userManager;

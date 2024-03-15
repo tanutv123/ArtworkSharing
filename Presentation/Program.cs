@@ -4,12 +4,11 @@ using DataAccess.Management;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Presentation.Extensions;
 using Presentation.Helpers;
 using Presentation.Services;
-using Microsoft.Extensions.DependencyInjection;
 using Presentation.SignalR;
 using Repository;
-using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +18,7 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
     options.Conventions.AddPageRoute("/Account/LoginPage", "");
 });
 builder.Services.AddControllers();
-builder.Services.AddDbContext<DataContext>(options =>
-{
-	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
@@ -36,12 +32,17 @@ builder.Services.AddIdentityCore<AppUser>(opt =>
 	.AddRoleManager<RoleManager<AppRole>>()
 	.AddEntityFrameworkStores<DataContext>()
 	.AddSignInManager<SignInManager<AppUser>>()
+	.AddUserManager<UserManager<AppUser>>()
 	.AddDefaultTokenProviders();
 builder.Services.AddAuthentication(options =>
 {
 	options.DefaultScheme = IdentityConstants.ApplicationScheme;
 	options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
 }).AddIdentityCookies();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+	options.LoginPath = "/Account/LoginPage";
+});
 builder.Services.AddAuthorization(options =>
 {
 	options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
@@ -60,17 +61,14 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddSignalR();
-
-builder.Services.AddScoped<UserManagement>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<CommissionManagement>();
 builder.Services.AddScoped<ICommissionRepository, CommissionRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
-builder.Services.AddScoped<ArtworkManagement>();
 builder.Services.AddScoped<IArtworkRepository, ArtworkRepository>();
-builder.Services.AddScoped<GenreManagement>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddSingleton<PresenceTracker>();
+builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddOptions();
 var mailsettings = builder.Configuration.GetSection("MailSettings");

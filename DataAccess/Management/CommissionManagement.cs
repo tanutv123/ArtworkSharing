@@ -13,13 +13,35 @@ namespace DataAccess.Management
 {
 	public class CommissionManagement
 	{
-		private readonly DataContext _context;
-		private readonly IMapper _mapper;
+		private static CommissionManagement instance = null;
+		private static readonly object instanceLock = new object();
 
-		public CommissionManagement(DataContext context, IMapper mapper)
-        {
-			_context = context;
-			_mapper = mapper;
+		public CommissionManagement() { }
+
+		public static CommissionManagement Instance
+		{
+			get
+			{
+				lock (instanceLock)
+				{
+					if (instance == null)
+					{
+						instance = new CommissionManagement();
+					}
+					return instance;
+				}
+			}
+		}
+
+		public IQueryable<CommissionRequest> GetAllCommissionsAsQueryable()
+		{
+			var _context = new DataContext();
+			return _context.CommissionRequests.AsQueryable();
+		}
+		public IQueryable<CommissionStatus> GetAllCommissionStatusAsQueryable()
+		{
+			var _context = new DataContext();
+			return _context.CommissionStatus.AsQueryable();
 		}
 
 		public async Task<Commission> GetArtistCommissionAsync(int id)
@@ -28,6 +50,7 @@ namespace DataAccess.Management
 
 			try
 			{
+				var _context = new DataContext();
 				commission = await _context.Commissions.SingleOrDefaultAsync(x => x.AppUserId == id);
 			}
 			catch(Exception ex)
@@ -44,6 +67,7 @@ namespace DataAccess.Management
 
 			try
 			{
+				var _context = new DataContext();
 				result = await _context.Commissions.AnyAsync(x => x.AppUserId == id);
 			}
 			catch (Exception ex)
@@ -57,6 +81,7 @@ namespace DataAccess.Management
 		{
 			try
 			{
+				var _context = new DataContext();
 				var _commission = await _context.Commissions.AnyAsync(x => x.Id == commission.Id);
 				if(!_commission)
 				{
@@ -87,6 +112,7 @@ namespace DataAccess.Management
 		{
 			try
 			{
+				var _context = new DataContext();
 				if (commissionRequest == null)
 				{
 					throw new Exception("Invalid request");
@@ -106,77 +132,11 @@ namespace DataAccess.Management
 				throw new Exception(ex.Message);
 			}
 		}
-
-		public async Task<List<CommissionRequestHistoryDTO>> GetCommissionRequestHistory(int audienceId)
-		{
-			List<CommissionRequestHistoryDTO> result = null;
-
-			try
-			{
-				result = await _context.CommissionRequests.Where(x => x.SenderId == audienceId).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
-			}
-			catch(Exception ex)
-			{
-				throw new Exception(ex.Message);
-			}
-			return result;
-		}
-
-		public async Task<List<CommissionRequestHistoryDTO>> GetCommissionRequestHistoryForArtist(int artistId, string statusFilter)
-		{
-			List<CommissionRequestHistoryDTO> result = null;
-
-			try
-			{
-				if(string.IsNullOrEmpty(statusFilter))
-				{
-					result = await _context.CommissionRequests.Where(x => x.ReceiverId == artistId).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
-				} 
-				else
-				{
-					var statusToBeFiltered = await _context.CommissionStatus.Where(x => x.Description == statusFilter).SingleOrDefaultAsync();
-					result = await _context.CommissionRequests.Where(x => x.ReceiverId == artistId && x.CommissionStatusId == statusToBeFiltered.Id).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
-				}
-			}
-			catch (Exception ex)
-			{
-				throw new Exception(ex.Message);
-			}
-			return result;
-		}
-
-		public async Task<CommissionRequestHistoryDTO> GetSingleCommissionRequest(int id)
-		{
-			CommissionRequestHistoryDTO result = null;
-
-			try
-			{
-				result = await _context.CommissionRequests.Where(x => x.Id == id).ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
-			}
-			catch(Exception ex)
-			{
-				throw new Exception(ex.Message);
-			}
-			return result;
-		}
-
-		public async Task<List<CommissionRequestHistoryDTO>> GetAllCommissionRequestHistory()
-		{
-			List<CommissionRequestHistoryDTO> commissions = null;
-			try
-			{
-				commissions = await _context.CommissionRequests.ProjectTo<CommissionRequestHistoryDTO>(_mapper.ConfigurationProvider).ToListAsync();
-			}catch(Exception ex)
-			{
-				throw new Exception(ex.Message);
-			}
-			return commissions;
-		}
-    
 		public async Task ChangeCommissionRequestStatusToAccept(int id, int actualPrice)
 		{
 			try
 			{
+				var _context = new DataContext();
 				var commission = await _context.CommissionRequests.FindAsync(id);
 				if(commission != null)
 				{
@@ -212,6 +172,7 @@ namespace DataAccess.Management
 		{
 			try
 			{
+				var _context = new DataContext();
 				var commission = await _context.CommissionRequests.FindAsync(id);
 				if (commission != null)
 				{
@@ -243,6 +204,7 @@ namespace DataAccess.Management
 		{
 			try
 			{
+				var _context = new DataContext();
 				var commission = await _context.CommissionRequests.FindAsync(id);
 				if (commission != null)
 				{
@@ -274,6 +236,7 @@ namespace DataAccess.Management
 		{
 			try
 			{
+				var _context = new DataContext();
 				var commission = await _context.CommissionRequests.SingleOrDefaultAsync(x => x.Id == commissionImage.CommissionRequestId);
 				if(commission != null)
 				{
@@ -307,6 +270,7 @@ namespace DataAccess.Management
 		{
 			try
 			{
+				var _context = new DataContext();
 				var commission = await _context.CommissionRequests.SingleOrDefaultAsync(x => x.Id == id);
 				if(commission != null)
 				{
@@ -328,6 +292,7 @@ namespace DataAccess.Management
 		{
 			try
 			{
+				var _context = new DataContext();
 				var commission = await _context.CommissionRequests.FindAsync(commissionResendDTO.Id);
 				if(commission != null)
 				{
@@ -346,6 +311,60 @@ namespace DataAccess.Management
 			{
 				throw new Exception(ex.Message);
 			}
+		}
+
+		public async Task EditCommissionImage(CommissionImage image)
+		{
+			try
+			{
+				var _context = new DataContext();
+				var _image = await _context.CommissionImages.FindAsync(image.Id);
+				if (_image == null) throw new Exception("Image not found");
+				_image.Description = image.Description;
+				_image.Url = image.Url;
+				_image.PublicId = image.PublicId;
+				await _context.SaveChangesAsync();
+			}
+			catch(Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+		public async Task Delete(CommissionImage image)
+		{
+			try
+			{
+				var _context = new DataContext();
+				var images = await _context.CommissionImages.Where(x => x.CommissionRequestId == image.CommissionRequestId).OrderBy(x => x.CreatedDate).ToListAsync();
+				var _image = await _context.CommissionImages.FindAsync(image.Id);
+				if (_image == null) throw new Exception("Image not found");
+				_context.CommissionImages.Remove(_image);
+				images.Last().isMain = true;
+				await _context.SaveChangesAsync();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+		public async Task<CommissionImage> GetCommissionImage(int imageId, int userId)
+		{
+			CommissionImage image = null;
+			try
+			{
+				var _context = new DataContext();
+				image = await _context.CommissionImages.FindAsync(imageId);
+				if (!await _context.CommissionRequests.AnyAsync(x => x.Id == image.CommissionRequestId && x.ReceiverId == userId))
+				{
+					image = null;
+				}
+			}
+			catch(Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+			return image;
 		}
 
 	}

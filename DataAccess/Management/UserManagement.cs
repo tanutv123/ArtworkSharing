@@ -19,12 +19,11 @@ namespace DataAccess.Management
 {
     public class UserManagement
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly DataContext _dataContext;
-        private readonly IMapper _mapper;
 
-        public UserManagement(
+        /*private readonly DataContext _dataContext;
+        private readonly IMapper _mapper;*/
+
+        /*public UserManagement(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             DataContext dataContext,
@@ -34,49 +33,29 @@ namespace DataAccess.Management
             _signInManager = signInManager;
             _dataContext = dataContext;
             _mapper = mapper;
-        }
+        }*/
 
-        public async Task<IdentityResult> RegisterAsync(AppUser newUser, string password)
-        {
-            try
-            {
-                if (await IsPhoneExistAsync(newUser.PhoneNumber))
-                {
-                    throw new Exception("Phone number already exists.");
-                }
-                var result = await _userManager.CreateAsync(newUser, password);
-                if (result.Succeeded)
-                {
-                    await _userManager.SetUserNameAsync(newUser, newUser.Email);
-                    await _userManager.AddToRoleAsync(newUser, "Audience");
-                }
-                return result;
-            } catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+        private static UserManagement instance = null;
+        private static readonly object instanceLock = new object();
 
-        public async Task<SignInResult> LoginAsync(string email, string password)
+		public static UserManagement Instance
+		{
+			get
+			{
+				lock (instanceLock)
+				{
+					if (instance == null)
+					{
+						instance = new UserManagement();
+					}
+					return instance;
+				}
+			}
+		}
+        public IQueryable<AppUser> GetUsersAsQueryable()
         {
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null || user.Status == 0 || user.EmailConfirmed == false)
-            {
-                return SignInResult.Failed;
-            }
-            var result = await _signInManager.PasswordSignInAsync(email, password, false,lockoutOnFailure: false);
-            return result;
-        }
-
-        public async Task SignOutAsync()
-        {
-            await _signInManager.SignOutAsync();
-        }
-
-        public async Task<bool> IsPhoneExistAsync(string phone)
-        {
-            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phone);
-            return user != null;
+            var _context = new DataContext();
+            return _context.Users.AsQueryable();
         }
 
         public async Task<AppUser> GetUserDetail(int userId)
@@ -84,7 +63,9 @@ namespace DataAccess.Management
             AppUser userDetailDto = null;
             try
             {
-                userDetailDto = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                var _dataContext = new DataContext();
+
+                userDetailDto = await _dataContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             }
             catch (Exception ex)
@@ -94,56 +75,47 @@ namespace DataAccess.Management
             return userDetailDto;
         }
 
-        public async Task<AppUserProfileDTO> GetUserProfile(int id)
+        public async Task<AppUser> GetUserProfile(int id)
         {
-            AppUserProfileDTO result = null;
+            AppUser result = null;
 
             try
             {
-				result = await _dataContext.Users.Where(x => x.Id == id).ProjectTo<AppUserProfileDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
-            }
-            catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            return result;
-        }
-        
-        public async Task<bool> ChangeUserPassword(AppUser user, string currentPass, string newPass)
-        {
-            try
-            {
-                await _userManager.ChangePasswordAsync(user, currentPass, newPass);
-                return true;
+                var _dataContext = new DataContext();
+                result = await _dataContext.Users.Where(x => x.Id == id).SingleOrDefaultAsync();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
+            return result;
         }
-
-        public async Task<List<AppUserDTO>> GetAllUser()
+        public async Task<List<AppUser>> GetAllUser()
         {
-            List<AppUserDTO> appUsers = null;
+            List<AppUser> appUsers = null;
             try
             {
+                var _dataContext = new DataContext();
                 appUsers = await _dataContext.Users
                     .Include(a => a.UserRoles)
-                    .ProjectTo<AppUserDTO>(_mapper.ConfigurationProvider).ToListAsync();
-            }catch(Exception ex)
+                    .ThenInclude(a => a.Role)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
             return appUsers;
         }
 
-        public async Task<AppUserDTO> GetUserDetailAdmin(int id)
+        public async Task<AppUser> GetUserDetailAdmin(int id)
         {
-            AppUserDTO user = null;
+            AppUser user = null;
 
             try
             {
-                user = await _dataContext.Users.Where(x => x.Id == id).ProjectTo<AppUserDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+                var _dataContext = new DataContext();
+                user = await _dataContext.Users.Where(x => x.Id == id).Include(u => u.UserRoles).ThenInclude(u => u.Role).SingleOrDefaultAsync();
             }
             catch (Exception ex)
             {
@@ -151,80 +123,15 @@ namespace DataAccess.Management
             }
             return user;
         }
-        public async Task AddUser(AppUser appUser, string password)
+        public async Task<AppUser> getUserDetail(AppUser user)
         {
+            AppUser userDetailDto = null;
             try
             {
-                var user = await _userManager.FindByEmailAsync(appUser.Email);
-                if(user == null)
-                {
-                    await _userManager.CreateAsync(appUser, password);
-                    await _userManager.SetUserNameAsync(appUser, appUser.Email);
-                }
-            }catch(Exception ex)
-            {
-                throw new Exception(ex.Message);    
-            }
-        }
-
-        public async Task UpdateUser(AppUser appUser)
-        {
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(appUser.Email);
-                if (user != null)
-                {
-                    user.Name = appUser.Name;
-                    user.PhoneNumber = appUser.PhoneNumber;
-                    user.Email = appUser.Email;
-                    user.Description = appUser.Description;
-                    user.UserRoles = appUser.UserRoles;
-                    user.Status = appUser.Status;
-                    await _userManager.UpdateAsync(user);
-                }
-                else
-                {
-                    throw new Exception("User does not exist");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        public async Task DeleteUser(AppUser appUser)
-        {
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(appUser.Email);
-                if(user != null)
-                {
-                    user.Status = 0; 
-
-/*                    if (user.Status == 0)
-                    {
-                        user.SecurityStamp = Guid.NewGuid().ToString();
-                    }*/
-                    await _userManager.UpdateAsync(user);
-                }
-                else
-                {
-                    throw new Exception("User does not exist");
-                }
-            }catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<UserDetailDTO> getUserDetail(AppUser user)
-        {
-            UserDetailDTO userDetailDto = new UserDetailDTO();
-            try
-            {
-                var user2 = await _userManager.Users.Include(u => u.UserImage)
+                var _dataContext = new DataContext();
+                userDetailDto = await _dataContext.Users
+                    .Include(u => u.UserImage)
                     .FirstOrDefaultAsync(u => u.Email == user.Email);
-                userDetailDto = _mapper.Map<UserDetailDTO>(user);
             }
             catch (Exception ex)
             {

@@ -10,26 +10,43 @@ namespace DataAccess.Management
 {
     public class PurchaseManagement
     {
-        private readonly DataContext _dataContext;
-        private readonly IMapper _mapper;
+		private static PurchaseManagement instance = null;
+		private static readonly object instanceLock = new object();
 
-        public PurchaseManagement(DataContext context, IMapper mapper)
+		public PurchaseManagement() { }
+
+		public static PurchaseManagement Instance
+		{
+			get
+			{
+				lock (instanceLock)
+				{
+					if (instance == null)
+					{
+						instance = new PurchaseManagement();
+					}
+					return instance;
+				}
+			}
+		}
+
+		public IQueryable<Purchase> GetAllAsQueryable() 
         {
-            _dataContext = context;
-            _mapper = mapper;
+			var _dataContext = new DataContext();
+			return _dataContext.Purchases.AsQueryable();
         }
-        
+
 
         public void AddPurchase(Purchase purchase)
         {
             try
             {
+                var _dataContext = new DataContext();
                 if (_dataContext != null && _dataContext.Purchases != null)
                 {
                     _dataContext.Purchases.Add(purchase);
                     _dataContext.SaveChanges();
                 }
-
             }
             catch (Exception exception)
             {
@@ -39,14 +56,16 @@ namespace DataAccess.Management
 
         public List<Purchase> GetPurchases()
         {
-            List<Purchase> purchases = new List<Purchase>();
+            var purchases = new List<Purchase>();
             try
             {
-                if (_dataContext != null && _dataContext.Purchases != null)
+				var _dataContext = new DataContext();
+				if (_dataContext != null && _dataContext.Purchases != null)
                 {
                     purchases = _dataContext.Purchases
                         .Include(p => p.AppUser)
                         .Include(p => p.Artwork)
+                        .ThenInclude(a => a.AppUser)
                         .ToList();
                     return purchases;
                 }
