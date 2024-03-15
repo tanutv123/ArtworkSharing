@@ -17,15 +17,17 @@
 			<div class="row mb-3">
 
 				<div class="col-md-4 mb-3">
-					<div class="card" style="width: 25rem; height:30rem">
-						<img src="@image.Url" class="card-img-top" alt="progress image">
-						<div class="card-body">
+					<div class="card" >
+						<div style="height:60%">
+							<img src="@image.Url" class="card-img-top" style="width:100%; height: 100%" alt="progress image">
+						</div>
+						<div class="card-body" style="height: 40%">
 							<h4 class="card-text">@image.CreatedDate.ToShortDateString()</h4>
 							<p class="card-text">@image.Description</p>
+							<a class="btn btn-primary" href="/artist/editcommissionimage?id=@image.Id">Edit</a>
 						</div>
 					</div>
 				</div>
-
 			</div>
 		}
 		<div class="row mb-3">

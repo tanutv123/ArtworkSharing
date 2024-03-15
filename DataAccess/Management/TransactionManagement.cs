@@ -9,18 +9,31 @@ namespace DataAccess.Management
 {
     public class TransactionManagement
     {
-        private readonly DataContext _dataContext;
+		private static TransactionManagement instance = null;
+		private static readonly object instanceLock = new object();
 
-        public TransactionManagement(DataContext dataContext)
-        {
-            _dataContext = dataContext;
-        }
+		public TransactionManagement() { }
 
-        public async Task<IList<Transaction>> getAllTransactions()
+		public static TransactionManagement Instance
+		{
+			get
+			{
+				lock (instanceLock)
+				{
+					if (instance == null)
+					{
+						instance = new TransactionManagement();
+					}
+					return instance;
+				}
+			}
+		}
+		public async Task<IList<Transaction>> getAllTransactions()
         {
             IList<Transaction> list = new List<Transaction>();
             try
             {
+                var _dataContext = new DataContext();
                 list = await _dataContext.Transactions
                     .Include(t => t.Receiver)
                     .Include(t => t.Sender)

@@ -1,0 +1,76 @@
+﻿@page
+@model Presentation.Pages.Artist.EditCommissionImageModel
+@{
+}
+@if(Model.CommissionImage != null)
+{
+	<div class="container">
+		<div class="row mb-3">
+			<form method="post">
+				<div>
+					<div class="text text-danger" asp-validation-summary="All"></div>
+					<input type="hidden" asp-for="CommissionImage.Id" readonly />
+					<input type="hidden" asp-for="CommissionImage.CommissionRequestId" readonly />
+					<div class="mb-3">
+						<label for="desc" class="form-label">Description: </label>
+						<input type="text" class="form-control" id="desc" asp-for="CommissionImage.Description">
+						<span class="text-danger" asp-validation-for="CommissionImage.Description"></span>
+					</div>
+					<div class="mb-3">
+						<label for="artworkImageUpload" class="form-label">Change Image</label>
+						<input type="file" class="form-control" id="artworkImageUpload">
+						<img src="" id="artworkImageDisplay" style="display:none;width:300px;" />
+					</div>
+					<div class="mb-3">
+						<label for="publicId" class="form-label">Public Id</label>
+						<input type="text" readonly class="form-control" id="publicId" asp-for="CommissionImage.PublicId">
+						<img src="" id="artworkImageDisplay" style="display:none;width:300px;" />
+					</div>
+					<div class="mb-3">
+						<label for="artworkImage" class="form-label">Image Url</label>
+						<input type="text" class="form-control" id="artworkImage" asp-for="CommissionImage.Url" readonly>
+						<span class="text-danger" asp-validation-for="CommissionImage.Url"></span>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary" asp-page-handler="Edit">Edit</button>
+					<button type="submit" class="btn btn-danger" asp-page-handler="Delete">Delete</button>
+				</div>
+			</form>
+		</div>
+	</div>
+}
+else
+{
+	<h3>Commission Image Not Found!</h3>
+}
+
+@section Scripts {
+	<script>
+		const artworkImageUpload = document.getElementById('artworkImageUpload');
+		const artworkImage = document.getElementById('artworkImage');
+		const artworkImageDisplay = document.getElementById('artworkImageDisplay');
+		const publicId = document.getElementById('publicId');
+		async function uploadArtworkImage(e) {
+
+			let data = new FormData();
+			data.append('file', e.target.files[0]);
+
+			await fetch('/api/image', {
+				method: 'POST',
+				header: {
+					'Accept': '*/*',
+
+				},
+				body: data
+			}).then(response => response.json())
+				.then(result => {
+					artworkImage.value = result.link;
+					artworkImageDisplay.style.display = 'block';
+					artworkImageDisplay.src = result.link;
+					publicId.value = result.publicId;
+				});
+		}
+		artworkImageUpload.addEventListener('change', uploadArtworkImage)
+	</script>
+}
