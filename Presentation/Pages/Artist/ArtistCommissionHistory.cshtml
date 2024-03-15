@@ -116,6 +116,8 @@
 												<div class="modal-body">
 													<div class="text text-danger" asp-validation-summary="All"></div>
 													<input type="hidden" class="form-control" id="commissionId" asp-for="CommissionId" value="@request.Id" readonly>
+													<input type="hidden" class="form-control" id="commissionId" asp-for="MinPrice" value="@request.MinPrice" readonly>
+													<input type="hidden" class="form-control" id="commissionId" asp-for="MaxPrice" value="@request.MaxPrice" readonly>
 													<div class="mb-3">
 														<label for="actualPrice" class="form-label">Actual Price: </label>
 														<input type="number" class="form-control" id="actualPrice" asp-for="ActualPrice">
