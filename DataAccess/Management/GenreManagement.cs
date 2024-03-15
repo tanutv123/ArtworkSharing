@@ -9,18 +9,32 @@ namespace DataAccess.Management
 {
     public class GenreManagement
     {
-        private readonly DataContext _context;
+		private static GenreManagement instance = null;
+		private static readonly object instanceLock = new object();
 
-        public GenreManagement(DataContext context)
-        {
-            _context = context;
-        }
+		public GenreManagement() { }
 
-        public async Task<List<Genre>> GetGenresAsync()
+		public static GenreManagement Instance
+		{
+			get
+			{
+				lock (instanceLock)
+				{
+					if (instance == null)
+					{
+						instance = new GenreManagement();
+					}
+					return instance;
+				}
+			}
+		}
+
+		public async Task<List<Genre>> GetGenresAsync()
         {
             List<Genre> genres = null;
             try
             {
+                var _context = new DataContext();
                 genres = await _context.Genres.ToListAsync();
             }
             catch(Exception ex)
