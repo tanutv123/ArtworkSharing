@@ -25,9 +25,6 @@ namespace Repository
             _userManager = userManager;
             _signInManager = signInManager;
 		}
-
-        public async Task DeleteUser(AppUser appUser) => await UserManagement.GetInstance(_userManager, _signInManager).DeleteUser(appUser);
-
         public async Task<List<AppUserDTO>> GetAllUser()
         {
             var users = await UserManagement.GetInstance(_userManager, _signInManager).GetAllUser();
@@ -103,23 +100,78 @@ namespace Repository
             return user != null;
         }
 
-        public async Task UpdateUser(AppUser appUser)
-        {
-            await UserManagement.GetInstance(_userManager, _signInManager).UpdateUser(appUser);
-        }
         public async Task<AppUser> GetUserById(int userId)
         {
             return await UserManagement.GetInstance(_userManager, _signInManager).GetUserDetail(userId);
         }
 
-        public async Task AddUser(AppUser appUser, string password)
-        {
-            await UserManagement.GetInstance(_userManager, _signInManager).AddUser(appUser, password);
-        }
         public async Task<UserDetailDTO> getUserDetail(AppUser user)
         {
             var detail = await UserManagement.GetInstance(_userManager, _signInManager).getUserDetail(user);
             return _mapper.Map<UserDetailDTO>(detail);
+        }
+
+        public async Task AddUser(AppUser appUser, string password)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(appUser.Email);
+                if (user == null)
+                {
+                    await _userManager.CreateAsync(appUser, password);
+                    await _userManager.SetUserNameAsync(appUser, appUser.Email);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task UpdateUser(AppUser appUser)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(appUser.Email);
+                if (user != null)
+                {
+                    user.Name = appUser.Name;
+                    user.PhoneNumber = appUser.PhoneNumber;
+                    user.Email = appUser.Email;
+                    user.Description = appUser.Description;
+                    user.UserRoles = appUser.UserRoles;
+                    user.Status = appUser.Status;
+                    await _userManager.UpdateAsync(user);
+                }
+                else
+                {
+                    throw new Exception("User does not exist");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public async Task DeleteUser(AppUser appUser)
+        {
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(appUser.Email);
+                if (user != null)
+                {
+                    user.Status = 0;
+                    await _userManager.UpdateAsync(user);
+                }
+                else
+                {
+                    throw new Exception("User does not exist");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<bool> SignAsArtist(int userId)

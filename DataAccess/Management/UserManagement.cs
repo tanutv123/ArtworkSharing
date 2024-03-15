@@ -185,10 +185,11 @@ namespace DataAccess.Management
         {
             try
             {
-                var user = await GetUserDetailAdmin(appUser.Id);
+                var user = await _userManager.FindByEmailAsync(appUser.Email);
                 if (user == null)
                 {
-                    
+                    await _userManager.CreateAsync(appUser, password);
+                    await _userManager.SetUserNameAsync(appUser, appUser.Email);
                 }
             }
             catch (Exception ex)
@@ -201,7 +202,7 @@ namespace DataAccess.Management
         {
             try
             {
-                var user = await GetUserDetailAdmin(appUser.Id);
+                var user = await _userManager.FindByEmailAsync(appUser.Email);
                 if (user != null)
                 {
                     user.Name = appUser.Name;
@@ -226,7 +227,7 @@ namespace DataAccess.Management
         {
             try
             {
-                var user = await GetUserDetailAdmin(appUser.Id);
+                var user = await _userManager.FindByEmailAsync(appUser.Email);
                 if (user != null)
                 {
                     user.Status = 0;
