@@ -80,7 +80,9 @@ namespace Presentation.Pages.Artist
                 var artworkimg = _mapper.Map<ArtworkImage>(addArtworkImageDTO);
                 await _artworkRepository.UpdateArtwork(artwork);
                 await _artworkRepository.UpdateArtworkImage(artworkimg);
-            }
+				TempData["Message"] = "Artwork has been Updated successfully!";
+				return Redirect("/Audience/ArtistPage?userId=" + User.GetUserId());
+			}
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);

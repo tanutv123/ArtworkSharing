@@ -205,9 +205,10 @@ namespace DataAccess.Management
                 if (_dataContext != null && _dataContext.Artworks != null)
                 {
                     artworks = await _dataContext.Artworks
+                        .Where(x => x.Status == 1)
                         .Include(a => a.ArtworkImage)
                         .Include(a => a.Genre)
-                        .Include(a => a.AppUser).Where(a => a.AppUserId == artistid)
+                        .Include(a => a.AppUser).Where(a => a.AppUserId == artistid )
                         .ToListAsync();
                 }
                 return artworks;
@@ -326,14 +327,14 @@ namespace DataAccess.Management
                 var artimg = await _dataContext.ArtworkImages.SingleOrDefaultAsync(x => x.Id == artworkImage.Id);
 				if (art != null && artimg != null)
 				{
-					artworkImage.Url = artimg.Url;
-                    artworkImage.PublicId = artimg.PublicId;
+					artimg.Url = artworkImage.Url;
+                    artimg.PublicId = artworkImage.PublicId;
 
 					await _dataContext.SaveChangesAsync();
 				}
 				else
 				{
-					throw new Exception("Artwork not found!");
+					throw new Exception("Artwork Image not found!");
 				}
 			}
 			catch (Exception ex)
@@ -380,11 +381,21 @@ namespace DataAccess.Management
             {
                 var _context = new DataContext();
                 var isPurchase = await _context.Purchases.AnyAsync(x => x.ArtworkId == purchase.ArtworkId && x.AppUserId == purchase.AppUserId);
+                var isExistTransaction = await _context.Transactions.AnyAsync(x => x.SenderId == transaction.SenderId && x.ReceiverId == transaction.ReceiverId);
+                var index = await _context.Transactions.Where(x => x.SenderId == transaction.SenderId && x.ReceiverId == transaction.ReceiverId).FirstOrDefaultAsync();
                 if (!isPurchase)
                 {
                     await _context.Purchases.AddAsync(purchase);
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync();                   
+                }
+                if (!isExistTransaction)
+                {
                     await _context.Transactions.AddAsync(transaction);
+                    await _context.SaveChangesAsync();
+                } else
+                {
+                    index.Money += transaction.Money;
+                    index.CreatedDate = transaction.CreatedDate;
                     await _context.SaveChangesAsync();
                 }
                 
@@ -434,6 +445,18 @@ namespace DataAccess.Management
             }
 
             return false;
+        }
+        public async Task<bool> HasUserBuy(int userId, int artworkId)
+        {
+            try
+            {
+                var _context = new DataContext();
+                return await _context.Purchases.AnyAsync(a => a.AppUserId == userId && a.ArtworkId == artworkId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

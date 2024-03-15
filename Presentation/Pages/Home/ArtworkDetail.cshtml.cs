@@ -35,17 +35,21 @@ namespace Presentation.Pages.Home
         public bool Likes { get; set; }
         public int UserId { get; set; }
         public bool Follows { get; set; }
+        public bool Bought {  get; set; }
+        public string DownloadUrl { get; set; }
 
 
         public async Task OnGetAsync(int id)
         {
             Artwork = await _artworkRepository.GetArtworkById(id);
-            Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.Url);
+            Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
             ArtworkComment = await _artworkRepository.GetArtworkComments(id);
             if (Artwork != null)
             {
                 Likes = await _artworkRepository.HasUserLikedArtwork(User.GetUserId(), id);
                 Follows = await _artworkRepository.HasUserFollowed(User.GetUserId(), Artwork.AppUserId);
+                Bought = await _artworkRepository.HasUserBought(User.GetUserId(), id);
+                DownloadUrl = _imageService.GetImageUploadUrl(Artwork.ArtworkImage.PublicId);
             }
             UserId = User.GetUserId();
         }
@@ -54,11 +58,14 @@ namespace Presentation.Pages.Home
         {
             //Keep Page State
             Artwork = await _artworkRepository.GetArtworkById(AddComment.Artworkid);
-            ArtworkComment = await _artworkRepository.GetArtworkComments(AddComment.Artworkid);
+            Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
+
             if (Artwork != null)
             {
                 Likes = await _artworkRepository.HasUserLikedArtwork(User.GetUserId(), AddComment.Artworkid);
                 Follows = await _artworkRepository.HasUserFollowed(User.GetUserId(), Artwork.AppUserId);
+                Bought = await _artworkRepository.HasUserBought(User.GetUserId(), AddComment.Artworkid);
+                DownloadUrl = _imageService.GetImageUploadUrl(Artwork.ArtworkImage.PublicId);
             }
             UserId = User.GetUserId();
             //
@@ -75,6 +82,7 @@ namespace Presentation.Pages.Home
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
             }
+            ArtworkComment = await _artworkRepository.GetArtworkComments(AddComment.Artworkid);
             return Page();
         }
 
@@ -82,6 +90,7 @@ namespace Presentation.Pages.Home
         {
             //Keep Page State
             Artwork = await _artworkRepository.GetArtworkById(AddLikeDTO.ArtworkId);
+            Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
             ArtworkComment = await _artworkRepository.GetArtworkComments(AddLikeDTO.ArtworkId);
             
             UserId = User.GetUserId();
@@ -100,6 +109,8 @@ namespace Presentation.Pages.Home
             {
                 Likes = await _artworkRepository.HasUserLikedArtwork(User.GetUserId(), AddLikeDTO.ArtworkId);
                 Follows = await _artworkRepository.HasUserFollowed(User.GetUserId(), Artwork.AppUserId);
+                Bought = await _artworkRepository.HasUserBought(User.GetUserId(), AddLikeDTO.ArtworkId);
+                DownloadUrl = _imageService.GetImageUploadUrl(Artwork.ArtworkImage.PublicId);
             }
             return Page();
         }
@@ -108,6 +119,7 @@ namespace Presentation.Pages.Home
         {
             //Keep Page State
             Artwork = await _artworkRepository.GetArtworkById(AddLikeDTO.ArtworkId);
+            Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
             ArtworkComment = await _artworkRepository.GetArtworkComments(AddLikeDTO.ArtworkId);
             
             UserId = User.GetUserId();
@@ -115,8 +127,7 @@ namespace Presentation.Pages.Home
             if (AddFollowDTO != null)
             {
                 AddFollowDTO.AppUserId = User.GetUserId();
-            } //When Debug reach here. TargetUserId was 0 and AppUserId was 13.
-              //I was expecting TargerUserId to be 4 but no its 0
+            } 
             if (!ModelState.IsValid) return Page();
             try
             {
@@ -130,6 +141,8 @@ namespace Presentation.Pages.Home
             {
                 Likes = await _artworkRepository.HasUserLikedArtwork(User.GetUserId(), AddLikeDTO.ArtworkId);
                 Follows = await _artworkRepository.HasUserFollowed(User.GetUserId(), Artwork.AppUserId);
+                Bought = await _artworkRepository.HasUserBought(User.GetUserId(), AddLikeDTO.ArtworkId);
+                DownloadUrl = _imageService.GetImageUploadUrl(Artwork.ArtworkImage.PublicId);
             }
             return Page();
         }
@@ -138,11 +151,13 @@ namespace Presentation.Pages.Home
         {
             //Keep Page State
             Artwork = await _artworkRepository.GetArtworkById(AddLikeDTO.ArtworkId);
+            Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
             ArtworkComment = await _artworkRepository.GetArtworkComments(AddLikeDTO.ArtworkId);
             if (Artwork != null)
             {
                 Likes = await _artworkRepository.HasUserLikedArtwork(User.GetUserId(), AddLikeDTO.ArtworkId);
                 Follows = await _artworkRepository.HasUserFollowed(User.GetUserId(), Artwork.AppUserId);
+                DownloadUrl = _imageService.GetImageUploadUrl(Artwork.ArtworkImage.PublicId);
             }
             UserId = User.GetUserId();
             //
@@ -158,12 +173,42 @@ namespace Presentation.Pages.Home
             try
             {
                 await _artworkRepository.BuyArtwork(addPurchaseDTO,addTransationDTO);
+                TempData["Message"] = "Artwork has been Bought successfully!";
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
             }
+            Bought = await _artworkRepository.HasUserBought(User.GetUserId(), AddLikeDTO.ArtworkId);
             return Page();
         }
+
+        /*public async Task<IActionResult> OnPostDownload()
+        {
+            //Keep Page State
+            Artwork = await _artworkRepository.GetArtworkById(AddLikeDTO.ArtworkId);
+            Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
+            ArtworkComment = await _artworkRepository.GetArtworkComments(AddLikeDTO.ArtworkId);
+            if (Artwork != null)
+            {
+                Likes = await _artworkRepository.HasUserLikedArtwork(User.GetUserId(), AddLikeDTO.ArtworkId);
+                Follows = await _artworkRepository.HasUserFollowed(User.GetUserId(), Artwork.AppUserId);
+                Bought = await _artworkRepository.HasUserBought(User.GetUserId(), AddLikeDTO.ArtworkId);
+            }
+            UserId = User.GetUserId();
+            //
+            
+            if (!ModelState.IsValid) return Page();
+            try
+            {
+                
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+            
+            return Page();
+        }*/
     }
 }

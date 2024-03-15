@@ -71,8 +71,10 @@ namespace Presentation.Pages.Artist
 				var artwork = _mapper.Map<Artwork>(addArtworkDTO);
                 await _artworkRepository.DeleteArtwork(artworkid);
                 await _imageService.DeletePhotoAsync(publicId);
-				
-			}
+                TempData["Message"] = "Artwork has been Deleted successfully!";
+                return Redirect("/Audience/ArtistPage?userId=" + User.GetUserId());
+
+            }
 			catch (Exception ex)
 			{
 				ModelState.AddModelError(string.Empty, ex.Message);

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Presentation.Extensions;
+using Presentation.Services;
 using Repository;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -16,10 +17,12 @@ namespace Presentation.Pages.Home
     public class IndexModel : PageModel
     {
         private readonly IArtworkRepository _artworkRepository;
+        private readonly IImageService _imageService;
 
-        public IndexModel(IArtworkRepository artworkRepository)
+        public IndexModel(IArtworkRepository artworkRepository, IImageService imageService)
         {
             _artworkRepository = artworkRepository;
+            _imageService = imageService;
         }
 
         public IEnumerable<Artwork> Artworks { get; set; } 
@@ -39,7 +42,11 @@ namespace Presentation.Pages.Home
         public async Task OnGetAsync()
         {
             Artworks = await _artworkRepository.GetPaginatedResult(CurrentPage, PageSize);
-            Count = await _artworkRepository.GetCount();            
+            foreach (var Artwork in Artworks)
+            {
+                Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
+            }
+            Count = await _artworkRepository.GetCount();
             /*Artworks = await _artworkRepository.GetArtworks();*/
 
         }
@@ -49,12 +56,20 @@ namespace Presentation.Pages.Home
             if (System.String.IsNullOrEmpty(title))
             {
                 Artworks = await _artworkRepository.GetArtworks();
+                foreach (var Artwork in Artworks)
+                {
+                    Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
+                }
                 return Page();
 
             }
             else
             {
                 Artworks = await _artworkRepository.GetArtworkByTitle(title);
+                foreach (var Artwork in Artworks)
+                {
+                    Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
+                }
                 return Page();
             }
         }

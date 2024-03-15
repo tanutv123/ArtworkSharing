@@ -49,11 +49,26 @@
 					<label for="artworkImage" class="form-label">Artwork Image Url</label>
 					<input type="text" class="form-control" id="artworkImage" asp-for="addArtworkImageDTO.Url" readonly>
 					<span class="text-danger" asp-validation-for="addArtworkImageDTO.Url"></span>
+					<button type="button" class="btn btn-primary" id="buttonAdd" data-bs-toggle="modal" data-bs-target="#confirmModal">Add</button>
 				</div>
+
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-				<button type="submit" class="btn btn-primary">Add</button>
+			<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="confirmModalLabel">Confirm Add</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							Are you sure you want to add this artwork?
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+							<button type="button" class="btn btn-primary" id="confirmAddButton">Yes</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		</form>
 	</div>
@@ -66,8 +81,9 @@
 		const artworkImage = document.getElementById('artworkImage');
 		const artworkImageDisplay = document.getElementById('artworkImageDisplay');
 		const publicId = document.getElementById('publicId');
+		const buttonAdd = document.getElementById('buttonAdd');
 		async function uploadArtworkImage(e) {
-
+			buttonAdd.disabled = true
 			let data = new FormData();
 			data.append('file', e.target.files[0]);
 
@@ -85,7 +101,23 @@
 					artworkImageDisplay.src = result.link;
 					publicId.value = result.publicId;
 				});
+			buttonAdd.disabled = false
 		}
 		artworkImageUpload.addEventListener('change', uploadArtworkImage)
+
+		const addButton = document.querySelector('[data-bs-toggle="modal"]');
+		addButton.addEventListener('click', function (event) {
+
+			$('#confirmModal').modal('show');
+		});
+
+
+		const confirmAddButton = document.getElementById('confirmAddButton');
+		confirmAddButton.addEventListener('click', function () {
+
+			document.forms[0].submit();
+
+			$('#confirmModal').modal('hide');
+		});
 	</script>
 }
