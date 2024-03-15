@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using DataAccess.Data;
 
 namespace Repository
 {
@@ -18,6 +19,7 @@ namespace Repository
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly DataContext _dataContext;  
 
 		public UserRepository(IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
@@ -27,20 +29,20 @@ namespace Repository
 		}
         public async Task<List<AppUserDTO>> GetAllUser()
         {
-            var users = await UserManagement.GetInstance(_userManager, _signInManager).GetAllUser();
+            var users = await UserManagement.GetInstance(_userManager, _signInManager, _dataContext).GetAllUser();
             return users.Select(user => _mapper.Map<AppUserDTO>(user)).ToList();
         }
 
 
         public async Task<AppUserDTO> GetUserDetailAdmin(int id)
         {
-            var detail = await UserManagement.GetInstance(_userManager,_signInManager).GetUserDetailAdmin(id);
+            var detail = await UserManagement.GetInstance(_userManager,_signInManager, _dataContext).GetUserDetailAdmin(id);
             return _mapper.Map<AppUserDTO>(detail);
         }
 
         public async Task<AppUserProfileDTO> GetUserProfile(int id)
 		{
-            var detail = await UserManagement.GetInstance(_userManager,_signInManager).GetUserProfile(id);
+            var detail = await UserManagement.GetInstance(_userManager,_signInManager, _dataContext).GetUserProfile(id);
 			return _mapper.Map<AppUserProfileDTO>(detail);
 		}
 
@@ -48,7 +50,7 @@ namespace Repository
         {
             try
             {
-                await UserManagement.GetInstance(_userManager, _signInManager).ChangeUserPassword(appUser, currentPassword, newPassword);
+                await UserManagement.GetInstance(_userManager, _signInManager, _dataContext).ChangeUserPassword(appUser, currentPassword, newPassword);
             }
             catch (Exception ex)
             {
@@ -102,12 +104,12 @@ namespace Repository
 
         public async Task<AppUser> GetUserById(int userId)
         {
-            return await UserManagement.GetInstance(_userManager, _signInManager).GetUserDetail(userId);
+            return await UserManagement.GetInstance(_userManager, _signInManager, _dataContext).GetUserDetail(userId);
         }
 
         public async Task<UserDetailDTO> getUserDetail(AppUser user)
         {
-            var detail = await UserManagement.GetInstance(_userManager, _signInManager).getUserDetail(user);
+            var detail = await UserManagement.GetInstance(_userManager, _signInManager, _dataContext).getUserDetail(user);
             return _mapper.Map<UserDetailDTO>(detail);
         }
 
@@ -176,7 +178,7 @@ namespace Repository
 
         public async Task<bool> SignAsArtist(int userId)
         {
-            return await UserManagement.GetInstance(_userManager, _signInManager).SignAsArtist(userId);
+            return await UserManagement.GetInstance(_userManager, _signInManager, _dataContext).SignAsArtist(userId);
         }
     }
 }

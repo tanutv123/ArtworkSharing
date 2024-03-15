@@ -38,22 +38,24 @@ namespace DataAccess.Management
 
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly DataContext _dataContext;
         private static UserManagement instance = null;
         private static readonly object instanceLock = new object();
 
-        public UserManagement(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public UserManagement(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, DataContext dataContext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _dataContext = dataContext;
         }
 
-        public static UserManagement GetInstance(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public static UserManagement GetInstance(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, DataContext dataContext)
         {
             lock (instanceLock)
             {
                 if (instance == null)
                 {
-                    instance = new UserManagement(userManager, signInManager);
+                    instance = new UserManagement(userManager, signInManager, dataContext);
                 }
                 return instance;
             }
@@ -109,7 +111,9 @@ namespace DataAccess.Management
             AppUser userDetailDto = null;
             try
             {
-                userDetailDto = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                var _dataContext = new DataContext();
+
+                userDetailDto = await this._dataContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             }
             catch (Exception ex)
@@ -249,7 +253,9 @@ namespace DataAccess.Management
             AppUser userDetailDto = null;
             try
             {
-                userDetailDto = await _userManager.Users.Include(u => u.UserImage)
+                var _dataContext = new DataContext();
+                userDetailDto = await _dataContext.Users
+                    .Include(u => u.UserImage)
                     .FirstOrDefaultAsync(u => u.Email == user.Email);
             }
             catch (Exception ex)

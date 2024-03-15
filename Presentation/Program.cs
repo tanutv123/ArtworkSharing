@@ -66,7 +66,6 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddSignalR();
-
 builder.Services.AddScoped<UserManagement>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<CommissionManagement>();
