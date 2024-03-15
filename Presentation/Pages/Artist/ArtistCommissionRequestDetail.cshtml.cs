@@ -32,7 +32,7 @@ namespace Presentation.Pages.Artist
         public List<CommissionImage> CommissionImages{ get; set; }
         [BindProperty]
         public AddCommissionImageDTO AddCommissionImageDTO{ get; set; } = new AddCommissionImageDTO();
-        public DateTime CommissionStartDate { get; set; }
+		public DateTime CommissionStartDate { get; set; }
         public DateTime CommissionEndDate { get; set; }
         public bool IsAddImageSuccess { get; set; } = false;
         public async Task OnGet(int id, bool isAddImageSuccess = false)
@@ -93,7 +93,6 @@ namespace Presentation.Pages.Artist
 				isAddImageSuccess = true
 			});
         }
-
 		public async Task<IActionResult> OnPostDone()
 		{
 			if (AddCommissionImageDTO.CommissionRequestId == 0)
