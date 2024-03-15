@@ -20,6 +20,10 @@ namespace Presentation.Pages.Artist
         [BindProperty]
         public int CommissionId { get; set; }
 		[BindProperty]
+		public decimal MinPrice { get; set; }
+		[BindProperty]
+		public decimal MaxPrice { get; set; }
+		[BindProperty]
 		public string? NotAcceptedReason { get; set; }
 		[BindProperty]
 		public int? ActualPrice { get; set; }
@@ -56,9 +60,15 @@ namespace Presentation.Pages.Artist
 				IsInvalidAccept = true;
 				return Page();
 			}
+			if (ActualPrice < MinPrice || ActualPrice > MaxPrice)
+			{
+				ModelState.AddModelError(string.Empty, $"Your Price must be between {MinPrice} and {MaxPrice}");
+				IsInvalidAccept = true;
+				return Page();
+			}
 
 
-            try
+			try
             {
                 await _commissionRepository.AcceptCommissionRequest(CommissionId, ActualPrice.Value);
 				IsInvalidAccept = false;

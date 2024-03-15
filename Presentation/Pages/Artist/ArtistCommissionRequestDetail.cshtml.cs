@@ -44,8 +44,11 @@ namespace Presentation.Pages.Artist
 				CommissionStartDate = commission.RequestDate;
 				CommissionEndDate = commission.DueDate;
 				CommissionImages = commission.CommissionImages.OrderBy(x => x.CreatedDate).ToList();
-				CommissionImages.Any(x => x.isMain == true);
-				CommissionImages.Last().isMain = true;
+				if(CommissionImages.Any())
+				{
+					CommissionImages.Any(x => x.isMain == true);
+					CommissionImages.Last().isMain = true;
+				}
 				AddCommissionImageDTO.CommissionRequestId = id;
 				IsAddImageSuccess = isAddImageSuccess;
 			}
