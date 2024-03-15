@@ -85,5 +85,10 @@ namespace Repository
         {
             return await _userManagement.getUserDetail(user);
         }
+
+        public async Task<bool> SignAsArtist(int userId)
+        {
+            return await _userManagement.SignAsArtist(userId);
+        }
     }
 }

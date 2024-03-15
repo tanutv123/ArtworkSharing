@@ -405,5 +405,35 @@ namespace DataAccess.Management
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<bool> ChangeArtworkStatusAdmin(int artworkId)
+        {
+            try
+            {
+                var _context = new DataContext();
+                var uArtwork = await _context.Artworks.AsNoTracking().FirstOrDefaultAsync(a => a.Id == artworkId);
+                if (uArtwork.Status == 1)
+                {
+                    uArtwork.Status = 0;
+                    _context.Artworks.Update(uArtwork);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else if (uArtwork.Status == 0)
+                {
+                    uArtwork.Status = 1;
+                    _context.Artworks.Update(uArtwork);
+                    await _context.SaveChangesAsync();
+                    return true;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return false;
+        }
     }
 }

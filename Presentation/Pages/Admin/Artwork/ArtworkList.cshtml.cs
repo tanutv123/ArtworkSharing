@@ -20,4 +20,11 @@ public class ArtworkList : PageModel
     {
         Artworks = await _artworkRepository.GetArtworkAdmin();
     }
+
+    public async Task<IActionResult> OnPostChangeStatus(int Id)
+    {
+        await _artworkRepository.ChangeArtworkStatusAdmin(Id);
+        await OnGet();
+        return Page();
+    }
 }
