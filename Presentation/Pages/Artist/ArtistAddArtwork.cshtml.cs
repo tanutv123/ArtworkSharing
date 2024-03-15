@@ -66,6 +66,8 @@ namespace Presentation.Pages.Artist
 				addArtworkImageDTO.isMain = true;
 				artwork.ArtworkImage = _mapper.Map<ArtworkImage>(addArtworkImageDTO);
 				await _artworkRepository.AddArtwork(artwork);
+				TempData["Message"] = "Artwork has been added successfully!";
+				return Redirect("/Audience/ArtistPage?userId=" + User.GetUserId());
 			}
 			catch (Exception ex)
 			{

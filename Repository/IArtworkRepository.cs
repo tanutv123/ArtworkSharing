@@ -29,6 +29,7 @@ namespace Repository
         Task<bool> HasUserLikedArtwork(int userId, int artworkId);
         Task BuyArtwork(AddPurchaseDTO addPurchase, AddTransationDTO addTransationDTO);
         Task<bool> HasUserFollowed(int sourceId, int targetId);
+        Task<bool> HasUserBought(int userId, int artworkId);
     }
 
 }

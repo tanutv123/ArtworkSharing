@@ -101,6 +101,10 @@ namespace Repository
         {
             return await ArtworkManagement.Instance.HasUserFollowed(sourceId, targetId);
         }
+        public async Task<bool> HasUserBought(int userId, int artworkId)
+        {
+            return await ArtworkManagement.Instance.HasUserBuy(userId, artworkId);
+        }
         public async Task BuyArtwork(AddPurchaseDTO addPurchase, AddTransationDTO addTransationDTO)
         {
             var purchase = _mapper.Map<Purchase>(addPurchase);

@@ -62,8 +62,25 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-				<button type="submit" class="btn btn-primary">Update</button>
+				<button type="button" class="btn btn-primary" id="buttonUpdate" data-bs-toggle="modal" data-bs-target="#confirmModal">Update</button>
+			</div>
+
+			<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="confirmModalLabel">Confirm Add</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<div class="modal-body">
+							Are you sure you want to update this artwork?
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+							<button type="button" class="btn btn-primary" id="confirmAddButton">Yes</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		</form>
 	</div>
@@ -75,8 +92,9 @@
 		const artworkImage = document.getElementById('artworkImage');
 		const artworkImageDisplay = document.getElementById('artworkImageDisplay');
 		const publicId = document.getElementById('publicId');
+		const buttonUpdate = document.getElementById('buttonUpdate');
 		async function uploadArtworkImage(e) {
-
+			buttonUpdate.disabled = true
 			let data = new FormData();
 			data.append('file', e.target.files[0]);
 
@@ -94,7 +112,23 @@
 					artworkImageDisplay.src = result.link;
 					publicId.value = result.publicId;
 				});
+			buttonUpdate.disabled = false
 		}
 		artworkImageUpload.addEventListener('change', uploadArtworkImage)
+
+		const addButton = document.querySelector('[data-bs-toggle="modal"]');
+		addButton.addEventListener('click', function (event) {
+
+			$('#confirmModal').modal('show');
+		});
+
+
+		const confirmAddButton = document.getElementById('confirmAddButton');
+		confirmAddButton.addEventListener('click', function () {
+
+			document.forms[0].submit();
+
+			$('#confirmModal').modal('hide');
+		});
 	</script>
 }
