@@ -43,6 +43,10 @@ builder.Services.AddAuthentication(options =>
 	options.DefaultScheme = IdentityConstants.ApplicationScheme;
 	options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
 }).AddIdentityCookies();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+	options.LoginPath = "/Account/LoginPage";
+});
 builder.Services.AddAuthorization(options =>
 {
 	options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
