@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using BusinessObject.Entities;
 using DataAccess.Data;
@@ -66,6 +67,31 @@ namespace DataAccess.Management
                         .Include(p => p.AppUser)
                         .Include(p => p.Artwork)
                         .ThenInclude(a => a.AppUser)
+                        .ToList();
+                    return purchases;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
+            return purchases;
+        }
+        
+        public async Task<List<Purchase>> GetBuyListForUsers(int userId)
+        {
+            var purchases = new List<Purchase>();
+            try
+            {
+                var _dataContext = new DataContext();
+                if (_dataContext != null && _dataContext.Purchases != null)
+                {
+                    purchases = _dataContext.Purchases
+                        .Include(p => p.AppUser)
+                        .Include(p => p.Artwork)
+                        .ThenInclude(a => a.AppUser)
+                        .Where(p => p.AppUserId == userId)
                         .ToList();
                     return purchases;
                 }
