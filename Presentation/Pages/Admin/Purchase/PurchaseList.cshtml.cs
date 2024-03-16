@@ -25,7 +25,7 @@ public class PurchaseList : PageModel
         Purchases = list;
         foreach (var purchase in list)
         {
-            decimal profit = (purchase.BuyPrice * 95 / 100);
+            decimal profit = (purchase.BuyPrice * 10 / 100);
             totalIncome += profit;
         }
     }
