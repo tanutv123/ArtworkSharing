@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Presentation.Pages.User;
+using Presentation.Services;
 using Repository;
 
 namespace Presentation.Pages.Admin.User
@@ -14,10 +16,12 @@ namespace Presentation.Pages.Admin.User
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        public UserEditModel(IUserRepository userRepository, IMapper mapper)
+        private readonly IValidator _validator;
+        public UserEditModel(IUserRepository userRepository, IMapper mapper, IValidator validator)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _validator = validator;
         }
 
         [BindProperty]
@@ -44,9 +48,15 @@ namespace Presentation.Pages.Admin.User
             {
                 return Page();
             }
+            if (await _validator.ValidateEmail(AppUserDTO.Email))
+            {
+                ModelState.AddModelError(string.Empty, "Please enter exist email address");
+                return Page();
+            }
             try
             {
                 var user = _mapper.Map<BusinessObject.Entities.AppUser>(AppUserDTO);
+                
                 await _userRepository.UpdateUser(user);
                 return RedirectToPage("./UserManagement");
             }

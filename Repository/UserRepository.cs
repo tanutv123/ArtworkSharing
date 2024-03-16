@@ -144,10 +144,10 @@ namespace Repository
                     {
                         throw new Exception("Phone is exist");
                     }
-                    if (await IsEmailExistAsync(appUser.Email))
+                    /*if (await IsEmailExistAsync(appUser.Email))
                     {
                         throw new Exception("Email is already in use");
-                    }
+                    }*/
                     user.Name = appUser.Name;
                     user.PhoneNumber = appUser.PhoneNumber;
                     user.Email = appUser.Email;
