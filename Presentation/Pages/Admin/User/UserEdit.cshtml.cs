@@ -1,8 +1,10 @@
 using AutoMapper;
 using BusinessObject.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Repository;
 
 namespace Presentation.Pages.Admin.User
@@ -38,13 +40,21 @@ namespace Presentation.Pages.Admin.User
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            try
             {
                 var user = _mapper.Map<BusinessObject.Entities.AppUser>(AppUserDTO);
                 await _userRepository.UpdateUser(user);
                 return RedirectToPage("./UserManagement");
             }
-            return Page();
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return Page();
+            }
         }
     }
 }

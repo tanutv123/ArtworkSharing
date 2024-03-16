@@ -144,6 +144,10 @@ namespace Repository
                     {
                         throw new Exception("Phone is exist");
                     }
+                    if (await IsEmailExistAsync(appUser.Email))
+                    {
+                        throw new Exception("Email is already in use");
+                    }
                     user.Name = appUser.Name;
                     user.PhoneNumber = appUser.PhoneNumber;
                     user.Email = appUser.Email;
@@ -207,5 +211,12 @@ namespace Repository
 				throw new Exception(ex.Message);
 			}
 		}
+
+        public async Task<bool> IsEmailExistAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            return user != null;
+        }
+
     }
 }
