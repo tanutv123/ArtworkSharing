@@ -1,6 +1,7 @@
 using BusinessObject.DTOs;
 using BusinessObject.Entities;
 using CloudinaryDotNet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.Extensions;
@@ -9,6 +10,7 @@ using Repository;
 
 namespace Presentation.Pages.Home
 {
+    [Authorize]
     public class ArtworkDetailModel : PageModel
     {
         private readonly IArtworkRepository _artworkRepository;

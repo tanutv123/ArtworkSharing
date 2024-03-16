@@ -42,14 +42,15 @@ namespace Presentation.Pages.Audience
         {
             IsRequestSentSuccess = isRequestSuccess;
             Message = message;
-            if(artistId != null)
+            Genres = await _genreRepository.GetAll();
+            if (artistId != 0)
             {
                 var artist = await _userRepository.GetUserProfile(artistId);
 				ArtistName = artist.Name;
                 ArtistEmail = artist.Email;
                 CommissionRequestDTO.SenderId = User.GetUserId();
                 CommissionRequestDTO.ReceiverId = artistId;
-                Genres = await _genreRepository.GetAll();
+                
             }
             else
             {
