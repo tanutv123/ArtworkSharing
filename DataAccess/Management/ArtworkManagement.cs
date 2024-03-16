@@ -395,7 +395,7 @@ namespace DataAccess.Management
                 } else
                 {
                     index.Money += transaction.Money;
-                    index.CreatedDate = transaction.CreatedDate;
+                    index.CreatedDate = DateTime.UtcNow;
                     await _context.SaveChangesAsync();
                 }
                 

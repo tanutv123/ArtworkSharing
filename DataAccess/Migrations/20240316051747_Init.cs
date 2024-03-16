@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDb : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -224,15 +224,16 @@ namespace DataAccess.Migrations
                 name: "Transactions",
                 columns: table => new
                 {
-                    SenderId = table.Column<int>(type: "int", nullable: false),
-                    ReceiverId = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Money = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SenderId = table.Column<int>(type: "int", nullable: false),
+                    ReceiverId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => new { x.SenderId, x.ReceiverId });
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Transactions_AspNetUsers_ReceiverId",
                         column: x => x.ReceiverId,
@@ -330,9 +331,11 @@ namespace DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     MinPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     MaxPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ActualPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     RequestDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NotAcceptedReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RequestDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<byte>(type: "tinyint", nullable: false),
                     SenderId = table.Column<int>(type: "int", nullable: false),
                     ReceiverId = table.Column<int>(type: "int", nullable: false),
@@ -470,9 +473,11 @@ namespace DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DownloadUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     isMain = table.Column<bool>(type: "bit", nullable: false),
                     PublicId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CommissionRequestId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -596,6 +601,11 @@ namespace DataAccess.Migrations
                 name: "IX_Transactions_ReceiverId",
                 table: "Transactions",
                 column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_SenderId",
+                table: "Transactions",
+                column: "SenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserFollows_TargetUserId",
