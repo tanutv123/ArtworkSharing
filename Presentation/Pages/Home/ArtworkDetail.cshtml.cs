@@ -44,10 +44,11 @@ namespace Presentation.Pages.Home
         public async Task OnGetAsync(int id)
         {
             Artwork = await _artworkRepository.GetArtworkById(id);
-            Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
+            
             ArtworkComment = await _artworkRepository.GetArtworkComments(id);
-            if (Artwork != null)
+            if (id != 0)
             {
+                Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
                 Likes = await _artworkRepository.HasUserLikedArtwork(User.GetUserId(), id);
                 Follows = await _artworkRepository.HasUserFollowed(User.GetUserId(), Artwork.AppUserId);
                 Bought = await _artworkRepository.HasUserBought(User.GetUserId(), id);

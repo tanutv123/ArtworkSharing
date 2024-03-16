@@ -123,8 +123,10 @@
                                         <div class="artwork-details">
                                             <h5>@artwork.Title</h5>
                                             <div class="d-grid gap-2">
-                                                <a class="btn btn-danger btn-delete" asp-page="/Artist/ArtworkModify" asp-route-artworkid="@artwork.Id">Delete</a>
-                                                <a class="btn btn-primary btn-edit" asp-page="/Artist/ArtworkModify2" asp-route-artworkid="@artwork.Id">Edit</a>
+                                                @if (Model.currentUserId == Model.appUser.Id && Model.currentUserRole == true) {
+                                                    <a class="btn btn-danger btn-delete" asp-page="/Artist/ArtworkModify" asp-route-artworkid="@artwork.Id">Delete</a>
+                                                    <a class="btn btn-primary btn-edit" asp-page="/Artist/ArtworkModify2" asp-route-artworkid="@artwork.Id">Edit</a>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -137,7 +139,10 @@
                             <p>There is no Artwork here</p>
                         </body>
                     }
-                    <a class="btn btn-success btn-create-new" asp-page="/Artist/ArtistAddArtwork" asp-route-id="@Model.appUser.Id">Upload New Artwork</a>
+                    @if (Model.currentUserId == Model.appUser.Id && Model.currentUserRole == true)
+                    {
+                        <a class="btn btn-success btn-create-new" asp-page="/Artist/ArtistAddArtwork" asp-route-id="@Model.appUser.Id">Upload New Artwork</a>
+                    }
                 </div>
             </div>
     </body>

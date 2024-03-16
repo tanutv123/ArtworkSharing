@@ -37,27 +37,31 @@ namespace Presentation.Pages.Artist
         public AddArtworkDTO addArtworkDTO { get; set; } 
         [BindProperty]
         public UpdateArtworkImageDTO addArtworkImageDTO { get; set; } = new UpdateArtworkImageDTO();
-
+        public int currentUserId = 0;
         public IEnumerable<Genre> Genres { get; set; }
         public async Task OnGetAsync(int artworkid)
         {
-            if (artworkid != null)
+            currentUserId = User.GetUserId();
+			Artwork = await _artworkRepository.GetArtworkById(artworkid);
+			if (artworkid != 0)
             {
                 if (_artworkRepository != null)
                 {
-                    Artwork = await _artworkRepository.GetArtworkById(artworkid);
-                    addArtworkDTO = new AddArtworkDTO();
-                    addArtworkDTO.Title = Artwork.Title;
-                    addArtworkDTO.Price = Artwork.Price;
-                    addArtworkDTO.CreatedDate = Artwork.CreatedDate;
-                    addArtworkDTO.Description = Artwork.Description;
-                    addArtworkDTO.AppUserId = Artwork.AppUserId;
-                    addArtworkDTO.Id = artworkid;
-                    addArtworkImageDTO.ArtworkId = artworkid.ToString();
-                    addArtworkImageDTO.Url = Artwork.ArtworkImage.Url;
-                    addArtworkImageDTO.PublicId = Artwork.ArtworkImage.PublicId;
-                    addArtworkImageDTO.Id = Artwork.ArtworkImage.Id;
                     
+                    if (Artwork != null)
+                    {
+                        addArtworkDTO = new AddArtworkDTO();
+                        addArtworkDTO.Title = Artwork.Title;
+                        addArtworkDTO.Price = Artwork.Price;
+                        addArtworkDTO.CreatedDate = Artwork.CreatedDate;
+                        addArtworkDTO.Description = Artwork.Description;
+                        addArtworkDTO.AppUserId = Artwork.AppUserId;
+                        addArtworkDTO.Id = artworkid;
+                        addArtworkImageDTO.ArtworkId = artworkid.ToString();
+                        addArtworkImageDTO.Url = Artwork.ArtworkImage.Url;
+                        addArtworkImageDTO.PublicId = Artwork.ArtworkImage.PublicId;
+                        addArtworkImageDTO.Id = Artwork.ArtworkImage.Id;
+                    }
                 }
 
                 Genres = await _genreRepository.GetAll();
@@ -89,7 +93,7 @@ namespace Presentation.Pages.Artist
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
             }
-
+            currentUserId = User.GetUserId();
             return Page();
         }
     }
