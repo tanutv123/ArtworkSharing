@@ -2,90 +2,99 @@
 @model Presentation.Pages.Artist.ArtworkModify2Model
 @{
 }
-<div class="container">
-	<div class="row mb-3">
-		<form method="post" asp-page-handler="UpdateImage">
+<h1>Artwork Update</h1>
+@if (Model != null)
+{
+	<div class="container">
+		<div class="row mb-3">
+			<form method="post" asp-page-handler="UpdateImage">
 
-			<div>
-				<div class="mb-3">
-					<label for="title" class="form-label">Your Title for this Artwork: </label>
-					<input type="text" class="form-control" id="title" asp-for="addArtworkDTO.Title">
-					<span class="text-danger" asp-validation-for="addArtworkDTO.Title"></span>
+				<div>
+					<div class="mb-3">
+						<label for="title" class="form-label">Your Title for this Artwork: </label>
+						<input type="text" class="form-control" id="title" asp-for="addArtworkDTO.Title">
+						<span class="text-danger" asp-validation-for="addArtworkDTO.Title"></span>
+					</div>
+					<div class="mb-3">
+						<label for="genre" class="form-label">Genre: </label>
+						<select asp-for="addArtworkDTO.GenreId" class="form-control">
+							@foreach (var genre in Model.Genres)
+							{
+								<option value="@genre.Id">@genre.Name</option>
+							}
+						</select>
+						<span class="text-danger" asp-validation-for="addArtworkDTO.Description"></span>
+					</div>
+					<div class="mb-3">
+						<label for="description" class="form-label">Your description for this artword: </label>
+						<input type="text" class="form-control" id="description" asp-for="addArtworkDTO.Description">
+						<span class="text-danger" asp-validation-for="addArtworkDTO.Description"></span>
+					</div>
+					<div class="mb-3">
+						<label for="price" class="form-label">Price: </label>
+						<input type="number" class="form-control" id="minPrice" asp-for="addArtworkDTO.Price">
+						<span class="text-danger" asp-validation-for="addArtworkDTO.Price"></span>
+					</div>
+					<div class="mb-3">
+						<label hidden for="artworkid" class="form-label">Id: </label>
+						<input hidden type="number" class="form-control" id="artworkid" asp-for="addArtworkDTO.Id">
+						<span hidden class="text-danger" asp-validation-for="addArtworkDTO.Id"></span>
+					</div>
+					<div class="mb-3">
+						<label hidden for="artworkimageid" class="form-label">Image Id: </label>
+						<input hidden type="number" class="form-control" id="artworkimageid" asp-for="addArtworkImageDTO.Id">
+						<span hidden class="text-danger" asp-validation-for="addArtworkImageDTO.Id"></span>
+					</div>
+
+					<div class="text text-danger" asp-validation-summary="All"></div>
+
+					<div class="mb-3">
+						<label for="artworkImageUpload" class="form-label">Upload Artwork Image</label>
+						<input type="file" class="form-control" id="artworkImageUpload">
+						<img src="@Model.addArtworkImageDTO.Url" id="artworkImageDisplay" style="display:block;width:300px;" />
+					</div>
+					<div class="mb-3">
+						<label for="publicId" class="form-label">Public Id</label>
+						<input type="text" readonly class="form-control" id="publicId" asp-for="addArtworkImageDTO.PublicId">
+						<img src="" id="artworkImageDisplay" style="display:none;width:300px;" />
+					</div>
+					<div class="mb-3">
+						<label for="artworkImage" class="form-label">Artwork Image Url</label>
+						<input type="text" class="form-control" id="artworkImage" asp-for="addArtworkImageDTO.Url" readonly>
+						<span class="text-danger" asp-validation-for="addArtworkImageDTO.Url"></span>
+					</div>
 				</div>
-				<div class="mb-3">
-					<label for="genre" class="form-label">Genre: </label>
-					<select asp-for="addArtworkDTO.GenreId" class="form-control">
-						@foreach (var genre in Model.Genres)
-						{
-							<option value="@genre.Id">@genre.Name</option>
-						}
-					</select>
-					<span class="text-danger" asp-validation-for="addArtworkDTO.Description"></span>
-				</div>
-				<div class="mb-3">
-					<label for="description" class="form-label">Your description for this artword: </label>
-					<input type="text" class="form-control" id="description" asp-for="addArtworkDTO.Description">
-					<span class="text-danger" asp-validation-for="addArtworkDTO.Description"></span>
-				</div>
-				<div class="mb-3">
-					<label for="price" class="form-label">Price: </label>
-					<input type="number" class="form-control" id="minPrice" asp-for="addArtworkDTO.Price">
-					<span class="text-danger" asp-validation-for="addArtworkDTO.Price"></span>
-				</div>
-				<div class="mb-3">
-					<label hidden for="artworkid" class="form-label">Id: </label>
-					<input hidden type="number" class="form-control" id="artworkid" asp-for="addArtworkDTO.Id">
-					<span hidden class="text-danger" asp-validation-for="addArtworkDTO.Id"></span>
-				</div>
-				<div class="mb-3">
-					<label hidden for="artworkimageid" class="form-label">Image Id: </label>
-					<input hidden type="number" class="form-control" id="artworkimageid" asp-for="addArtworkImageDTO.Id">
-					<span hidden class="text-danger" asp-validation-for="addArtworkImageDTO.Id"></span>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="buttonUpdate" data-bs-toggle="modal" data-bs-target="#confirmModal">Update</button>
 				</div>
 
-				<div class="text text-danger" asp-validation-summary="All"></div>
-
-				<div class="mb-3">
-					<label for="artworkImageUpload" class="form-label">Upload Artwork Image</label>
-					<input type="file" class="form-control" id="artworkImageUpload">
-					<img src="@Model.addArtworkImageDTO.Url" id="artworkImageDisplay" style="display:block;width:300px;" />
-				</div>
-				<div class="mb-3">
-					<label for="publicId" class="form-label">Public Id</label>
-					<input type="text" readonly class="form-control" id="publicId" asp-for="addArtworkImageDTO.PublicId">
-					<img src="" id="artworkImageDisplay" style="display:none;width:300px;" />
-				</div>
-				<div class="mb-3">
-					<label for="artworkImage" class="form-label">Artwork Image Url</label>
-					<input type="text" class="form-control" id="artworkImage" asp-for="addArtworkImageDTO.Url" readonly>
-					<span class="text-danger" asp-validation-for="addArtworkImageDTO.Url"></span>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="buttonUpdate" data-bs-toggle="modal" data-bs-target="#confirmModal">Update</button>
-			</div>
-
-			<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="confirmModalLabel">Confirm Add</h5>
-							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<div class="modal-body">
-							Are you sure you want to update this artwork?
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-							<button type="button" class="btn btn-primary" id="confirmAddButton">Yes</button>
+				<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="confirmModalLabel">Confirm Add</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								Are you sure you want to update this artwork?
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+								<button type="button" class="btn btn-primary" id="confirmAddButton">Yes</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
-</div>
-
+}
+else
+{
+	<body>
+		<p>Artwork Delete is not available</p>
+	</body>
+}
 @section Scripts {
 	<script>
 		const artworkImageUpload = document.getElementById('artworkImageUpload');

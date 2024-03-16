@@ -1,4 +1,5 @@
 using BusinessObject.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.Services;
@@ -6,6 +7,7 @@ using Repository;
 
 namespace Presentation.Pages.Audience
 {
+    [Authorize]
     public class ArtistPageModel : PageModel
     {
         private readonly IArtworkRepository _artworkRepository;
