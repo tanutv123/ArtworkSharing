@@ -19,7 +19,7 @@ namespace Presentation.Pages.Admin.Commission
         public CommissionRequestHistoryAdminDTO commissionRequestHistoryDTO { get; set; }
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            if (id == null)
+            if (id == 0)
             {
                 return NotFound();
             }
@@ -27,6 +27,10 @@ namespace Presentation.Pages.Admin.Commission
             if(detail != null)
             {
                 commissionRequestHistoryDTO = detail;
+            }
+            else
+            {
+                return NotFound();
             }
             return Page();
         }

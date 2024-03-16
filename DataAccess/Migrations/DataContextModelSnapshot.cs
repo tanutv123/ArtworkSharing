@@ -443,24 +443,29 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("BusinessObject.Entities.Transaction", b =>
                 {
-                    b.Property<int>("SenderId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ReceiverId")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Money")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("SenderId", "ReceiverId");
+                    b.Property<int>("ReceiverId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
 
                     b.ToTable("Transactions");
                 });

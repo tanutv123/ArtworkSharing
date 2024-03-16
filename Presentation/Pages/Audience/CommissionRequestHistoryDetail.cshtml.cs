@@ -35,14 +35,20 @@ namespace Presentation.Pages.Audience
                 IsInvalidAccess = false;
 				TempData["Message"] = message;
 				IsRequestSentSuccess = isRequestSuccess;
-				CommissionId = id;
-				CommissionRequestHistoryDTO = await _commissionRepository.GetSingleCommissionRequestHistory(id);
-                CommissionResend.Id = CommissionRequestHistoryDTO.Id;
-                CommissionResend.RequestDescription = CommissionRequestHistoryDTO.RequestDescription;
-                CommissionResend.MinPrice = CommissionRequestHistoryDTO.MinPrice;
-                CommissionResend.MaxPrice = CommissionRequestHistoryDTO.MaxPrice;
-                CommissionResend.DueDate = CommissionRequestHistoryDTO.DueDate;
-                
+                if(id != 0)
+                {
+					CommissionId = id;
+					CommissionRequestHistoryDTO = await _commissionRepository.GetSingleCommissionRequestHistory(id);
+					CommissionResend.Id = CommissionRequestHistoryDTO.Id;
+					CommissionResend.RequestDescription = CommissionRequestHistoryDTO.RequestDescription;
+					CommissionResend.MinPrice = CommissionRequestHistoryDTO.MinPrice;
+					CommissionResend.MaxPrice = CommissionRequestHistoryDTO.MaxPrice;
+					CommissionResend.DueDate = CommissionRequestHistoryDTO.DueDate;
+				}
+                else
+                {
+                    IsInvalidAccess = true;
+                }
 			}
         }
 
