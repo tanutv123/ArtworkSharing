@@ -33,47 +33,51 @@
                     </a>
                     <partial name="_LoginStatusPartial" />
                 </div>
-               
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Home/Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                    </li>
-                    @if(User.Identity.IsAuthenticated){
+                @if(!User.IsInRole("Admin"))
+                {
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Home/Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("Artist"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-route-userId="@Context.Session.GetInt32("Id")" asp-page="/Audience/ArtistPage">Manage Artwork</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Audience"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-route-userId="@Context.Session.GetInt32("Id")" asp-page="/User/Detail">Profile</a>
+                                </li>
+                            }
+
+                        }
+
+
                         @if (User.IsInRole("Artist"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-route-userId="@Context.Session.GetInt32("Id")" asp-page="/Audience/ArtistPage">Manage Artwork</a>
+                                <a class="nav-link text-dark" href="/artist/artistcommission">My Commission</a>
+                            </li>
+                            <li>
+                                <a class="nav-link text-dark" href="/artist/artistcommissionhistory">Commission History</a>
                             </li>
                         }
-                        @if (User.IsInRole("Audience"))
+                        @if (User.IsInRole("Audience") || User.IsInRole("Artist"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-route-userId="@Context.Session.GetInt32("Id")" asp-page="/User/Detail">Profile</a>
+                                <a class="nav-link text-dark" href="/audience/commissionrequesthistory">Your commission request history</a>
                             </li>
                         }
-                       
-                    }
-                    
-                    
-                    @if (User.IsInRole("Artist"))
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/artist/artistcommission">My Commission</a>
-                        </li>
-                        <li>
-                            <a class="nav-link text-dark" href="/artist/artistcommissionhistory">Commission History</a>
-                        </li>
-                    }
-                    @if (User.IsInRole("Audience") || User.IsInRole("Artist"))
-                    {
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="/audience/commissionrequesthistory">Your commission request history</a>
-                        </li>
-                    }
-                </ul>
+                    </ul>
+                }
+                
 
                 <nav class="nav-footer">
                     <p class="nav-footer-social-buttons">
