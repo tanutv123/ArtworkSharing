@@ -120,8 +120,7 @@ namespace DataAccess.Data
                 .HasForeignKey(u => u.TargetUserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.Entity<Transaction>()
-                .HasKey(k => new { k.SenderId, k.ReceiverId });
+            
             builder.Entity<Transaction>()
                 .HasOne(t => t.Sender)
                 .WithMany(u => u.TransactionSents)
