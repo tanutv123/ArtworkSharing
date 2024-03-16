@@ -9,6 +9,12 @@
 		<p>@Model.Message</p>
 	</div>
 }
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+	<div class="alert alert-danger">
+		<p>@Model.ErrorMessage</p>
+	</div>
+}
 @if (Model != null)
 {
 	@if (Model.CommissionRequestDTO != null)
@@ -57,11 +63,6 @@
 			</form>
 		</div>
 	}
-} else
-{
-	<body>
-		<p>Something wrong</p>
-	</body>
 }
 @section Scripts {
 	@if (Model.IsRequestSentSuccess)

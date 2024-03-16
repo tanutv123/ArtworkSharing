@@ -30,12 +30,13 @@ namespace Presentation.Pages.Audience
             _mapper = mapper;
 		}
         [BindProperty]
-        public CommissionRequestDTO CommissionRequestDTO{ get; set; } = new CommissionRequestDTO();
+        public CommissionRequestDTO CommissionRequestDTO{ get; set; }
         [BindProperty]
         public string ArtistName { get; set; }
         [BindProperty]
         public string ArtistEmail { get; set; }
         public string Message { get; set; }
+        public string ErrorMessage { get; set; }
         public bool IsRequestSentSuccess { get; set; } = false;
         public List<Genre> Genres { get; set; }
         public async Task OnGetAsync(int artistId, string message = null, bool isRequestSuccess = false)
@@ -46,6 +47,11 @@ namespace Presentation.Pages.Audience
             if (artistId != 0)
             {
                 var artist = await _userRepository.GetUserProfile(artistId);
+                if (artist == null)
+                {
+                    ErrorMessage = "Artist not found";
+                }
+                CommissionRequestDTO = new CommissionRequestDTO();
 				ArtistName = artist.Name;
                 ArtistEmail = artist.Email;
                 CommissionRequestDTO.SenderId = User.GetUserId();
@@ -55,7 +61,7 @@ namespace Presentation.Pages.Audience
             else
             {
                 
-                Message = "Something went wrong";
+                ErrorMessage = "Something went wrong";
             }
         }
 

@@ -38,7 +38,8 @@ namespace Presentation.Pages.Artist
         public async Task OnGet(int id, bool isAddImageSuccess = false)
         {
             var commission = await _commissionRepository.GetSingleCommissionRequestHistory(id);
-			if(commission.ReceiverEmail == User.GetEmailAddress())
+			
+			if(commission != null && commission.ReceiverEmail == User.GetEmailAddress())
 			{
 				IsInvalidAccess = false;
 				CommissionStartDate = commission.RequestDate;
