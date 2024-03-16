@@ -1,6 +1,7 @@
 using AutoMapper;
 using BusinessObject.DTOs;
 using BusinessObject.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.Extensions;
@@ -8,7 +9,8 @@ using Repository;
 
 namespace Presentation.Pages.Artist
 {
-	public class ArtistAddArtworkModel : PageModel
+    [Authorize(Policy = "RequireArtistRole")]
+    public class ArtistAddArtworkModel : PageModel
 	{
 		private readonly IArtworkRepository _artworkRepository;
 		private readonly IGenreRepository _genreRepository;

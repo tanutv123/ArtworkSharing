@@ -1,6 +1,7 @@
 using BusinessObject.DTOs;
 using BusinessObject.Entities;
 using CloudinaryDotNet;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.Extensions;
@@ -9,6 +10,7 @@ using Repository;
 
 namespace Presentation.Pages.Home
 {
+    [Authorize]
     public class ArtworkDetailModel : PageModel
     {
         private readonly IArtworkRepository _artworkRepository;
@@ -39,19 +41,26 @@ namespace Presentation.Pages.Home
         public string DownloadUrl { get; set; }
 
 
-        public async Task OnGetAsync(int id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            Artwork = await _artworkRepository.GetArtworkById(id);
-            Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
-            ArtworkComment = await _artworkRepository.GetArtworkComments(id);
-            if (Artwork != null)
+            if(id ==0)
             {
+                return NotFound();
+            }
+            Artwork = await _artworkRepository.GetArtworkById(id);
+
+            if(Artwork != null)
+            {
+                Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);
+                ArtworkComment = await _artworkRepository.GetArtworkComments(id);
+            
                 Likes = await _artworkRepository.HasUserLikedArtwork(User.GetUserId(), id);
                 Follows = await _artworkRepository.HasUserFollowed(User.GetUserId(), Artwork.AppUserId);
                 Bought = await _artworkRepository.HasUserBought(User.GetUserId(), id);
                 DownloadUrl = _imageService.GetImageUploadUrl(Artwork.ArtworkImage.PublicId);
             }
             UserId = User.GetUserId();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostComment()

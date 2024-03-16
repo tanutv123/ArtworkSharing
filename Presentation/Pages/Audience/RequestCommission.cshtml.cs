@@ -30,31 +30,44 @@ namespace Presentation.Pages.Audience
             _mapper = mapper;
 		}
         [BindProperty]
-        public CommissionRequestDTO CommissionRequestDTO{ get; set; } = new CommissionRequestDTO();
+        public CommissionRequestDTO CommissionRequestDTO{ get; set; }
         [BindProperty]
         public string ArtistName { get; set; }
         [BindProperty]
         public string ArtistEmail { get; set; }
         public string Message { get; set; }
+        public string ErrorMessage { get; set; }
         public bool IsRequestSentSuccess { get; set; } = false;
         public List<Genre> Genres { get; set; }
         public async Task OnGetAsync(int artistId, string message = null, bool isRequestSuccess = false)
         {
             IsRequestSentSuccess = isRequestSuccess;
             Message = message;
-            if(artistId != null)
+            Genres = await _genreRepository.GetAll();
+            if (artistId != 0)
             {
                 var artist = await _userRepository.GetUserProfile(artistId);
-				ArtistName = artist.Name;
-                ArtistEmail = artist.Email;
-                CommissionRequestDTO.SenderId = User.GetUserId();
-                CommissionRequestDTO.ReceiverId = artistId;
-                Genres = await _genreRepository.GetAll();
+                if (artist == null)
+                {
+                    ErrorMessage = "Artist not found";
+                }
+                else if(artist.Email == User.GetEmailAddress())
+                {
+                    ErrorMessage = "You cannot send commission to yourself";
+                }
+                else
+                {
+                    CommissionRequestDTO = new CommissionRequestDTO();
+                    ArtistName = artist.Name;
+                    ArtistEmail = artist.Email;
+                    CommissionRequestDTO.SenderId = User.GetUserId();
+                    CommissionRequestDTO.ReceiverId = artistId;
+                }
             }
             else
             {
                 
-                Message = "Something went wrong";
+                ErrorMessage = "Something went wrong";
             }
         }
 

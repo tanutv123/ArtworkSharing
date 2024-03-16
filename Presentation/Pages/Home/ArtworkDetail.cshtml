@@ -12,7 +12,7 @@
         <p><strong>Description:</strong> @Model.Artwork.Description</p>
         <p><strong>Genre:</strong> @Model.Artwork.Genre.Name</p>
         <p><strong>Price:</strong> @Model.Artwork.Price</p>
-        <p><strong>Artist:</strong> @Model.Artwork.AppUser.Name</p>
+        <p><strong>Artist:</strong> <a asp-page="/Audience/ArtistPage" asp-route-userId=@Model.Artwork.AppUserId > @Model.Artwork.AppUser.Name </a> </p>
     </div>
     <form method="post"> 
                             <div class="text text-danger" asp-validation-summary="All"></div> 

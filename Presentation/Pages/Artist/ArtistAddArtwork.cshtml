@@ -5,7 +5,7 @@
 <div class="container">
 	<div class="row mb-3">
 		<form method="post" asp-page-handler="AddImage">
-
+			<div class="text text-danger" asp-validation-summary="All"></div>
 			<div>
 				<div class="mb-3">
 					<label for="title" class="form-label">Your Title for this Artwork: </label>
@@ -33,7 +33,7 @@
 					<span class="text-danger" asp-validation-for="addArtworkDTO.Price"></span>
 				</div>
 
-				<div class="text text-danger" asp-validation-summary="All"></div>
+				
 
 				<div class="mb-3">
 					<label for="artworkImageUpload" class="form-label">Upload Artwork Image</label>
