@@ -48,6 +48,7 @@ namespace Presentation.Pages.Home
                 return NotFound();
             }
             Artwork = await _artworkRepository.GetArtworkById(id);
+
             if(Artwork != null)
             {
                 Artwork.ArtworkImage.Url = _imageService.GetImageUploadUrl2(Artwork.ArtworkImage.PublicId);

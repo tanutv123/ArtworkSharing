@@ -44,10 +44,11 @@ namespace Presentation.Pages.Artist
 		public AddArtworkImageDTO addArtworkImageDTO { get; set; } = new AddArtworkImageDTO();
 
 		public IEnumerable<Genre> Genres { get; set; }
-		public async Task OnGetAsync(int artworkid)
+		public int currentUserId = 0;
+        public async Task OnGetAsync(int artworkid)
 		{
 			Artwork = await _artworkRepository.GetArtworkById(artworkid);
-            
+			currentUserId = User.GetUserId();
             addArtworkDTO.Id = artworkid;
             if (Artwork != null)
 			{
@@ -81,8 +82,8 @@ namespace Presentation.Pages.Artist
 			{
 				ModelState.AddModelError(string.Empty, ex.Message);
 			}
-
-			return Page();
+            currentUserId = User.GetUserId();
+            return Page();
 		}
 	}
 }
