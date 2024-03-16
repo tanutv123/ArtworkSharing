@@ -51,7 +51,7 @@ namespace DataAccess.Data
 			};
 
 			var resultAdmin = await userManager.CreateAsync(admin, "Pa$$w0rd");
-			await userManager.AddToRolesAsync(admin, new[] {"Admin"});
+			await userManager.AddToRolesAsync(admin, new[] { "Audience", "Artist", "Admin" });
 
 			var manager = new AppUser
 			{
@@ -61,7 +61,7 @@ namespace DataAccess.Data
                 EmailConfirmed = true
             };
 			await userManager.CreateAsync(manager, "Pa$$w0rd");
-			await userManager.AddToRolesAsync(manager, new[] { "Manager"});
+			await userManager.AddToRolesAsync(manager, new[] { "Audience", "Artist", "Manager" });
 
 			var artist = new AppUser
 			{
@@ -79,7 +79,7 @@ namespace DataAccess.Data
 				}
 			};
 			await userManager.CreateAsync(artist, "Pa$$w0rd");
-			await userManager.AddToRolesAsync(artist, new[] {"Artist"} );
+			await userManager.AddToRolesAsync(artist, new[] { "Audience", "Artist" });
 		}
 
 		public static async Task SeedArtwork(DataContext context)

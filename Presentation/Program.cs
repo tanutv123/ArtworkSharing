@@ -4,13 +4,11 @@ using DataAccess.Management;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Presentation.Extensions;
 using Presentation.Helpers;
 using Presentation.Services;
-using Microsoft.Extensions.DependencyInjection;
 using Presentation.SignalR;
 using Repository;
-using System.Configuration;
-using System.Transactions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +18,7 @@ builder.Services.AddRazorPages().AddRazorPagesOptions(options =>
     options.Conventions.AddPageRoute("/Account/LoginPage", "");
 });
 builder.Services.AddControllers();
-builder.Services.AddDbContext<DataContext>(options =>
-{
-	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
@@ -66,20 +61,15 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.AddSignalR();
-builder.Services.AddScoped<UserManagement>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<CommissionManagement>();
 builder.Services.AddScoped<ICommissionRepository, CommissionRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
-builder.Services.AddScoped<ArtworkManagement>();
 builder.Services.AddScoped<IArtworkRepository, ArtworkRepository>();
-builder.Services.AddScoped<GenreManagement>();
 builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddSingleton<PresenceTracker>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
-builder.Services.AddScoped<PurchaseManagement>();
+builder.Services.AddScoped<IValidator, Validator>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
-builder.Services.AddScoped<TransactionManagement>();
 
 builder.Services.AddOptions();
 var mailsettings = builder.Configuration.GetSection("MailSettings");

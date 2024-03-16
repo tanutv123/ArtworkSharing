@@ -11,7 +11,7 @@ namespace Repository
 	{
 		private readonly IMapper _mapper;
 
-		public CommissionRepository(CommissionManagement commissionManagement, IMapper _mapper)
+		public CommissionRepository(IMapper _mapper)
         {
 			this._mapper = _mapper;
 		}

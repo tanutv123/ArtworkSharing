@@ -1,70 +1,75 @@
 [
   {
     "Title": "laboris dolore nisi",
-    "Description": "Esse est aute mollit nulla deserunt incididunt elit qui cupidatat. Irure et eiusmod sint dolore cillum ex sit qui do. Aute cillum quis magna eu tempor tempor aliquip consectetur. Magna nisi aliqua dolore aute do sunt. Commodo duis ad cupidatat elit nulla elit enim occaecat occaecat sunt culpa proident cillum.\r\n",
+    "Description": "This is Landscape Artwork",
     "GenreId": 1,
     "Price": 1100,
     "CreatedDate": "2023-03-09",
-    "AppUserId": 4,
+    "AppUserId": 13,
     "Status": 1,
     "ArtworkImage": {
-      "Url": "https://mir-s3-cdn-cf.behance.net/project_modules/2800_opt_1/ab723877268563.5c829061bd6ea.jpg",
+      "Url": "https://res.cloudinary.com/dpmjibfhc/image/upload/f_auto,q_auto/v1/asp-net7/iqwmfrirrvbvkcd5qqvg",
+      "PublicId": "asp-net7/iqwmfrirrvbvkcd5qqvg",
       "IsMain": true
     }
     
   },
   {
     "Title": "non veniam incididunt",
-    "Description": "Officia dolore commodo ad anim adipisicing do. Ut occaecat consectetur laborum occaecat adipisicing minim proident eiusmod nostrud. Tempor anim ut sint adipisicing consequat adipisicing non esse. Reprehenderit nulla pariatur quis adipisicing consectetur reprehenderit non id deserunt enim sit fugiat sunt ea. Ad anim velit fugiat est pariatur irure. Sunt aute elit laboris dolor exercitation id. Amet do commodo enim duis irure incididunt.\r\n",
+    "Description": "This is Landscape Artwork",
     "GenreId": 1,
     "Price": 6454,
     "CreatedDate": "2023-04-10",
-    "AppUserId": 3,
+    "AppUserId": 13,
     "Status": 1,
     "ArtworkImage": {
-      "Url": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/b6296ab5-9590-4f4b-826a-14d30a86a131/df4xrm3-f5c23434-c542-4bab-99f3-c0bce04a4ec0.jpg/v1/fill/w_1152,h_694,q_70,strp/new_course_digital_landscape_painting___next_week__by_michaeladamidisart_df4xrm3-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzcxIiwicGF0aCI6IlwvZlwvYjYyOTZhYjUtOTU5MC00ZjRiLTgyNmEtMTRkMzBhODZhMTMxXC9kZjR4cm0zLWY1YzIzNDM0LWM1NDItNGJhYi05OWYzLWMwYmNlMDRhNGVjMC5qcGciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.kK04UYpIRd4hzk7YtvA2qVjDubwP5jIVPD5Ja8W7PKA",
+      "Url": "https://res.cloudinary.com/dpmjibfhc/image/upload/f_auto,q_auto/v1/asp-net7/ixp4rcky5metaj1aptr7",
+      "PublicId": "asp-net7/ixp4rcky5metaj1aptr7",
       "IsMain": true
     }
     
   },
   {
     "Title": "cillum dolore proident",
-    "Description": "Aute eu laborum nulla sit nulla labore consectetur elit nisi pariatur officia. Eiusmod nostrud nisi proident aute do exercitation officia do irure veniam dolore. Amet et sint et non aute in et do. Occaecat nulla fugiat fugiat sunt nulla qui.\r\n",
+    "Description": "This is Portrait Artwork",
     "GenreId": 2,
     "Price": 2958,
     "CreatedDate": "2023-12-21",
-    "AppUserId": 5,
+    "AppUserId": 13,
     "Status": 1,
     "ArtworkImage": {
-      "Url": "https://paintable.cc/wp-content/uploads/2015/11/034-thiago-januario.jpg",
+      "Url": "https://res.cloudinary.com/dpmjibfhc/image/upload/f_auto,q_auto/v1/asp-net7/ka4dqdrhm6sewbmafjwg",
+      "PublicId": "asp-net7/ka4dqdrhm6sewbmafjwg",
       "IsMain": true
     }
     
   },
   {
     "Title": "proident enim commodo",
-    "Description": "Laboris exercitation aute ipsum sunt officia ad tempor amet sit. Officia cupidatat velit quis mollit commodo occaecat elit quis. Dolor sit ex proident ad consectetur commodo culpa eu ad veniam elit tempor est. Sint ullamco velit ut ipsum duis laborum aute aliquip cillum esse labore nostrud elit. Esse ea commodo aliqua tempor voluptate nisi aliquip duis.\r\n",
+    "Description": "This is Portrait Artwork",
     "GenreId": 2,
     "Price": 6170,
     "CreatedDate": "2023-05-05",
-    "AppUserId": 8,
+    "AppUserId": 13,
     "Status": 1,
     "ArtworkImage": {
-      "Url": "https://paintable.cc/wp-content/uploads/2015/11/002-yanjuncheng.jpg",
+      "Url": "https://res.cloudinary.com/dpmjibfhc/image/upload/f_auto,q_auto/v1/asp-net7/kuziqllfio7ueprtwqag",
+      "PublicId": "asp-net7/kuziqllfio7ueprtwqag",
       "IsMain": true
     }
     
   },
   {
     "Title": "enim officia sit",
-    "Description": "Qui laborum laborum fugiat in ad. Dolor commodo sit ad dolore proident eiusmod laborum occaecat et. Incididunt commodo est labore ut. Proident do laboris eiusmod cillum nulla dolor mollit amet labore. Et sunt mollit do fugiat cillum ullamco nostrud et quis minim voluptate ipsum proident. Magna Lorem proident culpa culpa quis proident ullamco aliqua dolore adipisicing qui dolore aliquip.\r\n",
+    "Description": "This is Anime-Related Artwork",
     "GenreId": 3,
     "Price": 9314,
     "CreatedDate": "2023-12-27",
-    "AppUserId": 5,
+    "AppUserId": 13,
     "Status": 1,
     "ArtworkImage": {
-      "Url": "https://e0.pxfuel.com/wallpapers/523/967/desktop-wallpaper-kimetsu-no-yaiba-anime-digital-art-artwork-2d-tanjiro-kamado-%E2%80%A2-for-you-for-mobile.jpg",
+      "Url": "https://res.cloudinary.com/dpmjibfhc/image/upload/f_auto,q_auto/v1/asp-net7/rw3uvs2pbr9om0om5skw",
+      "PublicId": "asp-net7/rw3uvs2pbr9om0om5skw",
       "IsMain": true
     }
     
@@ -75,10 +80,11 @@
     "GenreId": 3,
     "Price": 6551,
     "CreatedDate": "2023-02-14",
-    "AppUserId": 5,
+    "AppUserId": 13,
     "Status": 1,
     "ArtworkImage": {
-      "Url": "https://i.pinimg.com/564x/a1/dc/ac/a1dcacd4a2515d673ee2b4cc8d65a50b.jpg",
+      "Url": "https://res.cloudinary.com/dpmjibfhc/image/upload/f_auto,q_auto/v1/asp-net7/m3aajkiq3kjzagtxuzky",
+      "PublicId": "asp-net7/m3aajkiq3kjzagtxuzky",
       "IsMain": true
     }
     
@@ -89,10 +95,11 @@
     "GenreId": 4,
     "Price": 1349,
     "CreatedDate": "2023-01-18",
-    "AppUserId": 10,
+    "AppUserId": 13,
     "Status": 1,
     "ArtworkImage": {
-      "Url": "https://c4.wallpaperflare.com/wallpaper/122/555/692/science-fiction-digital-art-concept-art-artwork-futuristic-hd-wallpaper-preview.jpg",
+      "Url": "https://res.cloudinary.com/dpmjibfhc/image/upload/f_auto,q_auto/v1/asp-net7/srauljyw4gqq7fsu7f9y",
+      "PublicId": "asp-net7/srauljyw4gqq7fsu7f9y",
       "IsMain": true
     }
     
@@ -103,10 +110,11 @@
     "GenreId": 4,
     "Price": 2824,
     "CreatedDate": "2024-01-17",
-    "AppUserId": 9,
+    "AppUserId": 13,
     "Status": 1,
     "ArtworkImage": {
-      "Url": "https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701915053.jpg",
+      "Url": "https://res.cloudinary.com/dpmjibfhc/image/upload/f_auto,q_auto/v1/asp-net7/yz94i9poymulvjo96j5m",
+      "PublicId": "asp-net7/yz94i9poymulvjo96j5m",
       "IsMain": true
     }
     
@@ -117,10 +125,11 @@
     "GenreId": 1,
     "Price": 478,
     "CreatedDate": "2023-11-01",
-    "AppUserId": 10,
+    "AppUserId": 13,
     "Status": 1,
     "ArtworkImage": {
-      "Url": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/1f802150-66ea-43cc-8f5b-a0ceb24350ea/dfvhqda-74b5c095-c477-4cd1-a4ed-4687c57a8b80.png/v1/fit/w_828,h_478,q_70,strp/thank_you_wallpaper_by_elffyie_dfvhqda-414w-2x.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTUwNiIsInBhdGgiOiJcL2ZcLzFmODAyMTUwLTY2ZWEtNDNjYy04ZjViLWEwY2ViMjQzNTBlYVwvZGZ2aHFkYS03NGI1YzA5NS1jNDc3LTRjZDEtYTRlZC00Njg3YzU3YThiODAucG5nIiwid2lkdGgiOiI8PTI2MTQifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.d0oNiZ8Mu26nEjfV_7n5ORTNjvDJMcondDKxlQdPT1s",
+      "Url": "https://res.cloudinary.com/dpmjibfhc/image/upload/f_auto,q_auto/v1/asp-net7/nobxfj0tfbtm1ujvwmlb",
+      "PublicId": "asp-net7/nobxfj0tfbtm1ujvwmlb",
       "IsMain": true
     }
     
@@ -131,10 +140,11 @@
     "GenreId": 1,
     "Price": 2702,
     "CreatedDate": "2023-05-26",
-    "AppUserId": 9,
+    "AppUserId": 13,
     "Status": 1,
     "ArtworkImage": {
-      "Url": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ef3a4158-e0e0-418a-9e74-d273edb3a686/dfzf4vz-440a27d2-6324-4b20-8012-24fbbc719bea.png/v1/fill/w_1192,h_670,q_70,strp/serene_meadows_by_wopgnop_dfzf4vz-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzIwIiwicGF0aCI6IlwvZlwvZWYzYTQxNTgtZTBlMC00MThhLTllNzQtZDI3M2VkYjNhNjg2XC9kZnpmNHZ6LTQ0MGEyN2QyLTYzMjQtNGIyMC04MDEyLTI0ZmJiYzcxOWJlYS5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.kyr78ehjMHaQ6R1--7a4nT9V6Sz36Xlapm1lCmUUrks",
+      "Url": "https://res.cloudinary.com/dpmjibfhc/image/upload/f_auto,q_auto/v1/asp-net7/lvqpswvrnejbotyk2hog",
+      "PublicId": "asp-net7/lvqpswvrnejbotyk2hog",
       "IsMain": true
     }
     

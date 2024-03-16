@@ -3,8 +3,7 @@
 @{
     ViewData["Title"] = "Home page";
 }
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-<!-- Add additional stylesheets or scripts here -->
+
 @* <style> *@
 @*     /* Custom CSS styles */ *@
 @*     .user-detail { *@
@@ -57,6 +56,15 @@
     .search-input::placeholder{
       color: rgba(0, 0, 0, 0.5);
     }
+
+    .project-text-inner img {
+        width: 200px; 
+        height: 200px; 
+        object-fit: fill; 
+        display: block;
+        margin: 0 auto; 
+    }
+
 </style>
 <br/>
 <div class="hero-full-wrapper">
@@ -74,7 +82,7 @@
                 <a asp-page="./ArtworkDetail" asp-route-id="@artwork.Id"class="project-description">
                     <div class="project-text-holder">
                         <div class="project-text-inner">
-                            <h3>@artwork.Title</h3>
+                            <h3></h3>
                             <p asp-page="./ArtworkDetail" asp-route-id="@artwork.Id">Discover more</p>
                         </div>
                     </div>

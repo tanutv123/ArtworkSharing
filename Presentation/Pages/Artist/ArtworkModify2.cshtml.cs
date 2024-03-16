@@ -1,6 +1,7 @@
 using AutoMapper;
 using BusinessObject.DTOs;
 using BusinessObject.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Presentation.Extensions;
@@ -8,6 +9,7 @@ using Repository;
 
 namespace Presentation.Pages.Artist
 {
+    [Authorize(Policy = "RequireArtistRole")]
     public class ArtworkModify2Model : PageModel
     {
         private readonly IArtworkRepository _artworkRepository;
@@ -35,27 +37,31 @@ namespace Presentation.Pages.Artist
         public AddArtworkDTO addArtworkDTO { get; set; } 
         [BindProperty]
         public UpdateArtworkImageDTO addArtworkImageDTO { get; set; } = new UpdateArtworkImageDTO();
-
+        public int currentUserId = 0;
         public IEnumerable<Genre> Genres { get; set; }
         public async Task OnGetAsync(int artworkid)
         {
-            if (artworkid != null)
+            currentUserId = User.GetUserId();
+			Artwork = await _artworkRepository.GetArtworkById(artworkid);
+			if (artworkid != 0)
             {
                 if (_artworkRepository != null)
                 {
-                    Artwork = await _artworkRepository.GetArtworkById(artworkid);
-                    addArtworkDTO = new AddArtworkDTO();
-                    addArtworkDTO.Title = Artwork.Title;
-                    addArtworkDTO.Price = Artwork.Price;
-                    addArtworkDTO.CreatedDate = Artwork.CreatedDate;
-                    addArtworkDTO.Description = Artwork.Description;
-                    addArtworkDTO.AppUserId = Artwork.AppUserId;
-                    addArtworkDTO.Id = artworkid;
-                    addArtworkImageDTO.ArtworkId = artworkid.ToString();
-                    addArtworkImageDTO.Url = Artwork.ArtworkImage.Url;
-                    addArtworkImageDTO.PublicId = Artwork.ArtworkImage.PublicId;
-                    addArtworkImageDTO.Id = Artwork.ArtworkImage.Id;
                     
+                    if (Artwork != null)
+                    {
+                        addArtworkDTO = new AddArtworkDTO();
+                        addArtworkDTO.Title = Artwork.Title;
+                        addArtworkDTO.Price = Artwork.Price;
+                        addArtworkDTO.CreatedDate = Artwork.CreatedDate;
+                        addArtworkDTO.Description = Artwork.Description;
+                        addArtworkDTO.AppUserId = Artwork.AppUserId;
+                        addArtworkDTO.Id = artworkid;
+                        addArtworkImageDTO.ArtworkId = artworkid.ToString();
+                        addArtworkImageDTO.Url = Artwork.ArtworkImage.Url;
+                        addArtworkImageDTO.PublicId = Artwork.ArtworkImage.PublicId;
+                        addArtworkImageDTO.Id = Artwork.ArtworkImage.Id;
+                    }
                 }
 
                 Genres = await _genreRepository.GetAll();
@@ -80,12 +86,14 @@ namespace Presentation.Pages.Artist
                 var artworkimg = _mapper.Map<ArtworkImage>(addArtworkImageDTO);
                 await _artworkRepository.UpdateArtwork(artwork);
                 await _artworkRepository.UpdateArtworkImage(artworkimg);
-            }
+				TempData["Message"] = "Artwork has been Updated successfully!";
+				return Redirect("/Audience/ArtistPage?userId=" + User.GetUserId());
+			}
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
             }
-
+            currentUserId = User.GetUserId();
             return Page();
         }
     }

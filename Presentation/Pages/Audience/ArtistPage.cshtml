@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Artist Profile</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
         /* Custom CSS styles */
         body {
@@ -91,37 +91,65 @@
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Profile</h1>
-        <div class="user-info">
-            <h3>User Information</h3>
-            <p><strong>Username:</strong> @Model.appUser.Name</p>
-            <p><strong>Phone:</strong> @Model.appUser.PhoneNumber</p>
-            <p><strong>About You:</strong> @Model.appUser.Description</p>
-            <p><strong>Email:</strong> @Model.appUser.Email</p>
-        </div>
-        <div class="gallery">
-            <h3>Gallery</h3>
+@if (Model.appUser != null)
+{
+    <body>  
+        <div class="container">
+            <h1 class="mt-5">Profile</h1>
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-success" role="alert">
+                    @TempData["Message"]
+                </div>
+            }
             <div class="row">
-                @foreach (var artwork in Model.artworks)
-                {
-                    <div class="col-md-4 mb-3">
-                        <div class="card artwork-card">
-                            <img src="@artwork.ArtworkImage.Url" alt="@artwork.Title" class="card-img-top artwork-image">
-                            <div class="artwork-details">
-                                <h5>@artwork.Title</h5>
-                                <div class="d-grid gap-2">
-                                    <a class="btn btn-danger btn-delete" asp-page="/Artist/ArtworkModify" asp-route-artworkid="@artwork.Id">Delete</a>
-                                    <a class="btn btn-primary btn-edit" asp-page="/Artist/ArtworkModify2" asp-route-artworkid="@artwork.Id">Edit</a>
+                <div class="col-md-8">
+                    <h3>User Information</h3>
+                    <p><strong>Username:</strong> @Model.appUser.Name</p>
+                    <p><strong>Phone:</strong> @Model.appUser.PhoneNumber</p>
+                    <p><strong>About You:</strong> @Model.appUser.Description</p>
+                    <p><strong>Email:</strong> @Model.appUser.Email</p>
+                </div>
+                <div class="gallery">
+                    <h3>Gallery</h3>
+                    @if (Model.artworks != null)
+                    {
+                        <div class="row">
+                            @foreach (var artwork in Model.artworks)
+                            {
+                                <div class="col-md-4 mb-3">
+                                    <div class="card artwork-card">
+                                        <img src="@artwork.ArtworkImage.Url" alt="@artwork.Title" class="card-img-top artwork-image">
+                                        <div class="artwork-details">
+                                            <h5>@artwork.Title</h5>
+                                            <div class="d-grid gap-2">
+                                                @if (Model.currentUserId == Model.appUser.Id && Model.currentUserRole == true) {
+                                                    <a class="btn btn-danger btn-delete" asp-page="/Artist/ArtworkModify" asp-route-artworkid="@artwork.Id">Delete</a>
+                                                    <a class="btn btn-primary btn-edit" asp-page="/Artist/ArtworkModify2" asp-route-artworkid="@artwork.Id">Edit</a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            }
                         </div>
-                    </div>
-                }
+                    } else
+                    {
+                        <body>
+                            <p>There is no Artwork here</p>
+                        </body>
+                    }
+                    @if (Model.currentUserId == Model.appUser.Id && Model.currentUserRole == true)
+                    {
+                        <a class="btn btn-success btn-create-new" asp-page="/Artist/ArtistAddArtwork" asp-route-id="@Model.appUser.Id">Upload New Artwork</a>
+                    }
+                </div>
             </div>
-                <a class="btn btn-success btn-create-new" asp-page="/Artist/ArtistAddArtwork" asp-route-id="@Model.appUser.Id">Upload New Artwork</a>
-        </div>
-    </div>
-</body>
+    </body>
+} else
+{
+    <body>
+        <p>Artist not available</p>
+    </body>
+}
 </html>

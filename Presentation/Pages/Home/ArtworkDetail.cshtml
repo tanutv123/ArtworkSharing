@@ -4,6 +4,7 @@
 }
 @if (Model.Artwork != null)
 {
+    
     <h1>@Model.Artwork.Title</h1>
 
     <div>
@@ -11,7 +12,7 @@
         <p><strong>Description:</strong> @Model.Artwork.Description</p>
         <p><strong>Genre:</strong> @Model.Artwork.Genre.Name</p>
         <p><strong>Price:</strong> @Model.Artwork.Price</p>
-        <p><strong>Artist:</strong> @Model.Artwork.AppUser.Name</p>
+        <p><strong>Artist:</strong> <a asp-page="/Audience/ArtistPage" asp-route-userId=@Model.Artwork.AppUserId > @Model.Artwork.AppUser.Name </a> </p>
     </div>
     <form method="post"> 
                             <div class="text text-danger" asp-validation-summary="All"></div> 
@@ -46,8 +47,38 @@
                     <text> Follow </text>
                 }
             </button>
-            <button type="submit" class="btn btn-secondary" asp-page-handler="Buy">Buy Artwork</button>
+            @if (!Model.Bought)
+            {
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#confirmPurchaseModal">Buy Artwork</button>
+            } else
+            {
+                <button type="button" class="btn btn-secondary" onclick="downloadFile()" @* asp-page-handler="Download" *@>Download Bought-Artwork</button>
+            }
         }
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["Message"]
+            </div>
+        }
+        <div class="modal fade" id="confirmPurchaseModal" tabindex="-1" aria-labelledby="confirmPurchaseModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmPurchaseModalLabel">Buy Artwork Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Do you really want to buy this image ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="submit" class="btn btn-primary" id="confirmPurchaseButton" asp-page-handler="Buy">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </form>
     <br />
     <br />
@@ -65,14 +96,43 @@
     </div>
 }
 <hr />
-
-<!-- Form for submitting new comments -->
-<form id="comment-form" method="post" asp-page-handler="Comment" asp-route-artworkId="@Model.Artwork.Id">
-    <div class="form-group">
-        <label for="comment">Add a Comment:</label>
-        <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+@if (Model.Artwork != null)
+{
+    <!-- Form for submitting new comments -->
+    <form id="comment-form" method="post" asp-page-handler="Comment" asp-route-artworkId="@Model.Artwork.Id">
+        <div class="form-group">
+            <label for="comment">Add a Comment:</label>
+            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+        </div>
+        <div class="text text-danger" asp-validation-summary="All"></div>
+        <input type="hidden" asp-for="AddComment.Artworkid" value="@Model.Artwork.Id" />
+        <button type="submit" class="btn btn-primary">Comment</button>
+    </form>
+}
+else
+{
+    <div>
+        <p>Artwork not found.</p>
     </div>
-    <div class="text text-danger" asp-validation-summary="All"></div>
-    <input type="hidden" asp-for="AddComment.Artworkid" value="@Model.Artwork.Id" />
-    <button type="submit" class="btn btn-primary">Comment</button>
-</form>
+}
+@section Scripts {
+    <script>
+        
+        document.getElementById('confirmPurchaseButton').addEventListener('click', function () {
+
+            $('#confirmPurchaseModal').modal('hide');
+        });
+
+        function downloadFile() {
+            
+            var url = '@Model.DownloadUrl';
+
+            var anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = 'ArtworkSharing'; 
+            document.body.appendChild(anchor); 
+            anchor.click(); 
+            document.body.removeChild(anchor); 
+        }
+    </script>
+}

@@ -34,6 +34,7 @@ namespace Repository
         Task<IList<Artwork>> GetArtworkAdmin();
         Task<bool> ChangeArtworkStatusAdmin(int artworkId);
 
+        Task<bool> HasUserBought(int userId, int artworkId);
     }
 
 }

@@ -35,75 +35,27 @@ namespace DataAccess.Management
             _mapper = mapper;
         }*/
 
-
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly DataContext _dataContext;
         private static UserManagement instance = null;
         private static readonly object instanceLock = new object();
 
-        public UserManagement(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, DataContext dataContext)
+		public static UserManagement Instance
+		{
+			get
+			{
+				lock (instanceLock)
+				{
+					if (instance == null)
+					{
+						instance = new UserManagement();
+					}
+					return instance;
+				}
+			}
+		}
+        public IQueryable<AppUser> GetUsersAsQueryable()
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _dataContext = dataContext;
-        }
-
-        public static UserManagement GetInstance(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, DataContext dataContext)
-        {
-            lock (instanceLock)
-            {
-                if (instance == null)
-                {
-                    instance = new UserManagement(userManager, signInManager, dataContext);
-                }
-                return instance;
-            }
-        }
-
-
-        public async Task<IdentityResult> RegisterAsync(AppUser newUser, string password)
-        {
-            try
-            {
-                if (await IsPhoneExistAsync(newUser.PhoneNumber))
-                {
-                    throw new Exception("Phone number already exists.");
-                }
-                var result = await _userManager.CreateAsync(newUser, password);
-                if (result.Succeeded)
-                {
-                    await _userManager.SetUserNameAsync(newUser, newUser.Email);
-                    await _userManager.AddToRoleAsync(newUser, "Audience");
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<SignInResult> LoginAsync(string email, string password)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null || user.Status == 0 || user.EmailConfirmed == false)
-            {
-                return SignInResult.Failed;
-            }
-            var result = await _signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
-            return result;
-        }
-
-        public async Task SignOutAsync()
-        {
-            await _signInManager.SignOutAsync();
-        }
-
-        public async Task<bool> IsPhoneExistAsync(string phone)
-        {
-            var user = await _userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == phone);
-            return user != null;
+            var _context = new DataContext();
+            return _context.Users.AsQueryable();
         }
 
         public async Task<AppUser> GetUserDetail(int userId)
@@ -113,7 +65,7 @@ namespace DataAccess.Management
             {
                 var _dataContext = new DataContext();
 
-                userDetailDto = await this._dataContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                userDetailDto = await _dataContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
 
             }
             catch (Exception ex)
@@ -138,20 +90,6 @@ namespace DataAccess.Management
             }
             return result;
         }
-
-        public async Task<bool> ChangeUserPassword(AppUser user, string currentPass, string newPass)
-        {
-            try
-            {
-                await _userManager.ChangePasswordAsync(user, currentPass, newPass);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
         public async Task<List<AppUser>> GetAllUser()
         {
             List<AppUser> appUsers = null;
@@ -185,69 +123,6 @@ namespace DataAccess.Management
             }
             return user;
         }
-        public async Task AddUser(AppUser appUser, string password)
-        {
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(appUser.Email);
-                if (user == null)
-                {
-                    await _userManager.CreateAsync(appUser, password);
-                    await _userManager.SetUserNameAsync(appUser, appUser.Email);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task UpdateUser(AppUser appUser)
-        {
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(appUser.Email);
-                if (user != null)
-                {
-                    user.Name = appUser.Name;
-                    user.PhoneNumber = appUser.PhoneNumber;
-                    user.Email = appUser.Email;
-                    user.Description = appUser.Description;
-                    user.UserRoles = appUser.UserRoles;
-                    user.Status = appUser.Status;
-                    await _userManager.UpdateAsync(user);
-                }
-                else
-                {
-                    throw new Exception("User does not exist");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        public async Task DeleteUser(AppUser appUser)
-        {
-            try
-            {
-                var user = await _userManager.FindByEmailAsync(appUser.Email);
-                if (user != null)
-                {
-                    user.Status = 0;
-                    await _userManager.UpdateAsync(user);
-                }
-                else
-                {
-                    throw new Exception("User does not exist");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
         public async Task<AppUser> getUserDetail(AppUser user)
         {
             AppUser userDetailDto = null;
@@ -265,31 +140,5 @@ namespace DataAccess.Management
 
             return userDetailDto;
         }
-
-        public async Task<bool> SignAsArtist(int userId)
-        {
-            try
-            {
-                var exitedUser = await _userManager.Users
-                    .Include(u => u.UserRoles)
-                    .FirstOrDefaultAsync(a => a.Id == userId);
-                if (exitedUser != null)
-                {
-                    exitedUser.UserRoles.Clear();
-                    await _userManager.AddToRoleAsync(exitedUser, "Artist");
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
     }
 }

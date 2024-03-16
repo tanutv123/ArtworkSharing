@@ -19,7 +19,6 @@ namespace Repository
         private readonly IMapper _mapper;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly DataContext _dataContext;  
 
 		public UserRepository(IMapper mapper, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
@@ -29,34 +28,34 @@ namespace Repository
 		}
         public async Task<List<AppUserDTO>> GetAllUser()
         {
-            var users = await UserManagement.GetInstance(_userManager, _signInManager, _dataContext).GetAllUser();
+            var users = await UserManagement.Instance.GetAllUser();
             return users.Select(user => _mapper.Map<AppUserDTO>(user)).ToList();
         }
 
 
         public async Task<AppUserDTO> GetUserDetailAdmin(int id)
         {
-            var detail = await UserManagement.GetInstance(_userManager,_signInManager, _dataContext).GetUserDetailAdmin(id);
+            var detail = await UserManagement.Instance.GetUserDetailAdmin(id);
             return _mapper.Map<AppUserDTO>(detail);
         }
 
         public async Task<AppUserProfileDTO> GetUserProfile(int id)
 		{
-            var detail = await UserManagement.GetInstance(_userManager,_signInManager, _dataContext).GetUserProfile(id);
+            var detail = await UserManagement.Instance.GetUserProfile(id);
 			return _mapper.Map<AppUserProfileDTO>(detail);
 		}
 
         public async Task changeUserPassword(AppUser appUser, string currentPassword, string newPassword)
         {
-            try
-            {
-                await UserManagement.GetInstance(_userManager, _signInManager, _dataContext).ChangeUserPassword(appUser, currentPassword, newPassword);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+			try
+			{
+				await _userManager.ChangePasswordAsync(appUser, currentPassword, newPassword);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
 
         public async Task<IdentityResult> RegisterAsync(AppUser newUser, string password)
         {
@@ -104,12 +103,12 @@ namespace Repository
 
         public async Task<AppUser> GetUserById(int userId)
         {
-            return await UserManagement.GetInstance(_userManager, _signInManager, _dataContext).GetUserDetail(userId);
+            return await UserManagement.Instance.GetUserDetail(userId);
         }
 
         public async Task<UserDetailDTO> getUserDetail(AppUser user)
         {
-            var detail = await UserManagement.GetInstance(_userManager, _signInManager, _dataContext).getUserDetail(user);
+            var detail = await UserManagement.Instance.getUserDetail(user);
             return _mapper.Map<UserDetailDTO>(detail);
         }
 
@@ -186,7 +185,27 @@ namespace Repository
 
         public async Task<bool> SignAsArtist(int userId)
         {
-            return await UserManagement.GetInstance(_userManager, _signInManager, _dataContext).SignAsArtist(userId);
-        }
+			try
+			{
+				var exitedUser = await _userManager.Users
+					.Include(u => u.UserRoles)
+					.FirstOrDefaultAsync(a => a.Id == userId);
+				if (exitedUser != null)
+				{
+					exitedUser.UserRoles.Clear();
+					await _userManager.AddToRoleAsync(exitedUser, "Artist");
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
     }
 }

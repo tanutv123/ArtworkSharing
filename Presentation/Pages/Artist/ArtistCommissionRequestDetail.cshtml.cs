@@ -38,12 +38,18 @@ namespace Presentation.Pages.Artist
         public async Task OnGet(int id, bool isAddImageSuccess = false)
         {
             var commission = await _commissionRepository.GetSingleCommissionRequestHistory(id);
-			if(commission.ReceiverEmail == User.GetEmailAddress())
+			
+			if(commission != null && commission.ReceiverEmail == User.GetEmailAddress())
 			{
 				IsInvalidAccess = false;
 				CommissionStartDate = commission.RequestDate;
 				CommissionEndDate = commission.DueDate;
 				CommissionImages = commission.CommissionImages.OrderBy(x => x.CreatedDate).ToList();
+				if(CommissionImages.Any())
+				{
+					CommissionImages.Any(x => x.isMain == true);
+					CommissionImages.Last().isMain = true;
+				}
 				AddCommissionImageDTO.CommissionRequestId = id;
 				IsAddImageSuccess = isAddImageSuccess;
 			}
