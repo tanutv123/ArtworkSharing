@@ -10,4 +10,7 @@ public class PurchaseRepository : IPurchaseRepository
     {
         return PurchaseManagement.Instance.GetPurchases();
     }
+    
+    public async Task<List<Purchase>> GetBuyListForUsers(int userId) 
+        =>  await PurchaseManagement.Instance.GetBuyListForUsers(userId);
 }

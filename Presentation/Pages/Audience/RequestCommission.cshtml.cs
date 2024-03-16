@@ -51,12 +51,18 @@ namespace Presentation.Pages.Audience
                 {
                     ErrorMessage = "Artist not found";
                 }
-                CommissionRequestDTO = new CommissionRequestDTO();
-				ArtistName = artist.Name;
-                ArtistEmail = artist.Email;
-                CommissionRequestDTO.SenderId = User.GetUserId();
-                CommissionRequestDTO.ReceiverId = artistId;
-                
+                else if(artist.Email == User.GetEmailAddress())
+                {
+                    ErrorMessage = "You cannot send commission to yourself";
+                }
+                else
+                {
+                    CommissionRequestDTO = new CommissionRequestDTO();
+                    ArtistName = artist.Name;
+                    ArtistEmail = artist.Email;
+                    CommissionRequestDTO.SenderId = User.GetUserId();
+                    CommissionRequestDTO.ReceiverId = artistId;
+                }
             }
             else
             {

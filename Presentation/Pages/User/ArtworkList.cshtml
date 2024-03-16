@@ -1,0 +1,61 @@
+@page
+@using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Manage.Internal
+@model Presentation.Pages.User.ArtworkList
+
+@{
+    ViewData["Title"] = "Manage Artworks";
+    ViewData["ActivePage"] = ManageNavPages.PersonalData;
+}
+<h4>@ViewData["Title"]</h4>
+@* <partial name="_StatusMessage" model="Model.StatusMessage" /> *@
+ @if (Model.Purchases == null || Model.Purchases.Count == 0)
+    {
+        <div class="alert alert-danger" role="alert">
+            No artwork to display!
+        </div>
+    }
+ else
+ {
+     <table id="artworkTable" class="table table-hover table-bordered dataTable" style="width:100%">
+         <thead>
+         <tr>
+             <th scope="col">Artwork Id</th>
+             <th scope="col">Artwork Title</th>
+             <th scope="col">Author</th>
+             <th scope="col">Price</th>
+             <th scope="col">Buy Date</th>
+             <th scope="col">Action</th>
+         </tr>
+         </thead>
+         <tbody>
+         @foreach (var item in Model.Purchases)
+         {
+             <tr>
+                 <td>@item.Artwork.Id</td>
+                 <td>@item.Artwork.Title</td>
+                 <td>@item.Artwork.AppUser.Name</td>
+                 <td>@item.BuyPrice.ToString("C", System.Globalization.CultureInfo.GetCultureInfoByIetfLanguageTag("en-US"))</td>
+                 <td>@item.BuyDate</td>
+                 <td>
+                     <a asp-page="/Home/ArtworkDetail" asp-route-id="@item.Artwork.Id">
+                         <button class="btn btn-sm btn-primary">
+                             <i class="fas fa-eye"></i> Download Again
+                         </button>
+                     </a></td>
+
+
+             </tr>
+         }
+         </tbody>
+     </table>
+     @section Scripts {
+ <script>
+         let table = new DataTable('#artworkTable', {
+                    responsive: true
+                });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.13.1"></script>
+     }
+
+ }
