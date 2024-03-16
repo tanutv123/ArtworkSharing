@@ -43,14 +43,22 @@
 					<h4><strong>@Model.CommissionRequestHistoryDTO.DueDate</strong></h4>
 				</div>
 			</div>
-			<form method="post">
-				<input type="hidden" asp-for="CommissionId" />
-				<div class="text text-danger" asp-asp-validation-summary="All"></div>
-				<div class="mb-3">
-					<button type="submit" class="btn btn-primary">Request progress image</button>
-				</div>
-			</form>
-		}
+			@if(Model.CommissionRequestHistoryDTO.CommissionStatusDescription != "Done")
+			{
+				<form method="post">
+					<input type="hidden" asp-for="CommissionId" />
+					<div class="text text-danger" asp-asp-validation-summary="All"></div>
+					<div class="mb-3">
+						<button type="submit" class="btn btn-primary">Request progress image</button>
+					</div>
+				</form>
+			}
+			else
+			{
+				<h3 class="text text-success">The artist has completed the commission. The latest progress image is the result.</h3>
+			}
+
+	}
 		else
 		{
 			@if (Model.CommissionRequestHistoryDTO.CommissionStatusDescription == "Not Accepted")
