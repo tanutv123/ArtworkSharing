@@ -1,9 +1,11 @@
+using BusinessObject.DTOs;
 using BusinessObject.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Presentation.Services;
 using Repository;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
@@ -16,12 +18,17 @@ namespace Presentation.Pages.Admin.User
     {
         private readonly IUserRepository _userRepository;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly IValidator _validator;
 
         // Constructor
-        public UserAddModel(IUserRepository userRepository, RoleManager<AppRole> roleManager)
+        public UserAddModel(
+            IUserRepository userRepository, 
+            RoleManager<AppRole> roleManager,
+            IValidator validator)
         {
             _userRepository = userRepository;
             _roleManager = roleManager;
+            _validator = validator;
         }
 
         // Properties
@@ -68,6 +75,12 @@ namespace Presentation.Pages.Admin.User
         {
             if (!ModelState.IsValid)
             {
+                ViewData["Id"] = new SelectList(_roleManager.Roles.ToList(), "Id", "Name");
+                return Page();
+            }
+            if (await _validator.ValidateEmail(Email))
+            {
+                ModelState.AddModelError(string.Empty, "Please enter exist email address");
                 ViewData["Id"] = new SelectList(_roleManager.Roles.ToList(), "Id", "Name");
                 return Page();
             }
